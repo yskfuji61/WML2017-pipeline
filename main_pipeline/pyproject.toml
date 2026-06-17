@@ -1,0 +1,50 @@
+[project]
+name = "wmh2017-pipeline"
+version = "0.2.2"
+description = "Auditable local WMH2017 MONAI smoke pipeline for research PoC"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+  "numpy==1.26.4",
+  "pandas==2.2.2",
+  "scipy==1.13.1",
+  "PyYAML==6.0.2",
+]
+
+[project.optional-dependencies]
+medical-image = [
+  "nibabel==5.2.1",
+  "matplotlib==3.9.2",
+  "torch==2.4.1",
+  "monai==1.4.0",
+]
+test = [
+  "pytest==8.3.3",
+]
+dev = [
+  "pytest==8.3.3",
+  "ruff==0.6.9",
+  "mypy==1.11.2",
+  "pip-audit==2.7.3",
+  "bandit==1.7.10",
+  "detect-secrets==1.5.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+exclude = ["artifacts", "data", "reports"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true
+exclude = ["artifacts/", "data/", "reports/"]

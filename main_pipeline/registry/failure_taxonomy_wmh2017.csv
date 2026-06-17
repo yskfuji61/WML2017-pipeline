@@ -1,0 +1,13 @@
+failure_id,severity,category,failure_pattern,trigger,mitigation,test_or_evidence,owner,status
+F-001,Sev1,source_governance,Source Register placeholderでSotA比較する,source_idがNEEDS_EVIDENCE_REVIEW/UNRESOLVED_PLACEHOLDERのまま比較表作成,source verification gate,source_register_wmh2017.csv review,evidence_reviewer,OPEN
+F-002,Sev1,data_leakage,test110をtraining/validation/tuningに混入,challenge_split=testがtrain/valに入る,split guard and tests,test_split_no_leakage.py,implementation_lead,MITIGATED_BY_TEST
+F-003,Sev1,claim_boundary,validation値をSOTA/production性能と表現,report copy contains SOTA without evidence,claim boundary register,claim_boundary_wmh2017.csv review,evidence_reviewer,OPEN
+F-004,Sev2,metric,Dice単独で小病変性能を過大評価,Dice only report,5 metrics required,metric_register_wmh2017.csv + tests,implementation_lead,MITIGATED
+F-005,Sev2,model_strategy,3D前提だけでwinner条件を無視,only MONAI 3D baseline,2D/2.5D/3D + winner plan,sota_strategy_wmh2017.md,ml_reviewer,MITIGATED
+F-006,Sev2,generalization,scanner差で性能低下,site/scanner metrics absent,scanner-specific reporting,split_register_wmh2017.csv,evidence_reviewer,OPEN
+F-007,Sev0,security,独自医療データの未承認クラウド投入,cloud upload or external API required,stop condition and DLP gate,data_policy.md,security_privacy_reviewer,ACTIVE_STOP_CONDITION
+F-008,Sev2,license,GitHub/pretrained model license未確認,using external code/model without license review,verify license and artifact hash,source_register_wmh2017.csv,security_privacy_reviewer,OPEN
+F-009,Sev2,reproducibility,run hash不足で再現不能,missing run_id/config/code/env hash,run evidence policy,run_manifest_schema.csv,implementation_lead,OPEN
+F-010,Sev2,metric_gaming,結果確認後にmetricやthresholdを変更,threshold not pre-registered,threshold policy + experiment registry,experiment_registry_wmh2017.csv,evidence_reviewer,OPEN
+F-011,Sev2,annotation,additional_annotationsをprimary referenceに混入,O3/O4 used as primary baseline label,manifest field and training config guard,dataset_manifest_schema.csv,implementation_lead,OPEN
+F-012,Sev2,preprocessing,preprocessing fitにtest/heldoutを使用,normalization or fit over all cases,fit only train split,config review,implementation_lead,OPEN

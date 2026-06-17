@@ -1,0 +1,109 @@
+dataset_id: WMH2017
+dataset_name: MICCAI 2017 White Matter Hyperintensity Segmentation Challenge
+source_doi: 10.34894/AECRSD
+root_env_var: WMH2017_ROOT
+
+# Set WMH2017_ROOT to the Dataverse `files` directory, not to `training`.
+# Example:
+#   <LOCAL_WMH2017_FILES_ROOT>
+expected_root_layout:
+  files_root_contains:
+    - training
+    - test
+    - additional_annotations
+  user_local_example: "<LOCAL_WMH2017_FILES_ROOT>"
+
+expected_case_counts:
+  training_total: 60
+  test_total: 110
+  by_site:
+    training:
+      Utrecht: 20
+      Singapore: 20
+      Amsterdam_GE3T: 20
+    test:
+      Utrecht: 30
+      Singapore: 30
+      Amsterdam_GE3T: 30
+      Amsterdam_GE1T5: 10
+      Amsterdam_Philips_VU_PETMR_01: 10
+
+primary_inputs:
+  flair: pre/FLAIR.nii.gz
+  t1: pre/T1.nii.gz
+
+optional_inputs:
+  flair_orig: orig/FLAIR.nii.gz
+  t1_orig: orig/T1.nii.gz
+  t1_3d_orig: orig/3DT1.nii.gz
+  flair_mask_orig: orig/FLAIR_mask.nii.gz
+  t1_mask_orig: orig/T1_mask.nii.gz
+  t1_3d_mask_orig: orig/3DT1_mask.nii.gz
+
+reference_mask:
+  primary: wmh.nii.gz
+  training_required: true
+  test_may_exist_in_2022_release: true
+  use_test_mask_for_initial_train_val: false
+
+additional_annotations:
+  observer_o3: additional_annotations/observer_o3/training/**/result.nii.gz
+  observer_o4: additional_annotations/observer_o4/training/**/result.nii.gz
+  initial_smoke_training_policy: do_not_use
+  intended_later_use:
+    - inter_observer_variability
+    - annotation_uncertainty_analysis
+    - robustness_analysis
+
+expected_label_values:
+  - 0
+  - 1
+  - 2
+
+label_meaning:
+  0: background
+  1: white_matter_hyperintensity_foreground
+  2: other_pathology_ignore
+
+foreground_label: 1
+ignore_label: 2
+forbidden_foreground_rule: "mask > 0"
+
+split_policy:
+  train_val_source: training_only
+  test_policy: heldout_eval_only
+  test_forbidden_for:
+    - training
+    - validation
+    - threshold_tuning
+    - preprocessing_fit
+    - model_selection
+    - early_stopping
+
+raw_data_policy:
+  store_raw_data_in_repo: false
+  hash_raw_files: true
+  package_raw_files: false
+  git_tracking: forbidden
+  local_read_only_recommended: true
+
+dlp_class: public_dataset_medical_domain_restricted_use
+
+allowed_use:
+  - local_research_poc
+  - internal_technical_validation
+  - MONAI_smoke_training_on_challenge_training_split
+
+prohibited_use:
+  - clinical_diagnosis
+  - customer_facing_claim
+  - production_deployment
+  - cloud_upload_without_approval
+  - private_patient_data_without_review
+  - commercial_product_training_without_required_approval
+  - using_test_split_for_training_validation_or_threshold_tuning
+
+notes:
+  - "Challenge readme says test data originally was not released; 2022 Dataverse release may include test files and masks."
+  - "Presence of files/test/**/wmh.nii.gz does not make test eligible for training, validation, tuning, or model selection."
+  - "Use local heldout evaluation wording if test metrics are computed later; do not mix with challenge leaderboard values."

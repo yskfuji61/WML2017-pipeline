@@ -1,0 +1,33 @@
+{
+  "package_version": "0.2.2",
+  "generated_at_context_date": "2026-06-18",
+  "commands": [
+    {
+      "cmd": "python -m compileall scripts src tests",
+      "status": "passed",
+      "returncode": 0
+    },
+    {
+      "cmd": "python -m pytest -q",
+      "status": "passed",
+      "returncode": 0,
+      "tests": "36 passed"
+    },
+    {
+      "cmd": "python scripts/verify_release_package.py --repo-root . --out reports/full_package_manifest.json --package-version 0.2.2 --package-id WMH2017-LOCAL-POC-SCAFFOLD-0.2.2",
+      "status": "passed",
+      "returncode": 0
+    }
+  ],
+  "stderr_note": "Hosted spreadsheet runtime warmup emitted a startup warning unrelated to this repository; command exit statuses were zero.",
+  "not_executed": [
+    "raw 8.7GB WMH2017 files/ manifest generation",
+    "real NIfTI label audit",
+    "MONAI training",
+    "prediction generation",
+    "validation Dice on raw data",
+    "official evaluator parity against an actual official export",
+    "ruff/bandit/pip-audit/detect-secrets in this sandbox"
+  ],
+  "release_state": "READY_FOR_REQUIREMENTS_REVIEW"
+}

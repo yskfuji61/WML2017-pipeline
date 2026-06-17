@@ -1,0 +1,19 @@
+Dataset: MICCAI 2017 WMH / White Matter Hyperintensity Segmentation Challenge
+Source DOI: 10.34894/AECRSD
+Downloaded at: 2026-06-16T21:49:48Z
+Metadata file: dataverse_metadata.json
+Download manifest: download_manifest.tsv
+Downloaded file manifest: downloaded_file_manifest.txt
+SHA256 file: SHA256SUMS.txt
+
+Number of downloaded files:
+    1791 downloaded_file_manifest.txt
+
+Number of SHA256 entries:
+    1791 SHA256SUMS.txt
+
+Total downloaded size:
+8.7G	files
+
+Size check:
+All file sizes match Dataverse metadata.

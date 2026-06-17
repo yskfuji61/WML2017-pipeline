@@ -1,0 +1,51 @@
+{
+  "name": "wmh2017-reproducible-pipeline",
+  "version": "0.0.0.0",
+  "description": "Public bundle for the MICCAI 2017 WMH Segmentation Challenge pipeline, inherited from isles2022-2d3d-blend-reproducible-pipeline. No data, no trained weights.",
+  "inherits_from": {
+    "repo": "isles2022-2d3d-blend-reproducible-pipeline",
+    "tag": "v0.0.0.1",
+    "commit_short": "925ae8c"
+  },
+  "expected_files": [
+    "README.md",
+    "README_ja.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE",
+    "CITATION.cff",
+    "AUDIT_MAP.md",
+    "ROADMAP.md",
+    "MODEL_CARD.md",
+    "wmh2017/README.md",
+    "wmh2017/README_en.md",
+    "docs/experiment_journey.md",
+    "docs/inheritance/inheritance_map.md",
+    "core/pipeline/src/datasets/wmh_dataset.py",
+    "core/pipeline/src/models/convnext_nnunet_seg.py",
+    "core/pipeline/src/models/input_adapters.py",
+    "core/pipeline/src/preprocess/utils_io.py",
+    "core/pipeline/src/training/train_wmh_25d_convnext.py",
+    "core/pipeline/src/training/losses.py",
+    "core/pipeline/src/training/utils_train.py",
+    "core/pipeline/src/evaluation/evaluate_wmh_25d.py",
+    "core/pipeline/src/evaluation/evaluate_wmh_25d_ensemble.py",
+    "core/pipeline/src/evaluation/metrics_segmentation.py",
+    "core/pipeline/scripts/cross_arch_ensemble_native.py",
+    "core/pipeline/scripts/nnUNetTrainer_MPS3D_500epochs.py",
+    "core/pipeline/tools/make_manifest.py",
+    "scripts/smoke_test.py"
+  ],
+  "phase_1_acceptance_criteria": {
+    "AC-01_obtain_data": "https://wmh.isi.uu.nl/ DUA + download",
+    "AC-02_load_image_mask": "wmh_dataset.py DEFERRED_WMH_REVIEW stubs",
+    "AC-03_visualize_one_case": "ad hoc nibabel/matplotlib",
+    "AC-04_train_val_split": "scanner-stratified Utrecht/Singapore/GE3T",
+    "AC-05_baseline_3d_model": "MONAI 3D U-Net first (per kickoff brief)",
+    "AC-06_inference_masks": "evaluate_wmh_25d.py",
+    "AC-07_dice_metric": "extend metrics_segmentation.py to 5-metric MICCAI suite",
+    "AC-08_lab_notebook": "author writes (template in docs/experiment_journey.md)",
+    "AC-09_compare_published": "Phase 4 reality-check checklist in journey doc",
+    "AC-10_no_proprietary_data": ".gitignore excludes Datasets/, weights, logs"
+  }
+}

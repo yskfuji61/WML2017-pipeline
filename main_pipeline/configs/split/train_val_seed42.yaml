@@ -1,0 +1,36 @@
+split_id: WMH2017-TRAIN-VAL-SEED42
+seed: 42
+source_split_col: challenge_split
+
+source_split:
+  train_val_eligible: training
+  heldout_eval_only: test
+
+train_ratio: 0.8
+val_count: null
+
+stratify_keys_candidates:
+  - site
+  - scanner_code
+
+group_keys_candidates:
+  - case_id
+
+heldout_policy:
+  test_cases_assigned_to: heldout_eval
+  test_may_have_wmh_in_2022_release: true
+  use_test_for_train_val_tuning: false
+
+forbidden_use:
+  - test_for_training
+  - test_for_validation
+  - test_for_threshold_tuning
+  - test_for_preprocessing_fit
+  - test_for_model_selection
+  - test_for_early_stopping
+  - additional_annotations_as_primary_reference_in_smoke_baseline
+
+output_files:
+  train_val_csv: data/splits/wmh2017_train_val_seed42.csv
+  test_heldout_csv: data/splits/wmh2017_test110_heldout.csv
+  summary_json: data/splits/split_summary.json

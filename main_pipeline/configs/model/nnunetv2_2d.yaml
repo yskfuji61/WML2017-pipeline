@@ -1,0 +1,7 @@
+model_id: MODEL-NNUNETV2-2D
+status: PLANNED_SOURCE_NEEDS_EVIDENCE_REVIEW_REQUIRED
+purpose: strong automated baseline after EXP-000
+framework: nnU-Net v2
+source_ids:
+  - SRC-NNUNETV2-DOCS
+claim_boundary: local_validation_only

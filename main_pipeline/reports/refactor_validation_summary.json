@@ -1,0 +1,30 @@
+{
+  "refactor_completed_at": "2026-06-17T12:41:44Z",
+  "local_checks": [
+    {
+      "command": "python -m pytest -q",
+      "status": "passed",
+      "observed": "24 tests passed"
+    },
+    {
+      "command": "python -m compileall -q src scripts",
+      "status": "passed"
+    },
+    {
+      "command": "python scripts/verify_release_package.py --repo-root . --out reports/release_package_manifest.json",
+      "status": "passed"
+    },
+    {
+      "command": "python -m ruff check src scripts tests",
+      "status": "not_run_local_missing_ruff",
+      "note": "CI workflow installs ruff before running it."
+    }
+  ],
+  "not_verified_in_this_environment": [
+    "Real WMH2017 dataset manifest generation because dataset was not provided.",
+    "MONAI training because monai/nibabel are not installed in this execution environment.",
+    "Official WMH challenge evaluation-code cross-check.",
+    "Security scanner execution because CI evidence is defined but not run here."
+  ],
+  "claim_boundary": "This ZIP is an improved repository package, not a real-data validation package and not release-ready."
+}

@@ -1,0 +1,1 @@
+metric_id,metric_name,category,label_policy,definition,implementation_file,golden_test_file,spacing_required,aggregation,higher_is_better,valid_for_claims,claim_boundary,notes

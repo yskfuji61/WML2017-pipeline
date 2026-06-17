@@ -1,0 +1,37 @@
+{
+  "package": "wmh2017_pipeline_toppro_audit_refactor",
+  "validated_at_jst": "2026-06-17T00:00:00+09:00",
+  "release_state": {
+    "local_planning_state": "READY_FOR_REQUIREMENTS_REVIEW",
+    "controlled_release_state": "NOT_READY_FOR_PREVIEW",
+    "ready_for_release": false
+  },
+  "commands_executed": [
+    {
+      "command": "python scripts/verify_release_package.py --repo-root . --out reports/full_package_manifest.json",
+      "result": "pass",
+      "output": "Wrote reports/full_package_manifest.json with 144 files",
+      "note": "Creates full structural manifest; excludes its own output file from file list for stable hash."
+    },
+    {
+      "command": "python -m pytest tests/unit tests/integration",
+      "result": "pass",
+      "output": "24 passed in 5.42s",
+      "note": "Spreadsheet runtime warmup warning appeared in stderr from environment startup; pytest return code was 0."
+    }
+  ],
+  "evidence_boundaries": {
+    "real_wmh2017_dataset_run": "not generated",
+    "training_evidence": "not generated",
+    "prediction_evidence": "not generated",
+    "metric_evidence": "not generated",
+    "source_license_review": "not completed",
+    "review_approval": "not completed",
+    "clinical_customer_cloud_proprietary_use": "blocked"
+  },
+  "open_registers": [
+    "registry/finding_register_wmh2017.csv",
+    "registry/review_approval_register_wmh2017.csv",
+    "registry/decision_record_register_wmh2017.csv"
+  ]
+}

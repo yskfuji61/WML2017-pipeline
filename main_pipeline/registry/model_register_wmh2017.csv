@@ -1,0 +1,9 @@
+model_id,model_name,category,priority,framework,input_modalities,source_ids,status,claim_boundary,notes
+MODEL-WINNER-FCN-ENSEMBLE,Winner-style FCN ensemble,winner_reproduction,1,UNRESOLVED_UNTIL_HUMAN_REVIEW,FLAIR+T1,"SRC-LI-FCN-ENSEMBLE-2018;SRC-HONGWEI-WMH-IBBMTUM",NEEDS_SOURCE_LICENSE_REVIEW,reproduction_candidate_not_sota,Shortest SOTA-candidate anchor after EXP-000
+MODEL-MONAI-2D-UNET,MONAI 2D U-Net,baseline,2,MONAI,FLAIR optional T1,SRC-MONAI-DOCS,PLANNED,local_validation_only,Compare against winner under same split/metrics
+MODEL-MONAI-25D-UNET,MONAI 2.5D U-Net,baseline,3,MONAI,neighbor slices optional T1,SRC-MONAI-DOCS,PLANNED,local_validation_only,Pragmatic middle ground for small data
+MODEL-NNUNETV2-2D,nnU-Net v2 2D,strong_baseline,4,nnU-Net v2,FLAIR optional T1,SRC-NNUNETV2-DOCS,NEEDS_EVIDENCE_REVIEW_SOURCE,local_validation_only,Automated strong baseline
+MODEL-NNUNETV2-3D,nnU-Net v2 3D,strong_baseline,5,nnU-Net v2,FLAIR optional T1,SRC-NNUNETV2-DOCS,NEEDS_EVIDENCE_REVIEW_SOURCE,local_validation_only,May be data-limited
+MODEL-MONAI-3D-UNET,MONAI 3D U-Net,meeting_requirement_baseline,6,MONAI,FLAIR+T1,SRC-MONAI-DOCS,PLANNED,local_validation_only,Smoke path already scaffolded
+MODEL-MONAI-SEGRESNET,MONAI SegResNet,advanced_baseline,7,MONAI,FLAIR+T1,SRC-MONAI-DOCS,PLANNED,local_validation_only,After simpler baselines
+MODEL-SWINUNETR,SwinUNETR,transformer_candidate,8,MONAI,FLAIR+T1,SRC-MONAI-DOCS,DEFER,local_validation_only,Small data overfitting risk
