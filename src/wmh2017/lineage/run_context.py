@@ -19,15 +19,20 @@ def build_run_context(
     device: str = "auto",
     owner: str = "research-dev",
     release_state: str = "PREVIEW_CANDIDATE",
-    package_version: str = "0.0.0.0",
+    package_id: str = "WMH2017-LOCAL-POC-SCAFFOLD",
+    target_state: str = "READY_FOR_PREVIEW",
+    package_version: str = "0.2.3",
     config_hash: str = "",
+    config_snapshot_sha256: str = "",
     dataset_manifest_hash: str = "",
     split_manifest_hash: str = "",
 ) -> dict[str, Any]:
     versions = package_versions()
     return {
         "run_id": run_id,
+        "package_id": package_id,
         "package_version": package_version,
+        "target_state": target_state,
         "code_commit": git_commit_or_unknown(),
         "git_dirty": git_dirty(),
         "owner": owner,
@@ -41,8 +46,9 @@ def build_run_context(
         "wmh2017_root_redacted": True,
         "wmh2017_root": redact_path(wmh2017_root),
         "config_hash": config_hash,
-        "dataset_manifest_hash": dataset_manifest_hash,
-        "split_manifest_hash": split_manifest_hash,
+        "config_snapshot_sha256": config_snapshot_sha256,
+        "dataset_manifest_sha256": dataset_manifest_hash,
+        "split_manifest_sha256": split_manifest_hash,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
     }
 
@@ -84,6 +90,7 @@ def init_run_directory(
         "checkpoints",
         "predictions",
         "evaluation",
+        "lineage",
         "observability",
         "release",
     ]

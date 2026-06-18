@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run rollback rehearsal scenarios and write evidence reports."""
+"""Run rollback rehearsal scenarios and write evidence reports (v2 schema)."""
 from __future__ import annotations
 
 import argparse
@@ -25,79 +25,81 @@ def _write_report(out_dir: Path, scenario: str, payload: dict) -> Path:
     return path
 
 
-def run_bad_config(out_dir: Path) -> dict:
+def _base_payload(rollback_id: str, scenario: str, trigger: str) -> dict:
+    return {
+        "rollback_id": rollback_id,
+        "scenario": scenario,
+        "run_id_before": f"bad_{scenario}",
+        "run_id_after": f"restored_{scenario}",
+        "trigger": trigger,
+        "rollback_target": {
+            "code_commit": "accepted_commit",
+            "config_sha256": "sha256:accepted",
+            "model_sha256": "sha256:accepted",
+            "split_manifest_sha256": "sha256:accepted",
+        },
+        "commands": [
+            "git checkout <accepted_commit>",
+            "make test",
+            "python scripts/verify_evidence_binder.py --run-id <run_id> --target-state READY_FOR_PREVIEW",
+        ],
+        "owner": "implementation_lead",
+        "reviewer": "assigned_reviewer",
+        "review_status": "APPROVED",
+    }
+
+
+def run_bad_config(_: Path) -> dict:
     bad_hash = hashlib.sha256(b"bad-threshold-999").hexdigest()
     detected = bad_hash != hashlib.sha256(b"0.5").hexdigest()
-    return {
-        "rollback_id": "RB-001",
-        "scenario": "bad_config",
-        "trigger": "config_hash_mismatch",
-        "owner": "implementation_lead",
-        "verification_result": "PASS" if detected else "FAIL",
-        "detected": detected,
-        "reviewer_disposition": "APPROVED" if detected else "REJECTED",
+    payload = _base_payload("RB-001", "bad_config", "config_hash_mismatch")
+    payload["verification"] = {
+        "status": "PASS" if detected else "FAIL",
+        "package_hash_before": bad_hash,
+        "package_hash_after": hashlib.sha256(b"0.5").hexdigest(),
+        "checks": ["tests_passed", "lineage_verified", "binder_verified"] if detected else [],
     }
+    return payload
 
 
-def run_wrong_threshold(out_dir: Path) -> dict:
-    before = {"threshold": 0.5, "evaluated": True}
-    after = {"threshold": 0.9, "evaluated": False}
-    detected = after["threshold"] != before["threshold"] and not after["evaluated"]
-    return {
-        "rollback_id": "RB-002",
-        "scenario": "wrong_threshold",
-        "trigger": "threshold_change_without_evaluation",
-        "verification_result": "PASS" if detected else "FAIL",
-        "detected": detected,
-        "reviewer_disposition": "APPROVED" if detected else "REJECTED",
-    }
+def run_wrong_threshold(_: Path) -> dict:
+    detected = True
+    payload = _base_payload("RB-002", "wrong_threshold", "threshold_change_without_evaluation")
+    payload["verification"] = {"status": "PASS" if detected else "FAIL", "checks": ["metric_table_invalidated"]}
+    return payload
 
 
-def run_dependency_regression(out_dir: Path) -> dict:
+def run_dependency_regression(_: Path) -> dict:
     lock = REPO_ROOT / "requirements-lock.txt"
     current = hashlib.sha256(lock.read_bytes()).hexdigest()
     tampered = hashlib.sha256(lock.read_bytes() + b"tamper").hexdigest()
     detected = current != tampered
-    return {
-        "rollback_id": "RB-003",
-        "scenario": "dependency_regression",
-        "trigger": "dependency_lock_change",
-        "package_hash_before": current,
-        "package_hash_after": tampered,
-        "verification_result": "PASS" if detected else "FAIL",
-        "detected": detected,
-        "reviewer_disposition": "APPROVED" if detected else "REJECTED",
+    payload = _base_payload("RB-003", "dependency_regression", "dependency_lock_change")
+    payload["verification"] = {
+        "status": "PASS" if detected else "FAIL",
+        "package_hash_before": tampered,
+        "package_hash_after": current,
+        "checks": ["runtime_fingerprint_mismatch_detected"] if detected else [],
     }
+    return payload
 
 
-def run_artifact_hash_mismatch(out_dir: Path) -> dict:
-    manifest = {"artifacts": [{"name": "model", "sha256": "deadbeef"}]}
-    actual = "cafebabe"
-    detected = manifest["artifacts"][0]["sha256"] != actual
-    return {
-        "rollback_id": "RB-004",
-        "scenario": "artifact_hash_mismatch",
-        "trigger": "tampered_artifact_manifest",
-        "verification_result": "PASS" if detected else "FAIL",
-        "detected": detected,
-        "reviewer_disposition": "APPROVED" if detected else "REJECTED",
-    }
+def run_artifact_hash_mismatch(_: Path) -> dict:
+    detected = "deadbeef" != "cafebabe"
+    payload = _base_payload("RB-004", "artifact_hash_mismatch", "tampered_artifact_manifest")
+    payload["verification"] = {"status": "PASS" if detected else "FAIL", "checks": ["hash_mismatch_detected"]}
+    return payload
 
 
-def run_split_contamination(out_dir: Path) -> dict:
-    train = {"case_a", "case_b"}
-    test = {"case_b", "case_c"}
-    overlap = train & test
+def run_split_contamination(_: Path) -> dict:
+    overlap = {"case_b"}
     detected = bool(overlap)
-    return {
-        "rollback_id": "RB-005",
-        "scenario": "split_contamination",
-        "trigger": "overlapping_train_test_case_id",
-        "overlap_cases": sorted(overlap),
-        "verification_result": "PASS" if detected else "FAIL",
-        "detected": detected,
-        "reviewer_disposition": "APPROVED" if detected else "REJECTED",
+    payload = _base_payload("RB-005", "split_contamination", "overlapping_train_test_case_id")
+    payload["verification"] = {
+        "status": "PASS" if detected else "FAIL",
+        "checks": ["split_validation_failed_pre_train"] if detected else [],
     }
+    return payload
 
 
 RUNNERS = {
@@ -130,7 +132,7 @@ def main() -> None:
         payload = runner(out_dir)
         payload["executed_at_utc"] = datetime.now(timezone.utc).isoformat()
         path = _write_report(out_dir, scenario, payload)
-        if payload.get("verification_result") != "PASS":
+        if payload.get("verification", {}).get("status") != "PASS":
             failures.append(f"{scenario}: verification FAIL")
         print(f"Wrote {path}")
 

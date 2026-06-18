@@ -32,7 +32,8 @@ Target state: **READY_FOR_PREVIEW** (not READY_FOR_RELEASE)
 - [ ] `python scripts/verify_no_raw_data_committed.py`
 - [ ] `python scripts/verify_no_legacy_imports.py`
 - [ ] `make security` fail-closed (enforce_security_policy.py)
-- [ ] `make sbom` generates `reports/security/sbom.spdx.json`
+- [ ] CycloneDX SBOM at `reports/security/sbom.cdx.json`
+- [ ] `python scripts/verify_package_identity.py`
 - [ ] Security scan outputs under `reports/security/`
 - [ ] Release package manifest generated
 

@@ -1,0 +1,15 @@
+package_id: WMH2017-LOCAL-POC-SCAFFOLD
+package_version: 0.2.3
+target_state: READY_FOR_PREVIEW
+code_commit: null
+git_tag: null
+identity_sources:
+  readme: README.md
+  pyproject: pyproject.toml
+  evidence_binder: registry/evidence_binder_wmh2017.yaml
+  release_decision: docs/release_decision_record.md
+  full_manifest: reports/full_package_manifest.json
+required_consistency:
+  - package_id
+  - package_version
+  - target_state

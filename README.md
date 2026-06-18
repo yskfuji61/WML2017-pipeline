@@ -6,7 +6,7 @@ Auditable **offline** WMH2017 public-data research PoC package (not clinical, cu
 
 | Field | Value |
 |---|---|
-| package_version | `0.0.0.0` |
+| package_version | `0.2.3` |
 | local planning state | `READY_FOR_STRUCTURAL_REVIEW` |
 | controlled release state | `NOT_READY_FOR_PREVIEW` |
 | first goal | `READY_FOR_PREVIEW` (not `READY_FOR_RELEASE`) |

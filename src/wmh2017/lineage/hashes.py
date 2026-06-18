@@ -31,6 +31,29 @@ def write_hash_sidecar(path: str | Path) -> str:
     return digest
 
 
+def write_named_sidecar(path: str | Path, sidecar_name: str | None = None) -> str:
+    """Write sidecar with explicit filename (e.g. prediction_manifest.sha256)."""
+    p = Path(path)
+    digest = sha256_path(p)
+    if not digest:
+        return ""
+    if sidecar_name:
+        sidecar = p.parent / sidecar_name
+    else:
+        sidecar = p.parent / (p.name + ".sha256")
+    sidecar.write_text(digest + "\n", encoding="utf-8")
+    return digest
+
+
+def verify_sidecar(path: str | Path, sidecar_path: str | Path | None = None) -> bool:
+    p = Path(path)
+    sidecar = Path(sidecar_path) if sidecar_path else p.with_suffix(p.suffix + ".sha256")
+    if not sidecar.exists():
+        return False
+    expected = sidecar.read_text(encoding="utf-8").strip()
+    return sha256_path(p) == expected
+
+
 def write_json(path: str | Path, payload: Any) -> None:
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)

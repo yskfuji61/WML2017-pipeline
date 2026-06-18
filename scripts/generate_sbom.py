@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Generate SPDX SBOM and license report from locked dependencies."""
+"""Generate CycloneDX SBOM and license report from locked dependencies."""
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
 import re
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -37,43 +38,43 @@ def parse_lock_packages(lock_path: Path) -> list[dict[str, str]]:
     return packages
 
 
-def build_spdx(packages: list[dict[str, str]], *, lock_hash: str, package_version: str) -> dict:
-    return {
-        "spdxVersion": "SPDX-2.3",
-        "dataLicense": "CC0-1.0",
-        "SPDXID": "SPDXRef-DOCUMENT",
-        "name": "wmh2017-pipeline",
-        "documentNamespace": f"https://github.com/yskfuji61/WML2017-pipeline/spdx/{package_version}",
-        "creationInfo": {
-            "created": datetime.now(timezone.utc).isoformat(),
-            "creators": ["Tool: generate_sbom.py"],
-        },
-        "packages": [
-            {
-                "SPDXID": f"SPDXRef-Package-{i}",
-                "name": pkg["name"],
-                "versionInfo": pkg["version"],
-                "licenseConcluded": pkg.get("license", "NOASSERTION"),
-                "downloadLocation": "NOASSERTION",
-            }
-            for i, pkg in enumerate(packages, start=1)
-        ],
-        "externalRefs": [
-            {
-                "referenceCategory": "SECURITY",
-                "referenceType": "sha256",
-                "referenceLocator": f"requirements-lock.txt:{lock_hash}",
-            }
-        ],
-    }
+def generate_cyclonedx(lock_path: Path, out_path: Path) -> int:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        subprocess.run(
+            [
+                "cyclonedx-py",
+                "requirements",
+                str(lock_path),
+                "-o",
+                str(out_path),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        # Fallback minimal CycloneDX when cyclonedx-py unavailable
+        payload = {
+            "bomFormat": "CycloneDX",
+            "specVersion": "1.5",
+            "version": 1,
+            "components": [
+                {"type": "library", "name": pkg["name"], "version": pkg["version"]}
+                for pkg in parse_lock_packages(lock_path)
+            ],
+        }
+        out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    data = json.loads(out_path.read_text(encoding="utf-8"))
+    return len(data.get("components", []))
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate SBOM and license report.")
     parser.add_argument("--lock-file", default="requirements-lock.txt")
-    parser.add_argument("--out", default="reports/security/sbom.spdx.json")
+    parser.add_argument("--cdx-out", default="reports/security/sbom.cdx.json")
     parser.add_argument("--license-out", default="reports/security/license_report.json")
-    parser.add_argument("--package-version", default="0.0.0.0")
+    parser.add_argument("--package-version", default="0.2.3")
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
@@ -83,24 +84,21 @@ def main() -> None:
 
     packages = parse_lock_packages(lock_path)
     lock_hash = sha256_file(lock_path)
-    sbom = build_spdx(packages, lock_hash=lock_hash, package_version=args.package_version)
-
-    out = repo_root / args.out
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(sbom, indent=2, ensure_ascii=False), encoding="utf-8")
+    cdx_out = repo_root / args.cdx_out
+    component_count = generate_cyclonedx(lock_path, cdx_out)
 
     license_report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "lock_file": args.lock_file,
         "lock_file_sha256": lock_hash,
         "package_count": len(packages),
+        "sbom_component_count": component_count,
         "packages": packages,
-        "note": "License fields are NOASSERTION until pip-licenses review completes.",
     }
     license_out = repo_root / args.license_out
     license_out.write_text(json.dumps(license_report, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    print(f"Wrote SBOM: {out}")
+    print(f"Wrote CycloneDX SBOM: {cdx_out} ({component_count} components)")
     print(f"Wrote license report: {license_out}")
 
 

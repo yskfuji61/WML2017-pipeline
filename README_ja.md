@@ -1,6 +1,6 @@
 # WMH2017 Pipeline — ローカル公開データPoC scaffold
 
-> package_version: `0.2.0`
+> package_version: `0.2.3`
 >
 > local planning state: `READY_FOR_REQUIREMENTS_REVIEW`
 >
@@ -16,7 +16,7 @@
 
 **MICCAI 2017 白質病変（WMH）セグメンテーションチャレンジ** (Kuijf et al., IEEE TMI 2019) のための再現可能パイプライン。姉妹リポジトリ [`isles2022-2d3d-blend-reproducible-pipeline`](https://github.com/yskfuji/isles2022-2d3d-blend-reproducible-pipeline)（ISLES 2022 用の 2D + 3D + 2.5D 異種アンサンブル）からブートストラップし、**FLAIR + T1** 入力向けに再ターゲット。
 
-この 0.2.0 リリースは **継承ベースライン**: コードは揃ったが、WMH 固有部分は `# DEFERRED_WMH_REVIEW:` ヘッダーでマーク。WMH データへの活性化は明示的に Phase 1 タスク（[ROADMAP.md](ROADMAP.md) 参照）。
+この 0.2.3 リリースは **継承ベースライン**: コードは揃ったが、WMH 固有部分は `# DEFERRED_WMH_REVIEW:` ヘッダーでマーク。WMH データへの活性化は明示的に Phase 1 タスク（[ROADMAP.md](ROADMAP.md) 参照）。
 
 **クイックリンク**
 - エントリーガイド (EN): [wmh2017/README_en.md](wmh2017/README_en.md)
@@ -27,7 +27,7 @@
 - ロードマップ: [ROADMAP.md](ROADMAP.md)
 - 引用情報: [CITATION.cff](CITATION.cff)
 
-## このリポジトリが今 (0.2.0) 提供するもの
+## このリポジトリが今 (0.2.3) 提供するもの
 
 - 姉妹 `yskfuji/*-reproducible-pipeline` 規約に合わせた **portfolio-grade なリポジトリスケルトン**
 - **MPS 互換 nnU-Net 3D trainer**（Apple Silicon の `ConvTranspose3d` 未対応回避策）をそのまま継承 — ISLES の作業で最も再利用価値の高い単一コンポーネント

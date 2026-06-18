@@ -14,11 +14,13 @@ Verifier: `python scripts/verify_evidence_binder.py --run-id <run_id> --target-s
 
 ```text
 binder_status: OPEN
+package_version: 0.2.3
 real_wmh2017_run_evidence: GENERATED_LOCALLY_NOT_COMMITTED
-official_metric_parity: NOT_REVIEWED
+official_metric_parity: FIXTURE_ONLY_NOT_APPROVED
 source_license_review: NOT_COMPLETED
 review_approval: NOT_COMPLETED
 release_decision: NOT_APPROVED
+security_sbom: reports/security/sbom.cdx.json
 ```
 
 ## Required binder sections

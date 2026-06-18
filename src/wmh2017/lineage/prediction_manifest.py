@@ -7,7 +7,7 @@ from typing import Any
 
 import pandas as pd
 
-from wmh2017.lineage.hashes import sha256_path, write_hash_sidecar
+from wmh2017.lineage.hashes import sha256_path, write_hash_sidecar, write_named_sidecar
 from wmh2017.security.path_redaction import redact_path
 
 
@@ -61,7 +61,7 @@ def write_prediction_manifest(path: Path, rows: list[dict[str, Any]]) -> Path:
         writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         writer.writeheader()
         writer.writerows(rows)
-    write_hash_sidecar(path)
+    write_named_sidecar(path, "prediction_manifest.sha256")
     return path
 
 

@@ -1,8 +1,10 @@
 PYTHON ?= python
 RUN_ID ?= local_$(shell date +%Y%m%d_%H%M%S)
 WMH2017_ROOT ?=
+PACKAGE_ID ?= WMH2017-LOCAL-POC-SCAFFOLD
+PACKAGE_VERSION ?= 0.2.3
 
-.PHONY: setup lint typecheck test security sbom fingerprint e2e verify-package verify-lineage verify-binder preview-candidate
+.PHONY: setup lint typecheck test security sbom fingerprint manifest e2e verify-package verify-lineage verify-binder preview-candidate rollback-rehearsal parity-report
 
 setup:
 	$(PYTHON) -m pip install --upgrade pip
@@ -24,14 +26,31 @@ security:
 	detect-secrets audit .secrets.baseline --report > reports/security/detect_secrets_audit.txt
 	bandit -q -r src scripts -f json -o reports/security/bandit.json
 	pip-audit -r requirements-lock.txt -f json -o reports/security/pip_audit.json
+	$(PYTHON) scripts/generate_sbom.py --cdx-out reports/security/sbom.cdx.json --license-out reports/security/license_report.json
 	$(PYTHON) scripts/enforce_security_policy.py reports/security
 
 sbom:
-	$(PYTHON) scripts/generate_sbom.py --out reports/security/sbom.spdx.json --license-out reports/security/license_report.json
+	$(PYTHON) scripts/generate_sbom.py --cdx-out reports/security/sbom.cdx.json --license-out reports/security/license_report.json
+
+manifest:
+	mkdir -p reports
+	$(PYTHON) scripts/verify_release_package.py \
+	  --repo-root . \
+	  --structural-only \
+	  --out reports/full_package_manifest.json \
+	  --package-id $(PACKAGE_ID) \
+	  --package-version $(PACKAGE_VERSION)
 
 fingerprint:
 	$(PYTHON) scripts/print_runtime_fingerprint.py \
 	  --out artifacts/runs/$(RUN_ID)/runtime_fingerprint.json
+
+rollback-rehearsal:
+	$(PYTHON) scripts/run_rollback_rehearsal.py --all-scenarios
+	$(PYTHON) scripts/verify_rollback_rehearsal.py --target-state READY_FOR_PREVIEW
+
+parity-report:
+	$(PYTHON) scripts/generate_official_parity_report.py
 
 e2e:
 	test -n "$(WMH2017_ROOT)"
@@ -45,15 +64,27 @@ verify-package:
 	  --repo-root . \
 	  --run-dir artifacts/runs/$(RUN_ID) \
 	  --out artifacts/runs/$(RUN_ID)/release/release_package_manifest.json \
-	  --package-id WMH2017-LOCAL-POC-SCAFFOLD-0.0.0.0 \
-	  --package-version 0.0.0.0
+	  --package-id $(PACKAGE_ID) \
+	  --package-version $(PACKAGE_VERSION)
 
 verify-lineage:
-	$(PYTHON) scripts/verify_lineage_graph.py --run-id $(RUN_ID)
+	$(PYTHON) scripts/verify_lineage_graph.py \
+	  --run-id $(RUN_ID) \
+	  --require-artifact-hashes \
+	  --require-source-review \
+	  --require-release-decision
 
 verify-binder:
 	$(PYTHON) scripts/verify_evidence_binder.py \
 	  --run-id $(RUN_ID) \
 	  --target-state READY_FOR_PREVIEW
 
-preview-candidate: setup lint typecheck test security sbom fingerprint e2e verify-package verify-lineage verify-binder
+preview-candidate: setup lint typecheck test security manifest parity-report rollback-rehearsal
+	$(PYTHON) scripts/verify_package_identity.py
+	$(PYTHON) scripts/verify_finding_register.py --target-state READY_FOR_PREVIEW
+	test -n "$(WMH2017_ROOT)"
+	$(MAKE) e2e RUN_ID=$(RUN_ID) WMH2017_ROOT="$(WMH2017_ROOT)"
+	$(PYTHON) scripts/validate_metric_table.py artifacts/runs/$(RUN_ID)/evaluation/case_metrics.csv
+	$(MAKE) verify-lineage RUN_ID=$(RUN_ID)
+	$(MAKE) verify-binder RUN_ID=$(RUN_ID)
+	$(MAKE) verify-package RUN_ID=$(RUN_ID)

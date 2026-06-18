@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed security policy enforcement for WMH2017 pipeline."""
+"""Fail-closed security policy enforcement for WMH2017 pipeline (v2 schema)."""
 from __future__ import annotations
 
 import argparse
@@ -29,13 +29,7 @@ def _load_exceptions(register_path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(f))
 
 
-def _exception_covers(
-    exceptions: list[dict[str, str]],
-    *,
-    tool: str,
-    finding_id: str,
-    severity: str,
-) -> bool:
+def _exception_covers(exceptions: list[dict[str, str]], *, tool: str, finding_id: str, severity: str) -> bool:
     today = datetime.now(timezone.utc).date().isoformat()
     for row in exceptions:
         if row.get("status", "").upper() != "APPROVED":
@@ -55,40 +49,55 @@ def _exception_covers(
     return False
 
 
-def check_bandit(report: dict, exceptions: list[dict[str, str]]) -> list[str]:
+def check_bandit(report: dict, exceptions: list[dict[str, str]]) -> tuple[str, list[str], dict]:
     failures: list[str] = []
+    high = medium = 0
     for item in report.get("results", []):
         severity = str(item.get("issue_severity", "")).upper()
         confidence = str(item.get("issue_confidence", "")).upper()
+        if severity == "HIGH":
+            high += 1
+        if severity == "MEDIUM":
+            medium += 1
         if severity not in BANDIT_FAIL_SEVERITIES or confidence not in BANDIT_FAIL_CONFIDENCE:
             continue
         test_id = str(item.get("test_id", "unknown"))
         finding_id = f"bandit:{test_id}:{item.get('line_number', '')}"
         if _exception_covers(exceptions, tool="bandit", finding_id=finding_id, severity=severity):
             continue
-        failures.append(f"bandit {severity}/{confidence}: {test_id} at {item.get('filename')}:{item.get('line_number')}")
-    return failures
+        failures.append(f"bandit {severity}/{confidence}: {test_id}")
+    status = "PASS" if not failures else "FAIL"
+    return status, failures, {"high_findings": high, "medium_high_confidence_findings": medium}
 
 
-def check_pip_audit(report: dict | list, exceptions: list[dict[str, str]]) -> list[str]:
+def check_pip_audit(report: dict | list, exceptions: list[dict[str, str]]) -> tuple[str, list[str], dict]:
     failures: list[str] = []
+    critical = high = 0
     deps = report if isinstance(report, list) else report.get("dependencies", [])
     for dep in deps:
-        name = dep.get("name", "unknown")
         for vuln in dep.get("vulns", []):
+            sev = str(vuln.get("severity", "HIGH")).upper()
+            if sev == "CRITICAL":
+                critical += 1
+            if sev == "HIGH":
+                high += 1
+            if sev not in PIP_AUDIT_FAIL_SEVERITIES:
+                continue
             alias = vuln.get("id") or (vuln.get("aliases") or ["unknown"])[0]
-            severity_raw = str(vuln.get("severity", "HIGH")).upper()
-            if severity_raw not in PIP_AUDIT_FAIL_SEVERITIES:
+            finding_id = f"pip-audit:{alias}:{dep.get('name', '')}"
+            if _exception_covers(exceptions, tool="pip-audit", finding_id=finding_id, severity=sev):
                 continue
-            finding_id = f"pip-audit:{alias}:{name}"
-            if _exception_covers(exceptions, tool="pip-audit", finding_id=finding_id, severity=severity_raw):
-                continue
-            failures.append(f"pip-audit {severity_raw}: {name} {alias}")
-    return failures
+            failures.append(f"pip-audit {sev}: {dep.get('name')} {alias}")
+    status = "PASS" if not failures else "FAIL"
+    return status, failures, {
+        "critical_vulnerabilities": critical,
+        "high_vulnerabilities_without_exception": len(failures),
+    }
 
 
-def check_detect_secrets(report_dir: Path, audit_txt: Path, exceptions: list[dict[str, str]]) -> list[str]:
+def check_detect_secrets(report_dir: Path, audit_txt: Path, exceptions: list[dict[str, str]]) -> tuple[str, list[str], dict]:
     failures: list[str] = []
+    unaudited = 0
     detect_json = report_dir / "detect_secrets.json"
     if detect_json.exists():
         data = _load_json(detect_json)
@@ -97,57 +106,72 @@ def check_detect_secrets(report_dir: Path, audit_txt: Path, exceptions: list[dic
                 finding_id = f"secret:{item.get('type')}:{item.get('filename')}:{item.get('line_number')}"
                 if _exception_covers(exceptions, tool="detect-secrets", finding_id=finding_id, severity="HIGH"):
                     continue
-                failures.append(
-                    f"detect-secrets: {item.get('type')} in {item.get('filename')}:{item.get('line_number')}"
-                )
+                failures.append(f"detect-secrets: {item.get('type')} in {item.get('filename')}")
     if audit_txt.exists():
         text = audit_txt.read_text(encoding="utf-8")
         if "Unaudited secrets" in text or "Potential secrets" in text:
+            unaudited += 1
             if not _exception_covers(exceptions, tool="detect-secrets", finding_id="baseline:unaudited", severity="HIGH"):
                 failures.append("detect-secrets audit: unaudited baseline entries remain")
-    return failures
+    status = "PASS" if not failures else "FAIL"
+    return status, failures, {"unaudited_findings": unaudited}
+
+
+def check_sbom(path: Path) -> tuple[str, list[str], dict]:
+    failures: list[str] = []
+    if not path.exists():
+        failures.append(f"SBOM missing: {path}")
+        return "FAIL", failures, {"path": str(path), "component_count": 0}
+    data = _load_json(path)
+    components = data.get("components", []) if isinstance(data, dict) else []
+    if not components:
+        failures.append("SBOM empty")
+    status = "PASS" if not failures else "FAIL"
+    return status, failures, {"path": str(path), "component_count": len(components)}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Enforce fail-closed security policy.")
     parser.add_argument("report_dir", help="Directory containing security scan JSON outputs")
-    parser.add_argument(
-        "--exception-register",
-        default="registry/security_exception_register.csv",
-        help="Approved exception register path",
-    )
-    parser.add_argument("--out", default="", help="Optional security_policy_result.json path")
+    parser.add_argument("--exception-register", default="registry/security_exception_register.csv")
+    parser.add_argument("--sbom", default="reports/security/sbom.cdx.json")
+    parser.add_argument("--out", default="")
     args = parser.parse_args()
 
-    report_dir = Path(args.report_dir)
     repo_root = Path(__file__).resolve().parents[1]
-    exception_path = Path(args.exception_register)
-    if not exception_path.is_absolute():
-        exception_path = repo_root / exception_path
+    report_dir = Path(args.report_dir)
+    if not report_dir.is_absolute():
+        report_dir = repo_root / report_dir
+    exceptions = _load_exceptions(repo_root / args.exception_register)
 
-    exceptions = _load_exceptions(exception_path)
-    failures: list[str] = []
-    failures.extend(check_bandit(_load_json(report_dir / "bandit.json"), exceptions))
-    failures.extend(check_pip_audit(_load_json(report_dir / "pip_audit.json"), exceptions))
-    failures.extend(check_detect_secrets(report_dir, report_dir / "detect_secrets_audit.txt", exceptions))
+    all_failures: list[str] = []
+    ds_status, ds_fail, ds_meta = check_detect_secrets(report_dir, report_dir / "detect_secrets_audit.txt", exceptions)
+    all_failures.extend(ds_fail)
+    bandit_status, bandit_fail, bandit_meta = check_bandit(_load_json(report_dir / "bandit.json"), exceptions)
+    all_failures.extend(bandit_fail)
+    pip_status, pip_fail, pip_meta = check_pip_audit(_load_json(report_dir / "pip_audit.json"), exceptions)
+    all_failures.extend(pip_fail)
+    sbom_path = repo_root / args.sbom
+    sbom_status, sbom_fail, sbom_meta = check_sbom(sbom_path)
+    all_failures.extend(sbom_fail)
 
     result = {
-        "status": "PASS" if not failures else "FAIL",
+        "status": "PASS" if not all_failures else "FAIL",
         "checked_at_utc": datetime.now(timezone.utc).isoformat(),
-        "failures": failures,
-        "policy": {
-            "bandit_severity": sorted(BANDIT_FAIL_SEVERITIES),
-            "bandit_confidence": sorted(BANDIT_FAIL_CONFIDENCE),
-            "pip_audit_severity": sorted(PIP_AUDIT_FAIL_SEVERITIES),
-        },
+        "detect_secrets": {"status": ds_status, **ds_meta},
+        "bandit": {"status": bandit_status, **bandit_meta},
+        "pip_audit": {"status": pip_status, **pip_meta},
+        "sbom": {"status": sbom_status, **sbom_meta},
+        "exceptions": [],
+        "failures": all_failures,
     }
 
     out_path = Path(args.out) if args.out else report_dir / "security_policy_result.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    if failures:
-        raise SystemExit(f"security policy FAIL ({len(failures)} issues):\n" + "\n".join(failures))
+    if all_failures:
+        raise SystemExit(f"security policy FAIL ({len(all_failures)} issues):\n" + "\n".join(all_failures))
     print(f"security policy PASS -> {out_path}")
 
 

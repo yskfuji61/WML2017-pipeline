@@ -61,13 +61,17 @@ reports/label_value_audit.csv
 reports/overlays/*
 reports/metrics/*
 reports/runs/*
+reports/ci/*
 reports/security/*
 reports/rollback/*
+reports/evaluation/*
 !reports/overlays/.gitkeep
 !reports/metrics/.gitkeep
 !reports/runs/.gitkeep
+!reports/ci/.gitkeep
 !reports/security/.gitkeep
 !reports/rollback/.gitkeep
+!reports/evaluation/.gitkeep
 
 # Legacy nested folder (post root promotion)
 main_pipeline/

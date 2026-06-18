@@ -30,17 +30,32 @@ jobs:
         run: |
           python scripts/verify_no_raw_data_committed.py
           python scripts/verify_no_legacy_imports.py
-      - name: Verify structural release package
+      - name: Generate structural manifest
         run: |
           mkdir -p reports/ci
           python scripts/verify_release_package.py \
             --repo-root . \
             --structural-only \
+            --out reports/full_package_manifest.json \
+            --package-id WMH2017-LOCAL-POC-SCAFFOLD \
+            --package-version 0.2.3
+      - name: Package identity gate
+        run: python scripts/verify_package_identity.py
+      - name: Finding register gate
+        run: python scripts/verify_finding_register.py --target-state READY_FOR_STRUCTURAL_REVIEW
+      - name: Verify structural release package copy
+        run: |
+          python scripts/verify_release_package.py \
+            --repo-root . \
+            --structural-only \
             --out reports/ci/structural_release_manifest.json \
-            --package-id WMH2017-LOCAL-POC-SCAFFOLD-0.0.0.0 \
-            --package-version 0.0.0.0
+            --package-id WMH2017-LOCAL-POC-SCAFFOLD \
+            --package-version 0.2.3
       - name: Upload structural reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: structural-reports
-          path: reports/ci/
+          path: |
+            reports/ci/
+            reports/full_package_manifest.json

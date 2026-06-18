@@ -13,6 +13,9 @@ EXCLUDE_DIR_PARTS = {
     ".pytest_cache",
     ".mypy_cache",
     ".ruff_cache",
+    ".venv",
+    "venv",
+    "main_pipeline",
 }
 
 REQUIRED_FILES = [
@@ -43,6 +46,7 @@ REQUIRED_FILES = [
     "registry/decision_record_register_wmh2017.csv",
     "Makefile",
     "RELEASE_CHECKLIST.md",
+    "registry/package_identity_wmh2017.yaml",
     "registry/evidence_binder_wmh2017.yaml",
 ]
 
@@ -57,10 +61,12 @@ RUN_ARTIFACTS = [
     "logs/train_log.jsonl",
     "checkpoints/model.pt",
     "predictions/prediction_manifest.csv",
+    "predictions/prediction_manifest.sha256",
     "evaluation/case_metrics.csv",
     "evaluation/metrics_summary.json",
     "evaluation/metric_schema_validation.json",
-    "lineage_graph.json",
+    "lineage/lineage_graph.json",
+    "lineage/lineage_graph.sha256",
     "artifact_manifest.json",
 ]
 
@@ -128,8 +134,8 @@ def main() -> None:
     parser.add_argument("--out", default="reports/release_package_manifest.json")
     parser.add_argument("--run-dir", default="", help="Optional run directory for run-level manifest validation.")
     parser.add_argument("--structural-only", action="store_true", help="Validate repo structure only; skip run artifact checks.")
-    parser.add_argument("--package-id", default="WMH2017-LOCAL-POC-SCAFFOLD-0.0.0.0")
-    parser.add_argument("--package-version", default="0.0.0.0")
+    parser.add_argument("--package-id", default="WMH2017-LOCAL-POC-SCAFFOLD")
+    parser.add_argument("--package-version", default="0.2.3")
     args = parser.parse_args()
 
     root = Path(args.repo_root).resolve()

@@ -4,9 +4,11 @@
 
 ```text
 decision: NOT_APPROVED_FOR_PREVIEW_OR_RELEASE
-local_planning_state: READY_FOR_REQUIREMENTS_REVIEW
+local_planning_state: READY_FOR_STRUCTURAL_REVIEW
 controlled_release_state: NOT_READY_FOR_PREVIEW
-package_version: 0.2.0
+package_id: WMH2017-LOCAL-POC-SCAFFOLD
+package_version: 0.2.3
+package_manifest_sha256: PENDING_GENERATED_MANIFEST
 decision_date: 2026-06-17
 decision_owner: implementation_lead
 release_approver: UNASSIGNED_RELEASE_APPROVER

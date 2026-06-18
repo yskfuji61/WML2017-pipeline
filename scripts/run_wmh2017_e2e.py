@@ -18,7 +18,6 @@ from wmh2017.lineage.hashes import sha256_path, write_hash_sidecar, write_json
 from wmh2017.lineage.lineage_graph import (
     artifact_hashes_from_manifest,
     build_lineage_graph,
-    compute_evidence_binder_hash,
     write_lineage_graph,
 )
 from wmh2017.lineage.prediction_manifest import (
@@ -162,7 +161,8 @@ def main() -> None:
         split_manifest_hash=sha256_path(split_manifest),
     )
 
-    stage_status = {"dataset_audit": "PASS", "label_audit": "PASS", "split": "PASS"}
+    stage_status = {"dataset_audit": "PASS", "label_audit": "PASS"}
+    stage_status["split"] = "PASS"
 
     if not args.skip_train:
         import yaml
@@ -207,7 +207,11 @@ def main() -> None:
             producer="scripts/run_wmh2017_e2e.py",
             inputs=["dataset_manifest", "split_manifest"],
         )
-        update_run_context(work_dir, config_hash=sha256_path(train_config))
+        update_run_context(
+            work_dir,
+            config_hash=sha256_path(train_config),
+            config_snapshot_sha256=config_snapshot.read_text(encoding="utf-8").strip(),
+        )
 
         train_cmd = [sys.executable, "scripts/train_wmh2017.py", "--config", str(train_config)]
         step = _run(train_cmd, cwd=REPO_ROOT)
@@ -273,7 +277,15 @@ def main() -> None:
             manifest_csv=manifest_csv,
             split_csv=split_csv,
         )
-        write_prediction_manifest(pred_dir / "prediction_manifest.csv", pred_rows)
+        pred_manifest_path = pred_dir / "prediction_manifest.csv"
+        write_prediction_manifest(pred_manifest_path, pred_rows)
+        if pred_manifest_path.exists():
+            manifest.add(
+                "prediction_manifest",
+                pred_manifest_path,
+                producer="src/wmh2017/lineage/prediction_manifest.py",
+                inputs=["predictions"],
+            )
         write_prediction_label_linkage(eval_dir / "raw_prediction_label_linkage.csv", pred_rows)
 
         case_metrics = eval_dir / "case_metrics.csv"
@@ -305,20 +317,24 @@ def main() -> None:
     manifest.write(manifest_path)
     write_hash_sidecar(manifest_path)
 
-    binder_hash = compute_evidence_binder_hash(REPO_ROOT / "registry/evidence_binder_wmh2017.yaml")
     graph = build_lineage_graph(
         run_id=args.run_id,
         artifact_hashes=artifact_hashes_from_manifest(manifest_path),
-        evidence_binder_hash=binder_hash,
+        package_version="0.2.3",
     )
-    write_lineage_graph(work_dir / "lineage_graph.json", graph)
+    write_lineage_graph(work_dir / "lineage" / "lineage_graph.json", graph)
+
+    stage_status["split_generation"] = stage_status.pop("split", "PASS")
+    stage_status["prediction_export"] = stage_status.pop("prediction", "SKIP")
+    stage_status["lineage_verification"] = "PENDING"
+    stage_status["binder_verification"] = "PENDING"
 
     observability = build_run_observability(
         run_id=args.run_id,
         release_state="PREVIEW_CANDIDATE",
         dataset_summary={"status": stage_status.get("dataset_audit", "SKIP")},
         training_summary={"status": stage_status.get("training", "SKIP")},
-        inference_summary={"status": stage_status.get("prediction", "SKIP")},
+        inference_summary={"status": stage_status.get("prediction_export", "SKIP")},
         evaluation_summary={"status": stage_status.get("evaluation", "SKIP")},
     )
     observability["status"] = "PASS"

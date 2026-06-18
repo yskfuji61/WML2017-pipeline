@@ -1,8 +1,10 @@
 decision_id: REL-WMH-TEMPLATE-001
 run_id: wmh2017_preview_YYYYMMDD_gitsha
-package_id: WMH2017-LOCAL-POC-SCAFFOLD-0.0.0.0
-package_manifest_hash: sha256:PENDING
-artifact_manifest_hash: sha256:PENDING
+package_id: WMH2017-LOCAL-POC-SCAFFOLD
+package_version: 0.2.3
+package_manifest_sha256: sha256:PENDING
+artifact_manifest_sha256: sha256:PENDING
+evidence_binder_sha256: sha256:PENDING
 code_commit: PENDING
 target_state: READY_FOR_PREVIEW
 claims_approved:
@@ -14,12 +16,20 @@ claims_blocked:
   - proprietary_data_processing
   - cloud_upload
   - production_deployment
-  - SOTA_or_leaderboard_equivalence
+  - leaderboard_or_sota_claim
 required_reviews:
-  source_license_review: NOT_APPROVED
-  model_validation_review: NOT_APPROVED
-  security_privacy_review: NOT_APPROVED
-  release_approval: NOT_APPROVED
+  source_license_review:
+    review_id: REV-WMH-001
+    status: NOT_APPROVED
+  model_validation_review:
+    review_id: REV-WMH-002
+    status: NOT_APPROVED
+  security_privacy_review:
+    review_id: REV-WMH-003
+    status: NOT_APPROVED
+  release_approval:
+    review_id: REV-WMH-004
+    status: NOT_APPROVED
 open_findings:
   sev0: 0
   sev1: pending_human_closure
