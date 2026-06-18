@@ -1,0 +1,61 @@
+split_id,case_id,challenge_split,source_split,assigned_split,site,scanner,scanner_code,group_id,seed,reason,created_at
+WMH2017-TRAIN-VAL-SEED42,100,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,100,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,101,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,101,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,102,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,102,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,103,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,103,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,104,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,104,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,105,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,105,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,106,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,106,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,107,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,107,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,108,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,108,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,109,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,109,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,110,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,110,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,112,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,112,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,113,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,113,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,114,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,114,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,115,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,115,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,116,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,116,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,126,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,126,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,132,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,132,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,137,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,137,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,144,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,144,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,50,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,50,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,51,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,51,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,52,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,52,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,53,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,53,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,54,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,54,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,55,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,55,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,56,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,56,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,57,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,57,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,58,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,58,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,59,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,59,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,60,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,60,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,61,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,61,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,62,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,62,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,63,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,63,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,64,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,64,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,65,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,65,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,66,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,66,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,67,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,67,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,68,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,68,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,69,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,69,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,0,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,0,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,11,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,11,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,17,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,17,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,19,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,19,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,2,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,2,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,21,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,21,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,23,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,23,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,25,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,25,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,27,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,27,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,29,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,29,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,31,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,31,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,33,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,33,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,35,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,35,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,37,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,37,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,39,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,39,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,4,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,4,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,41,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,41,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,49,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,49,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,6,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,6,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00
+WMH2017-TRAIN-VAL-SEED42,8,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,8,42,challenge_training_random_seeded_primary_reference,2026-06-17T23:05:22.310263+00:00

@@ -31,6 +31,7 @@
 
 - 姉妹 `yskfuji/*-reproducible-pipeline` 規約に合わせた **portfolio-grade なリポジトリスケルトン**
 - **MPS 互換 nnU-Net 3D trainer**（Apple Silicon の `ConvTranspose3d` 未対応回避策）をそのまま継承 — ISLES の作業で最も再利用価値の高い単一コンポーネント
+- **MONAI smoke の MPS 互換パッチ**（`src/wmh2017/training/mps_compat.py`）— MPS 選択時に `ConvTranspose3d` を nearest upsample + `Conv3d` に置換。smoke/互換性確認用であり、元構成との数値同等性は保証しない
 - **cross-architecture 確率融合スクリプト** + ケース適応的閾値処理 (`core/pipeline/scripts/cross_arch_ensemble_native.py`)。WMH モデルが揃った Phase 2 で使用、それまでは task 非依存で待機
 - **2.5D ConvNeXt モデル** (`ConvNeXtNnUNetSeg`) と訓練ループ、WMH キャリブレーション UNRESOLVED_PLACEHOLDER マーク付き（チャネル数、slice_offsets、pos_slice_weight）
 - **データ不要 smoke test**: 継承された model と適応閾値ロジックを合成 volume で 30 秒以内検証

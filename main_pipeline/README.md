@@ -66,6 +66,10 @@ is the explicit Phase 1 work item; see [ROADMAP.md](ROADMAP.md).
 - The **MPS-compatible nnU-Net 3D trainer** (Apple Silicon `ConvTranspose3d`
   workaround) inherited verbatim — this is the single most reusable piece of
   the ISLES work for any 3D MRI segmentation task on Apple hardware.
+- **MONAI smoke MPS compatibility patch** (`src/wmh2017/training/mps_compat.py`):
+  when MPS is selected, `ConvTranspose3d` is replaced with nearest upsample +
+  `Conv3d` for smoke/compatibility testing only; numerical equivalence with the
+  original architecture is not claimed.
 - The **cross-architecture probability fusion script** with case-adaptive
   thresholding (`core/pipeline/scripts/cross_arch_ensemble_native.py`). It
   will be used in Phase 2 once WMH models exist; until then the script is

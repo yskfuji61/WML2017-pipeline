@@ -90,6 +90,36 @@ python scripts/train_wmh2017.py --config configs/wmh2017_monai_smoke.yaml
 
 `configs/wmh2017_monai_smoke.yaml` is the canonical smoke config. `configs/train/smoke_monai_unet3d.yaml` is retained as a compatibility alias with the same schema.
 
+### Apple Silicon (MPS) compatibility
+
+On Apple Silicon, MONAI smoke training may use MPS when `device: auto` selects it.
+For MPS compatibility, `ConvTranspose3d` layers are replaced with nearest-neighbor
+upsampling followed by `Conv3d`. This avoids a known MPS limitation around 3D
+transposed convolution. `PYTORCH_ENABLE_MPS_FALLBACK=1` is also enabled before
+PyTorch import for unsupported MPS operators.
+
+This mode is intended for smoke/compatibility testing, not for claiming numerical
+equivalence with the original `ConvTranspose3d` architecture.
+
+Release gates:
+
+- CPU smoke: release gate
+- CUDA smoke: release gate where available
+- MPS patched smoke: compatibility gate / non-blocking optional gate
+- MPS native equivalence: not claimed
+
+`run_evidence.json` records `device_requested`, `device_selected`, `mps_available`,
+`mps_convtranspose_patched`, `mps_convtranspose_replaced_count`, `mps_fallback_enabled`,
+`model_patch`, `patch_scope`, and `native_mps_claim: false` when MPS is used.
+
+日本語:
+
+Apple Silicon 環境では、MPS 利用時に MONAI UNet の `ConvTranspose3d` を
+nearest upsample + `Conv3d` に置換する互換パッチを適用する。
+これは MPS の既知の 3D transposed convolution 制約を回避するための
+smoke/互換性確認用の実装であり、元の `ConvTranspose3d` 構成との
+数値的同等性や学習結果の同等性を保証するものではない。
+
 ## Done definition before July
 
 - WMH2017 source, license, and use boundary are recorded.

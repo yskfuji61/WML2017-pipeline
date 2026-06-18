@@ -22,6 +22,12 @@ import pandas as pd
 from wmh2017.audit.run_record import append_run_manifest, make_run_row, write_json
 from wmh2017.data.preprocessing import normalize_nonzero_channelwise
 from wmh2017.io.images import load_array, save_array_like
+from wmh2017.training.mps_compat import (
+    apply_mps_safe_convtranspose_patch,
+    enable_mps_cpu_fallback,
+    record_mps_convtranspose_patch,
+    resolve_training_device,
+)
 
 
 def _load_config(path: str | Path) -> dict[str, Any]:
@@ -75,17 +81,6 @@ def _require_monai_stack() -> tuple[Any, Any]:
         "RandCropByPosNegLabeld": RandCropByPosNegLabeld,
         "ResizeWithPadOrCropd": ResizeWithPadOrCropd,
     }
-
-
-def _device(torch: Any, requested: str) -> Any:
-    requested = str(requested or "auto").lower()
-    if requested != "auto":
-        return torch.device(requested)
-    if torch.cuda.is_available():
-        return torch.device("cuda")
-    if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
-        return torch.device("mps")
-    return torch.device("cpu")
 
 
 def _set_seed(seed: int, torch: Any) -> None:
@@ -164,6 +159,7 @@ def _normalize_for_inference(image: np.ndarray) -> np.ndarray:
 
 
 def main(config_path: str) -> None:
+    enable_mps_cpu_fallback()
     torch, monai = _require_monai_stack()
     cfg = _load_config(config_path)
 
@@ -174,7 +170,8 @@ def main(config_path: str) -> None:
     run_id = str(run_cfg.get("run_id", "wmh2017_monai_smoke"))
     seed = int(run_cfg.get("seed", 42))
     _set_seed(seed, torch)
-    device = _device(torch, str(run_cfg.get("device", "auto")))
+    device_requested = str(run_cfg.get("device", "auto"))
+    device, device_runtime = resolve_training_device(torch, device_requested)
 
     dataset_manifest = str(data_cfg["dataset_manifest"])
     split_manifest = str(data_cfg["split_manifest"])
@@ -199,7 +196,16 @@ def main(config_path: str) -> None:
     train_ds = monai["Dataset"](data=train_rows, transform=_transforms(monai, patch_size, train=True))
     train_loader = monai["DataLoader"](train_ds, batch_size=1, shuffle=True, num_workers=num_workers)
 
-    model = _build_model(monai, cfg).to(device)
+    model = _build_model(monai, cfg)
+    if device.type == "mps":
+        patched_layers = apply_mps_safe_convtranspose_patch(model)
+        if patched_layers == 0:
+            raise RuntimeError(
+                "MPS was selected but no ConvTranspose3d layers were replaced; "
+                "MONAI smoke cannot run on MPS without the compatibility patch."
+            )
+        device_runtime = record_mps_convtranspose_patch(device_runtime, patched_layers)
+    model = model.to(device)
     loss_fn = monai["DiceCELoss"](to_onehot_y=True, softmax=True)
     opt = torch.optim.Adam(model.parameters(), lr=float(train_cfg.get("learning_rate", 1e-4)))
 
@@ -261,6 +267,7 @@ def main(config_path: str) -> None:
         "run_id": run_id,
         "status": "completed",
         "device": str(device),
+        **device_runtime,
         "global_step": global_step,
         "train_case_count": len(train_rows),
         "val_prediction_count": len(list(pred_dir.glob("*_pred.*"))),
@@ -271,6 +278,11 @@ def main(config_path: str) -> None:
             "test_split_used": False,
             "label_policy": "label==1 foreground; label==2 ignored as foreground",
             "claim_boundary": "local PoC smoke only",
+            "mps_execution_claim": (
+                "MPS-compatible patched smoke; not native-MPS equivalence with ConvTranspose3d"
+                if device.type == "mps"
+                else "standard device path without MPS ConvTranspose3d patch"
+            ),
         },
     }
     evidence_path = out_dir / "run_evidence.json"

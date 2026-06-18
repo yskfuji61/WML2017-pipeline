@@ -70,6 +70,15 @@ split_manifest_path
 split_manifest_sha256
 seed
 device
+device_requested
+device_selected
+mps_available
+mps_convtranspose_patched
+mps_convtranspose_replaced_count
+mps_fallback_enabled
+model_patch
+patch_scope
+native_mps_claim
 model_architecture
 checkpoint_path
 checkpoint_sha256

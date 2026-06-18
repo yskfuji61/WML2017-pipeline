@@ -2,8 +2,12 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
+
+# Enable before any torch import so PyTorch reads MPS fallback at backend init.
+os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
