@@ -1,4 +1,8 @@
-PYTHON ?= python
+ifeq ($(wildcard .venv/bin/python),)
+PYTHON ?= python3
+else
+PYTHON ?= .venv/bin/python
+endif
 RUN_ID ?= local_$(shell date +%Y%m%d_%H%M%S)
 WMH2017_ROOT ?=
 PACKAGE_ID ?= WMH2017-LOCAL-POC-SCAFFOLD
@@ -12,13 +16,13 @@ setup:
 	$(PYTHON) -m pip install -e ".[dev,test,medical-image]"
 
 lint:
-	ruff check src scripts tests
+	$(PYTHON) -m ruff check src scripts tests
 
 typecheck:
-	mypy src scripts
+	$(PYTHON) -m mypy src scripts
 
 test:
-	pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation
+	$(PYTHON) -m pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation
 
 security:
 	mkdir -p reports/security
