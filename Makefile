@@ -79,10 +79,11 @@ verify-binder:
 	  --run-id $(RUN_ID) \
 	  --target-state READY_FOR_PREVIEW
 
-preview-candidate: setup lint typecheck test security parity-report rollback-rehearsal
+preview-candidate: setup lint typecheck test parity-report rollback-rehearsal
 	test -n "$(WMH2017_ROOT)"
 	rm -rf artifacts/runs/$(RUN_ID)
 	$(MAKE) e2e RUN_ID=$(RUN_ID) WMH2017_ROOT="$(WMH2017_ROOT)"
+	$(MAKE) security
 	$(MAKE) manifest
 	$(PYTHON) scripts/sync_release_manifest_hashes.py --run-id $(RUN_ID)
 	$(PYTHON) scripts/verify_package_identity.py
