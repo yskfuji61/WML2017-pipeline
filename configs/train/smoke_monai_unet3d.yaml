@@ -1,0 +1,39 @@
+# Compatibility alias for the canonical MONAI smoke config.
+# Keep this file schema-identical to ../wmh2017_monai_smoke.yaml.
+# Prefer: python scripts/train_wmh2017.py --config configs/wmh2017_monai_smoke.yaml
+
+# Minimal local WMH2017 MONAI smoke config.
+# Raw WMH2017 data stays outside git. Set WMH2017_ROOT or use an absolute manifest path.
+run:
+  run_id: wmh2017_monai_smoke_seed42
+  seed: 42
+  device: auto
+  output_dir: artifacts/runs/wmh2017_monai_smoke_seed42
+  run_manifest: registry/runs/run_manifest.csv
+
+data:
+  dataset_manifest: reports/dataset_manifest.csv
+  split_manifest: data/splits/wmh2017_train_val_seed42.csv
+  image_key: flair_pre_path
+  label_key: wmh_path
+  patch_size: [32, 32, 32]
+  cache_rate: 0.0
+  num_workers: 0
+  val_max_cases: 2
+
+model:
+  name: monai_unet
+  spatial_dims: 3
+  in_channels: 1
+  out_channels: 2
+  channels: [8, 16, 32]
+  strides: [2, 2]
+  num_res_units: 1
+
+training:
+  max_epochs: 1
+  max_steps_per_epoch: 2
+  learning_rate: 0.0001
+  threshold: 0.5
+  save_checkpoint: true
+  save_predictions: true
