@@ -234,7 +234,7 @@ def main(config_path: str) -> None:
     checkpoint_path = ""
     if bool(train_cfg.get("save_checkpoint", True)):
         checkpoint_path = str(ckpt_dir / "model_smoke.pt")
-        torch.save(
+        torch.save(  # nosec B614 — local smoke checkpoint only; not loading untrusted weights
             {
                 "run_id": run_id,
                 "model_state_dict": model.state_dict(),

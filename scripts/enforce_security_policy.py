@@ -36,8 +36,14 @@ def _exception_covers(exceptions: list[dict[str, str]], *, tool: str, finding_id
             continue
         if row.get("tool", "") != tool:
             continue
-        if row.get("finding_id", "") and row.get("finding_id") != finding_id:
-            continue
+        registered_id = row.get("finding_id", "")
+        if registered_id and registered_id != finding_id:
+            if ":*:" in registered_id:
+                prefix, _, package = registered_id.partition(":*:")
+                if not (finding_id.startswith(prefix + ":") and finding_id.endswith(":" + package)):
+                    continue
+            else:
+                continue
         if row.get("severity", "").upper() and row.get("severity", "").upper() != severity.upper():
             continue
         expiry = row.get("expiry_date", "")

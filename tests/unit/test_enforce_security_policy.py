@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from scripts.enforce_security_policy import check_bandit, check_pip_audit, check_sbom
+from scripts.enforce_security_policy import _exception_covers, check_bandit, check_pip_audit, check_sbom
 
 
 def test_bandit_high_finding_fails() -> None:
@@ -41,6 +41,28 @@ def test_sbom_nonempty_passes(tmp_path: Path) -> None:
     assert status == "PASS"
     assert not failures
     assert meta["component_count"] == 1
+
+
+def test_pip_audit_wildcard_exception_covers_package() -> None:
+    exceptions = [
+        {
+            "tool": "pip-audit",
+            "finding_id": "pip-audit:*:torch",
+            "severity": "HIGH",
+            "owner": "owner",
+            "rationale": "pinned",
+            "compensating_control": "offline",
+            "expiry_date": "2099-12-31",
+            "reviewer": "reviewer",
+            "status": "APPROVED",
+        }
+    ]
+    assert _exception_covers(
+        exceptions,
+        tool="pip-audit",
+        finding_id="pip-audit:GHSA-example:torch",
+        severity="HIGH",
+    )
 
 
 def test_security_policy_passes_clean_bandit(tmp_path: Path) -> None:

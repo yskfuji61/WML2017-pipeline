@@ -1,6 +1,6 @@
 # WMH2017 Pipeline — local public-data PoC scaffold
 
-> package_version: `0.2.0`
+> package_version: `0.2.3`
 >
 > local planning state: `READY_FOR_REQUIREMENTS_REVIEW`
 >
@@ -46,7 +46,7 @@ sibling repo [`isles2022-2d3d-blend-reproducible-pipeline`](https://github.com/y
 (heterogeneous 2D + 3D + 2.5D ensemble for ISLES 2022) and re-targeted for
 **FLAIR + T1** input.
 
-This 0.2.0 release is the **inheritance baseline**: the code is in place but
+This 0.2.3 release is the **inheritance baseline**: the code is in place but
 WMH-specific bits are marked with `# DEFERRED_WMH_REVIEW:` headers. WMH-data activation
 is the explicit Phase 1 work item; see [ROADMAP.md](ROADMAP.md).
 
@@ -59,7 +59,7 @@ is the explicit Phase 1 work item; see [ROADMAP.md](ROADMAP.md).
 - Roadmap: [ROADMAP.md](ROADMAP.md)
 - Citation: [CITATION.cff](CITATION.cff)
 
-## What this repository provides today (0.2.0)
+## What this repository provides today (0.2.3)
 
 - A **portfolio-grade repo skeleton** matching the sibling
   `yskfuji/*-reproducible-pipeline` convention.

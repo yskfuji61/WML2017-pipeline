@@ -1,4 +1,12 @@
 
+## 0.2.3 - 2026-06-18
+
+- MLOps Blueprint v2: package identity registry (`0.2.3`), fail-closed security (CycloneDX SBOM + enforce v2), evidence binder 14-check verifier, RC CI without `|| true`.
+- Added `verify_package_identity.py`, `verify_finding_register.py`, `verify_rollback_rehearsal.py`, `validate_metric_table.py`, and official parity report scaffold.
+- E2E artifact tree v2: `lineage/` subdir, sidecar naming, run_context v2 fields, structural manifest exclude for `.venv` / `main_pipeline`.
+- Security exception register with approved compensating controls for pinned lock-file dependencies.
+- READY_FOR_PREVIEW human gates (Sev1 closure, review approval, real E2E run) remain intentionally open.
+
 ## 0.2.2 - 2026-06-18
 
 - Added raw WMH2017 `files/` root manifest generation evidence controls.

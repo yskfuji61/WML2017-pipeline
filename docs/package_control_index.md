@@ -11,7 +11,7 @@ SOTA release package.
 | Field | Value |
 |---|---|
 | package_name | wmh2017-pipeline |
-| package_version | 0.2.0 |
+| package_version | 0.2.3 |
 | package_status | REQUIREMENTS_REVIEW_ONLY |
 | controlled_release_state | NOT_READY_FOR_PREVIEW |
 | source_package | wmh2017_pipeline_refactored_toppro_qc.zip, refactored into this package |

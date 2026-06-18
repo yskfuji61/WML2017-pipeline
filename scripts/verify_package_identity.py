@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -73,12 +74,26 @@ def main() -> None:
             failures.append(f"release_decision_record package_version={fields.get('package_version')}")
 
     manifest_path = repo_root / str(identity.get("identity_sources", {}).get("full_manifest", ""))
+    manifest_sha256 = ""
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         if str(manifest.get("package_id", "")) != expected_id:
             failures.append("full_package_manifest package_id mismatch")
         if str(manifest.get("package_version", "")) != expected_version:
             failures.append(f"full_package_manifest package_version={manifest.get('package_version')}")
+        h = hashlib.sha256()
+        with manifest_path.open("rb") as f:
+            for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                h.update(chunk)
+        manifest_sha256 = h.hexdigest()
+
+    if release_path.exists() and manifest_sha256:
+        fields = _read_release_decision_fields(release_path)
+        recorded = fields.get("package_manifest_sha256", "").strip()
+        if recorded and not recorded.startswith("PENDING"):
+            expected_hash = recorded.replace("sha256:", "")
+            if expected_hash != manifest_sha256:
+                failures.append("release_decision_record package_manifest_sha256 mismatch")
 
     if args.check_git_tag:
         tag = str(identity.get("git_tag") or f"v{expected_version}")

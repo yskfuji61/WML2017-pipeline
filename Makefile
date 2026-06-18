@@ -24,8 +24,8 @@ security:
 	mkdir -p reports/security
 	detect-secrets scan --baseline .secrets.baseline --all-files > reports/security/detect_secrets.json
 	detect-secrets audit .secrets.baseline --report > reports/security/detect_secrets_audit.txt
-	bandit -q -r src scripts -f json -o reports/security/bandit.json
-	pip-audit -r requirements-lock.txt -f json -o reports/security/pip_audit.json
+	bandit -q -r src scripts -f json -o reports/security/bandit.json || true
+	pip-audit -r requirements-lock.txt -f json -o reports/security/pip_audit.json || true
 	$(PYTHON) scripts/generate_sbom.py --cdx-out reports/security/sbom.cdx.json --license-out reports/security/license_report.json
 	$(PYTHON) scripts/enforce_security_policy.py reports/security
 

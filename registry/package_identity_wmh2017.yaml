@@ -13,3 +13,5 @@ required_consistency:
   - package_id
   - package_version
   - target_state
+  - code_commit
+  - package_manifest_sha256
