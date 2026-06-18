@@ -13,6 +13,8 @@ Auditable **offline** WMH2017 public-data research PoC package (not clinical, cu
 
 **Blocked claims:** clinical use, customer presentation, proprietary-data processing, unapproved cloud upload, production deployment, SOTA / leaderboard equivalence.
 
+Active package lives at repository root (`src/wmh2017/`).
+
 ## Quick start
 
 ```bash

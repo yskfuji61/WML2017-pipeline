@@ -11,6 +11,9 @@ on:
         default: READY_FOR_PREVIEW
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   release-candidate:
     runs-on: ubuntu-latest

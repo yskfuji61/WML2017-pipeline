@@ -374,4 +374,15 @@ def build_manifest(
     if not df.empty:
         df = df.sort_values(["challenge_split", "site", "scanner_code", "case_id"]).reset_index(drop=True)
         df["created_at"] = pd.Timestamp.now(tz="UTC").isoformat()
+        duplicates = df[df["case_id"].astype(str).duplicated(keep=False)]
+        if not duplicates.empty:
+            cols = [
+                c
+                for c in ["challenge_split", "site", "scanner_code", "case_id"]
+                if c in duplicates.columns
+            ]
+            raise ValueError(
+                "case_id is not globally unique; evaluation currently joins by case_id only. "
+                f"Duplicate rows: {duplicates[cols].to_dict(orient='records')}"
+            )
     return df

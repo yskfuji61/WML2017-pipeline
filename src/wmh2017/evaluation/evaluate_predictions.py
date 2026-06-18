@@ -77,6 +77,13 @@ def evaluate_predictions(
         if mrow.empty:
             raise ValueError(f"case_id={case_id} exists in split but not manifest")
         m = mrow.iloc[0]
+        challenge_split = str(m.get("challenge_split", "")).lower()
+        if challenge_split == "test":
+            raise ValueError(
+                f"case_id={case_id} belongs to challenge_split=test; "
+                "test split must not be used for local validation, threshold tuning, "
+                "model selection, or early stopping"
+            )
         label_path = str(m.get("wmh_path", "") or m.get("mask_path", "") or "")
         if not label_path:
             raise ValueError(f"case_id={case_id} has no label path; local validation requires labels")

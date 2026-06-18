@@ -68,6 +68,61 @@ def test_evaluate_predictions_from_npy_fixture(tmp_path: Path):
     assert (tmp_path / "eval" / "metrics_summary.json").exists()
 
 
+def test_evaluate_predictions_rejects_challenge_test_split(tmp_path: Path):
+    label = np.zeros((5, 5, 5), dtype=np.uint8)
+    pred = np.zeros((5, 5, 5), dtype=np.uint8)
+    label[2, 2, 2] = 1
+    pred[2, 2, 2] = 1
+
+    label_path = tmp_path / "case001_wmh.npy"
+    pred_dir = tmp_path / "predictions"
+    pred_dir.mkdir()
+    pred_path = pred_dir / "case001_pred.npy"
+
+    np.save(label_path, label)
+    np.save(pred_path, pred)
+
+    manifest = pd.DataFrame(
+        [
+            {
+                "case_id": "case001",
+                "challenge_split": "test",
+                "site": "fixture",
+                "scanner_code": "fixture",
+                "wmh_path": str(label_path),
+            }
+        ]
+    )
+    split = pd.DataFrame(
+        [
+            {
+                "case_id": "case001",
+                "challenge_split": "test",
+                "source_split": "test",
+                "assigned_split": "val",
+                "site": "fixture",
+                "scanner_code": "fixture",
+            }
+        ]
+    )
+    manifest_csv = tmp_path / "manifest.csv"
+    split_csv = tmp_path / "split.csv"
+    manifest.to_csv(manifest_csv, index=False)
+    split.to_csv(split_csv, index=False)
+
+    import pytest
+
+    with pytest.raises(ValueError, match=r"challenge_split=test|test split"):
+        evaluate_predictions(
+            manifest_csv=manifest_csv,
+            split_csv=split_csv,
+            prediction_dir=pred_dir,
+            out_dir=tmp_path / "eval",
+            run_id="fixture_run",
+            assigned_split="val",
+        )
+
+
 def test_image_io_npy_roundtrip(tmp_path: Path):
     ref = tmp_path / "ref.npy"
     out = tmp_path / "out.npy"

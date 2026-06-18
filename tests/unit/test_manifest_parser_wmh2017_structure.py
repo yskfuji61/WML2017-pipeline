@@ -62,3 +62,14 @@ def test_manifest_accepts_parent_containing_files(tmp_path):
 
     assert len(df) == 1
     assert df.iloc[0]["case_id"] == "0"
+
+
+def test_build_manifest_rejects_duplicate_case_ids(tmp_path):
+    files = tmp_path / "files"
+    _make_case(files, "training/Utrecht/100")
+    _make_case(files, "training/Singapore/100")
+
+    import pytest
+
+    with pytest.raises(ValueError, match="case_id is not globally unique"):
+        build_manifest(files)
