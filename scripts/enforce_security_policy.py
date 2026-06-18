@@ -153,7 +153,10 @@ def main() -> None:
     all_failures: list[str] = []
     ds_status, ds_fail, ds_meta = check_detect_secrets(report_dir, report_dir / "detect_secrets_audit.txt", exceptions)
     all_failures.extend(ds_fail)
-    bandit_status, bandit_fail, bandit_meta = check_bandit(_load_json(report_dir / "bandit.json"), exceptions)
+    bandit_report = _load_json(report_dir / "bandit.json")
+    if not isinstance(bandit_report, dict):
+        bandit_report = {}
+    bandit_status, bandit_fail, bandit_meta = check_bandit(bandit_report, exceptions)
     all_failures.extend(bandit_fail)
     pip_status, pip_fail, pip_meta = check_pip_audit(_load_json(report_dir / "pip_audit.json"), exceptions)
     all_failures.extend(pip_fail)
