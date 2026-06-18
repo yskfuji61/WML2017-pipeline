@@ -1,0 +1,18 @@
+wmh2017-reproducible-pipeline
+Copyright 2026 yskfuji
+
+This repository is provided as a research/reproducibility and portfolio package
+for the MICCAI 2017 White Matter Hyperintensities (WMH) Segmentation Challenge
+(Kuijf et al., IEEE TMI 2019). The pipeline is inherited from the sibling repo
+isles2022-2d3d-blend-reproducible-pipeline; see docs/inheritance/inheritance_map.md
+for the exact mapping of code reused vs. WMH-specific additions.
+
+It is NOT a medical device and is NOT intended for clinical decision making.
+
+No datasets, trained weights, runs, results, or logs are included in this
+repository. Users must obtain the MICCAI 2017 WMH Segmentation Challenge data
+separately from https://wmh.isi.uu.nl/ and comply with the applicable data use
+agreement.
+
+This NOTICE file is provided for informational purposes only and does not
+modify the License.

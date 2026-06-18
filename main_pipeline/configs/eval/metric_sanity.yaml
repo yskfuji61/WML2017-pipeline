@@ -1,0 +1,12 @@
+run_purpose: EXP-000 metric sanity
+dataset_manifest: reports/dataset_manifest.csv
+split_manifest: data/splits/wmh2017_train_val_seed42.csv
+metrics:
+  - MET-DSC
+  - MET-H95
+  - MET-AVD
+  - MET-LESION-RECALL
+  - MET-LESION-F1
+foreground_label: 1
+ignore_label: 2
+claim_boundary: no_model_performance_claim

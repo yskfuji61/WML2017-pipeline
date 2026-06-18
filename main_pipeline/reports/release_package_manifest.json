@@ -1,0 +1,6 @@
+{
+  "status": "superseded_by_full_package_manifest",
+  "replacement": "reports/full_package_manifest.json",
+  "claim_boundary": "This file is retained only for compatibility. Use full_package_manifest.json for package identity.",
+  "superseded_at": "2026-06-17T00:00:00+09:00"
+}

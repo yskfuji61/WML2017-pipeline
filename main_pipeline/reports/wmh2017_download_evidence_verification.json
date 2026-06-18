@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "evidence_dir": "evidence/wmh2017_download_2026-06-16",
+  "checked_at_utc": "2026-06-17T15:43:28.426497+00:00",
+  "downloaded_file_count": 1791,
+  "sha256_entry_count": 1791,
+  "sha256_verified_ok_count": 1791,
+  "raw_medical_files_in_evidence_package": 0,
+  "claim_boundary": "Download evidence verifies local acquisition metadata and checksum logs only; it is not source/license approval, real training evidence, evaluation evidence, clinical validation, customer approval, or release approval."
+}

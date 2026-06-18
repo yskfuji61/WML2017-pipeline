@@ -1,0 +1,8 @@
+model_id: MODEL-MONAI-2D-UNET
+status: PLANNED
+purpose: local validation baseline after EXP-000
+inputs:
+  - FLAIR
+  - optional_T1
+framework: MONAI
+claim_boundary: local_validation_only

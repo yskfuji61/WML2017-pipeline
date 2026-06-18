@@ -1,0 +1,22 @@
+model_id: MODEL-WINNER-FCN-ENSEMBLE
+status: PLANNED_SOURCE_NEEDS_EVIDENCE_REVIEW_REQUIRED
+purpose: EXP-001 winner reproduction attempt
+inputs:
+  - FLAIR
+  - T1
+architecture: requires_source_verification_winner_2d_fcn_ensemble
+source_ids:
+  - SRC-LI-FCN-ENSEMBLE-2018
+  - SRC-HONGWEI-WMH-IBBMTUM
+preprocessing:
+  normalization: requires_source_verification
+  brain_mask: requires_source_verification
+training:
+  batch_size: requires_source_verification
+  learning_rate: requires_source_verification
+  epochs: requires_source_verification
+claim_boundary: reproduction_candidate_not_sota
+stop_conditions:
+  - source_license_unclear
+  - pretrained_model_provenance_unclear
+  - official_metric_parity_missing

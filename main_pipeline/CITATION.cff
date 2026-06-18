@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+title: wmh2017-reproducible-pipeline
+message: >-
+  If you use this software, please cite it using the metadata in this file.
+type: software
+authors:
+  - given-names: yskfuji
+    family-names: ""
+abstract: >-
+  Reproducible segmentation pipeline for the MICCAI 2017 White Matter
+  Hyperintensities (WMH) Segmentation Challenge. The code base is inherited
+  from `isles2022-2d3d-blend-reproducible-pipeline` (the heterogeneous 2D + 3D
+  + 2.5D ensemble recipe for ISLES 2022) and re-targeted for FLAIR + T1
+  WMH segmentation. Includes the MPS-compatible nnU-Net 3D trainer and the
+  cross-architecture probability fusion script with case-adaptive thresholding.
+keywords:
+  - medical-imaging
+  - segmentation
+  - WMH
+  - white-matter-hyperintensities
+  - MICCAI-2017
+  - nnU-Net
+  - ConvNeXt
+  - ensemble
+  - Apple-Silicon
+  - MPS
+license: Apache-2.0
+version: 0.0.0.0
+date-released: 2026-06-16
+references:
+  - type: software
+    title: isles2022-2d3d-blend-reproducible-pipeline
+    repository-code: "https://github.com/yskfuji/isles2022-2d3d-blend-reproducible-pipeline"
+    notes: source pipeline; this repository inherits source code and methodology
+  - type: article
+    authors:
+      - family-names: Kuijf
+        given-names: Hugo J.
+    title: >-
+      Standardized Assessment of Automatic Segmentation of White Matter
+      Hyperintensities and Results of the WMH Segmentation Challenge
+    journal: IEEE Transactions on Medical Imaging
+    year: 2019
+    doi: 10.1109/TMI.2019.2905770

@@ -1,0 +1,9 @@
+claim_type,allowed_expression,required_evidence,forbidden_expression,status,notes
+source_report,source reports from paper or leaderboard,source_id + citation + exact metric context,reproduced result or our SOTA,ACTIVE,Source report is not local performance
+local_validation,local validation result,run_id + split_id + metric_id + config_hash + dataset_manifest_hash + artifact_path,SOTA or production performance,ACTIVE,Training-set-derived validation only
+local_heldout_evaluation,local heldout evaluation on released test cases,explicit test boundary + no tuning record + run evidence,official hidden benchmark,ACTIVE,Only if allowed by terms and no tuning contamination
+reproduced_result,reproduced result under stated protocol,source_id + implementation_hash + same split/metric/protocol evidence,official benchmark result,ACTIVE,Must state deviations
+official_benchmark,official benchmark result,official evaluator or challenge-accepted result + source_id,local validation result,ACTIVE,Only official/evaluator condition
+sota_claim,SOTA candidate or SOTA claim,comparison validity record + all source and local evidence + reviewer approval + no Sev0/Sev1 findings,best/top/clinical-grade without evidence,BLOCKED_UNTIL_EVIDENCE,Do not use before EXP evidence and review
+clinical_claim,clinical or diagnostic performance,clinical validation + regulatory/domain review + intended use + human boundary,diagnosis/読影代替/臨床利用可能,BLOCKED,Out of current scope
+customer_claim,customer-facing presentation,release decision record + domain/security/evidence review,顧客提示可能 or production-ready,BLOCKED,Out of current scope

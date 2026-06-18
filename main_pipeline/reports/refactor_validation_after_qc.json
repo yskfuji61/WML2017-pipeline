@@ -1,0 +1,19 @@
+{
+  "package": "wmh2017_pipeline_refactored_toppro_qc",
+  "release_state": "READY_FOR_REQUIREMENTS_REVIEW",
+  "checks": {
+    "unit_tests_command": "python -m pytest tests/unit",
+    "unit_tests_returncode": 0,
+    "unit_tests_result": "21 passed",
+    "absolute_workstation_path_hits": 0,
+    "ready_for_structural_review_hits": 0,
+    "todo_verify_token_hits": 0,
+    "pytest_cache_excluded_from_zip": true
+  },
+  "boundaries": {
+    "real_data_run": "not_verified_in_package",
+    "preview": "blocked_until_real_data_evidence_and_human_review",
+    "release": "blocked",
+    "clinical_customer_use": "blocked"
+  }
+}

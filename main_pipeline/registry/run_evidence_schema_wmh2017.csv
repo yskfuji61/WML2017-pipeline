@@ -1,0 +1,30 @@
+field,required,description,release_implication
+run_id,true,Stable run identifier,Metrics cannot be used without it
+timestamp,true,Execution timestamp,Audit trail
+operator,true,Person or agent running command,Attribution
+machine_class,true,Local machine class not private path,Reproducibility
+python_version,true,Python version,Reproducibility
+dependency_versions,true,Package versions,Reproducibility
+git_commit_or_package_hash,true,Code/package identity,Version binding
+config_path,true,Training/eval config path,Version binding
+config_sha256,true,Config hash,Version binding
+dataset_manifest_path,true,Dataset manifest path,Data identity
+dataset_manifest_sha256,true,Dataset manifest hash,Data identity
+split_manifest_path,true,Split manifest path,Split identity
+split_manifest_sha256,true,Split manifest hash,Leakage prevention
+seed,true,Random seed,Reproducibility
+device,true,cpu/cuda/mps device,Reproducibility
+model_architecture,true,Model architecture,Implementation identity
+checkpoint_path,true,Checkpoint path,Model artifact identity
+checkpoint_sha256,true,Checkpoint hash,Model artifact identity
+prediction_paths,true,Prediction artifacts,Evaluation linkage
+prediction_sha256,true,Prediction hashes,Evaluation linkage
+metric_script_path,true,Metric script path,Metric identity
+metric_script_sha256,true,Metric script hash,Metric identity
+case_metrics_path,true,Case metrics CSV,Metric evidence
+case_metrics_sha256,true,Case metrics hash,Metric evidence
+metrics_summary_path,true,Summary JSON,Metric evidence
+metrics_summary_sha256,true,Summary hash,Metric evidence
+claim_boundary,true,Allowed and forbidden claims,Overclaim prevention
+known_limitations,true,Limitations recorded,Release decision input
+stop_conditions_checked,true,Stop condition evidence,Safety gate
