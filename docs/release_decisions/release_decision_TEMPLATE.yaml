@@ -1,0 +1,33 @@
+decision_id: REL-WMH-TEMPLATE-001
+run_id: wmh2017_preview_YYYYMMDD_gitsha
+package_id: WMH2017-LOCAL-POC-SCAFFOLD-0.0.0.0
+package_manifest_hash: sha256:PENDING
+artifact_manifest_hash: sha256:PENDING
+code_commit: PENDING
+target_state: READY_FOR_PREVIEW
+claims_approved:
+  - offline_public_data_research_preview
+  - local_reproducibility_review
+claims_blocked:
+  - clinical_use
+  - customer_presentation
+  - proprietary_data_processing
+  - cloud_upload
+  - production_deployment
+  - SOTA_or_leaderboard_equivalence
+required_reviews:
+  source_license_review: NOT_APPROVED
+  model_validation_review: NOT_APPROVED
+  security_privacy_review: NOT_APPROVED
+  release_approval: NOT_APPROVED
+open_findings:
+  sev0: 0
+  sev1: pending_human_closure
+decision: NOT_APPROVED
+approver: UNASSIGNED_RELEASE_APPROVER
+date: NOT_REVIEWED
+conditions:
+  - no external/customer/clinical claim
+  - no raw WMH2017 data committed
+  - no cloud upload
+  - official comparable metric claim remains blocked unless parity approved

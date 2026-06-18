@@ -25,10 +25,22 @@ jobs:
       - name: Typecheck
         run: mypy src scripts
       - name: Tests
-        run: pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke
+        run: pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation
+      - name: Architecture gates
+        run: |
+          python scripts/verify_no_raw_data_committed.py
+          python scripts/verify_no_legacy_imports.py
       - name: Verify structural release package
         run: |
+          mkdir -p reports/ci
           python scripts/verify_release_package.py \
             --repo-root . \
             --structural-only \
-            --out reports/ci/structural_release_manifest.json
+            --out reports/ci/structural_release_manifest.json \
+            --package-id WMH2017-LOCAL-POC-SCAFFOLD-0.0.0.0 \
+            --package-version 0.0.0.0
+      - name: Upload structural reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: structural-reports
+          path: reports/ci/

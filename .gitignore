@@ -62,10 +62,12 @@ reports/overlays/*
 reports/metrics/*
 reports/runs/*
 reports/security/*
+reports/rollback/*
 !reports/overlays/.gitkeep
 !reports/metrics/.gitkeep
 !reports/runs/.gitkeep
 !reports/security/.gitkeep
+!reports/rollback/.gitkeep
 
 # Legacy nested folder (post root promotion)
 main_pipeline/

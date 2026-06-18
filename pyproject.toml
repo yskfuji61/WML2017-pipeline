@@ -1,6 +1,6 @@
 [project]
 name = "wmh2017-pipeline"
-version = "0.2.2"
+version = "0.0.0.0"
 description = "Auditable local WMH2017 MONAI smoke pipeline for research PoC"
 requires-python = ">=3.10,<3.13"
 dependencies = [

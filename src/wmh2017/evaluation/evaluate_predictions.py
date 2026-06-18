@@ -19,6 +19,7 @@ from wmh2017.evaluation.voxel_metrics import avd_wmh_label1, dice_wmh_label1, hd
 from wmh2017.io.images import assert_compatible_image_geometry, load_array, load_image_metadata
 from wmh2017.lineage.hashes import sha256_jsonable, sha256_path
 from wmh2017.lineage.runtime_fingerprint import git_commit_or_unknown, package_versions
+from wmh2017.security.path_redaction import redact_path
 
 
 def _prediction_path_for_case(prediction_dir: Path, case_id: str) -> Path:
@@ -97,15 +98,15 @@ def evaluate_predictions(
         spacing = label_meta.spacing or None
         lesion = lesion_recall_f1_wmh_label1(pred_mask, label_mask)
 
-        site_id = str(srow.get("site", "") or m.get("site", "") or "")
+        site_or_center = str(srow.get("site", "") or m.get("site", "") or "")
         record = {
             "run_id": run_id,
             "case_id": case_id,
             "assigned_split": assigned_split,
-            "site_id": site_id,
-            "prediction_path": str(pred_path),
+            "site_or_center": site_or_center,
+            "prediction_path_redacted": redact_path(pred_path),
             "prediction_sha256": sha256_path(pred_path),
-            "label_path": label_path,
+            "label_path_redacted": redact_path(label_path),
             "label_sha256": sha256_path(label_path),
             **pred_meta.to_record("prediction"),
             **label_meta.to_record("label"),
@@ -113,16 +114,15 @@ def evaluate_predictions(
             "threshold": threshold,
             "dice": float(dice_wmh_label1(pred_mask, label_mask)),
             "hd95": float(hd95_wmh_label1(pred_mask, label_mask, spacing=spacing)),
-            "avd_percent": float(avd_wmh_label1(pred_mask, label_mask, spacing=spacing)),
+            "avd": float(avd_wmh_label1(pred_mask, label_mask, spacing=spacing)),
             "lesion_recall": float(lesion["lesion_recall"]),
             "lesion_f1": float(lesion["lesion_f1"]),
             "target_lesion_count": int(lesion.get("target_lesion_count", lesion.get("n_target", 0))),
             "pred_lesion_count": int(lesion.get("pred_lesion_count", lesion.get("n_pred", 0))),
-            "data_manifest_hash": sha256_path(manifest_csv),
-            "split_manifest_hash": sha256_path(split_csv),
-            "model_artifact_hash": model_hash,
-            "metric_script_hash": sha256_path(metric_script_path),
-            "config_hash": config_hash,
+            "split_manifest_sha256": sha256_path(split_csv),
+            "model_artifact_sha256": model_hash,
+            "metric_script_sha256": sha256_path(metric_script_path),
+            "config_sha256": config_hash,
             "code_commit": git_commit_or_unknown(),
             "created_at_utc": created_at,
         }
@@ -146,7 +146,7 @@ def evaluate_predictions(
         "mean_dice": float(result_df["dice"].mean()),
         "median_dice": float(result_df["dice"].median()),
         "mean_hd95": float(result_df["hd95"].replace([np.inf, -np.inf], np.nan).mean()),
-        "mean_avd_percent": float(result_df["avd_percent"].mean()),
+        "mean_avd": float(result_df["avd"].mean()),
         "mean_lesion_recall": float(result_df["lesion_recall"].mean()),
         "mean_lesion_f1": float(result_df["lesion_f1"].mean()),
         "case_metrics_csv": str(case_csv),
@@ -165,6 +165,11 @@ def evaluate_predictions(
             "local_metrics_available": True,
             "official_evaluator_parity_complete": False,
             "leaderboard_claim_allowed": False,
+        },
+        "claim_allowed": {
+            "local_validation": True,
+            "official_comparable": False,
+            "leaderboard_or_sota": False,
         },
         "claim_boundary": "local validation only; no diagnostic, customer, leaderboard, or SOTA claim without official evaluation cross-check and review",
     }

@@ -1,0 +1,53 @@
+binder_id: WMH2017_EVIDENCE_BINDER
+package_id: WMH2017-LOCAL-POC-SCAFFOLD-0.0.0.0
+target_state: READY_FOR_PREVIEW
+status: OPEN
+required_sections:
+  package_identity:
+    artifact: reports/full_package_manifest.json
+    required: true
+    severity_if_missing: Sev1
+    reviewer_required: true
+  source_register:
+    artifact: registry/source_register_wmh2017.csv
+    required: true
+    severity_if_missing: Sev1
+    reviewer_required: true
+  real_run:
+    run_id: null
+    required_artifacts:
+      - artifacts/runs/{run_id}/run_context.json
+      - artifacts/runs/{run_id}/runtime_fingerprint.json
+      - artifacts/runs/{run_id}/dataset/dataset_manifest.json
+      - artifacts/runs/{run_id}/label_audit/label_audit.json
+      - artifacts/runs/{run_id}/splits/split_manifest.json
+      - artifacts/runs/{run_id}/logs/train_log.jsonl
+      - artifacts/runs/{run_id}/checkpoints/model.pt.sha256
+      - artifacts/runs/{run_id}/predictions/prediction_manifest.csv
+      - artifacts/runs/{run_id}/evaluation/case_metrics.csv
+      - artifacts/runs/{run_id}/evaluation/metrics_summary.json
+      - artifacts/runs/{run_id}/artifact_manifest.json
+    severity_if_missing: Sev1
+  official_metric_parity:
+    required: true
+    artifacts:
+      - reports/official_metric_parity_report.json
+      - registry/source_register_wmh2017.csv
+    severity_if_missing: Sev1_for_benchmark_claim
+  security:
+    required_artifacts:
+      - reports/security/detect_secrets.json
+      - reports/security/bandit.json
+      - reports/security/pip_audit.json
+      - reports/security/sbom.spdx.json
+    fail_closed: true
+    severity_if_missing: Sev1
+  rollback:
+    required_artifacts:
+      - reports/rollback/rollback_rehearsal_bad_config.json
+      - reports/rollback/rollback_rehearsal_wrong_threshold.json
+      - reports/rollback/rollback_rehearsal_dependency_regression.json
+      - reports/rollback/rollback_rehearsal_artifact_hash_mismatch.json
+      - reports/rollback/rollback_rehearsal_split_contamination.json
+    severity_if_missing: Sev2_for_preview
+closure_rule: every Sev1 is either closed with evidence or release claim is reduced

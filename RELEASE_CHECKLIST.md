@@ -29,8 +29,21 @@ Target state: **READY_FOR_PREVIEW** (not READY_FOR_RELEASE)
 ## CI / security
 
 - [ ] structural CI green (lint, typecheck, unit, integration, schema, contract, architecture)
+- [ ] `python scripts/verify_no_raw_data_committed.py`
+- [ ] `python scripts/verify_no_legacy_imports.py`
+- [ ] `make security` fail-closed (enforce_security_policy.py)
+- [ ] `make sbom` generates `reports/security/sbom.spdx.json`
 - [ ] Security scan outputs under `reports/security/`
 - [ ] Release package manifest generated
+
+## Verifier commands (release candidate)
+
+```bash
+make preview-candidate RUN_ID=... WMH2017_ROOT=...
+python scripts/verify_review_approval.py --target-state READY_FOR_PREVIEW
+python scripts/verify_official_metric_parity.py
+python scripts/run_rollback_rehearsal.py --all-scenarios
+```
 
 ## Human gates (cannot be closed by code alone)
 

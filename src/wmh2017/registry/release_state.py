@@ -3,6 +3,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+RELEASE_LADDER = (
+    "STRUCTURAL_REVIEW",
+    "PREVIEW_CANDIDATE",
+    "READY_FOR_PREVIEW",
+    "LIMITED_INTERNAL_USE",
+    "READY_FOR_RELEASE",
+)
+
 
 @dataclass
 class Evidence:
@@ -14,7 +22,10 @@ class Evidence:
     test_set_isolation_auditable: bool = True
     ci_artifact_hash_recorded: bool = False
     real_data_run_evidence: bool = False
+    security_gate_pass: bool = False
+    reviewer_assigned: bool = False
     reviewer_approval: bool = False
+    rollback_rehearsal_complete: bool = False
     production_claim: bool = False
     monitoring_and_rollback: bool = False
 
@@ -33,11 +44,19 @@ def determine_release_state(evidence: Evidence) -> str:
     if not evidence.test_set_isolation_auditable:
         return "BLOCKED_BY_SEV0_OR_SEV1"
     if not evidence.ci_artifact_hash_recorded:
-        return "READY_FOR_STRUCTURAL_REVIEW"
+        return "STRUCTURAL_REVIEW"
     if not evidence.real_data_run_evidence:
-        return "READY_FOR_STRUCTURAL_REVIEW"
+        return "STRUCTURAL_REVIEW"
+    if not evidence.security_gate_pass:
+        return "PREVIEW_CANDIDATE"
+    if not evidence.reviewer_assigned:
+        return "PREVIEW_CANDIDATE"
     if not evidence.reviewer_approval:
-        return "READY_FOR_PREVIEW"
+        return "PREVIEW_CANDIDATE"
     if evidence.production_claim and not evidence.monitoring_and_rollback:
         return "BLOCKED_BY_SEV0_OR_SEV1"
+    if evidence.rollback_rehearsal_complete and evidence.reviewer_approval:
+        if evidence.production_claim and evidence.monitoring_and_rollback:
+            return "READY_FOR_RELEASE"
+        return "READY_FOR_PREVIEW"
     return "READY_FOR_PREVIEW"

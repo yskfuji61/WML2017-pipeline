@@ -8,6 +8,10 @@ run evidence.
 
 ## Binder state
 
+Machine-readable binder: [`registry/evidence_binder_wmh2017.yaml`](../registry/evidence_binder_wmh2017.yaml)
+
+Verifier: `python scripts/verify_evidence_binder.py --run-id <run_id> --target-state READY_FOR_PREVIEW`
+
 ```text
 binder_status: OPEN
 real_wmh2017_run_evidence: GENERATED_LOCALLY_NOT_COMMITTED
@@ -24,9 +28,9 @@ release_decision: NOT_APPROVED
 | Package identity | `reports/full_package_manifest.json` | generated for refactored ZIP | Sev2 until reviewer checks it |
 | Source register | `registry/source_register_wmh2017.csv` | present but review incomplete | Sev1 |
 | Claim boundary | `registry/claim_boundary_wmh2017.csv` | present | Sev2 until reviewed |
-| Dataset manifest | `artifacts/runs/<run_id>/dataset_manifest.json` | generated locally; not committed (absolute paths) | Sev1 until reviewer accepts local run |
-| Label audit | `artifacts/runs/<run_id>/label_audit.json` | generated locally | Sev1 |
-| Split manifest | `artifacts/runs/<run_id>/split_manifest.json` | generated locally | Sev1 |
+| Dataset manifest | `artifacts/runs/<run_id>/dataset/dataset_manifest.json` | generated locally; not committed | Sev1 |
+| Label audit | `artifacts/runs/<run_id>/label_audit/label_audit.json` | generated locally | Sev1 |
+| Split manifest | `artifacts/runs/<run_id>/splits/split_manifest.json` | generated locally | Sev1 |
 | Overlay evidence | `reports/overlays/*_overlay.png` + reviewer note | not generated | Sev2 |
 | Training log | `artifacts/runs/<run_id>/logs/train_log.jsonl` | not generated | Sev1 |
 | Run evidence | `artifacts/runs/<run_id>/run_context.json` + `artifact_manifest.json` | generated locally | Sev1 |

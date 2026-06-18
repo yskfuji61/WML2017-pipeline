@@ -6,7 +6,7 @@ Auditable **offline** WMH2017 public-data research PoC package (not clinical, cu
 
 | Field | Value |
 |---|---|
-| package_version | `0.2.2` |
+| package_version | `0.0.0.0` |
 | local planning state | `READY_FOR_STRUCTURAL_REVIEW` |
 | controlled release state | `NOT_READY_FOR_PREVIEW` |
 | first goal | `READY_FOR_PREVIEW` (not `READY_FOR_RELEASE`) |
@@ -20,7 +20,10 @@ python -m pip install -r requirements-lock.txt
 python -m pip install -e ".[dev,test,medical-image]"
 export WMH2017_ROOT=/path/to/MICCAI2017_WMH/files
 make test
-make e2e RUN_ID=local_smoke WMH2017_ROOT="$WMH2017_ROOT"
+make e2e RUN_ID=wmh2017_preview_YYYYMMDD_gitsha WMH2017_ROOT="$WMH2017_ROOT"
+make verify-package RUN_ID="$RUN_ID"
+python scripts/verify_lineage_graph.py --run-id "$RUN_ID" --require-artifact-hashes
+python scripts/verify_evidence_binder.py --run-id "$RUN_ID" --target-state READY_FOR_PREVIEW
 ```
 
 Minimal smoke path:

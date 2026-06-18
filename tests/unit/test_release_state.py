@@ -1,7 +1,7 @@
 from wmh2017.registry.release_state import Evidence, determine_release_state
 
 
-def test_default_evidence_is_structural_review():
+def test_default_evidence_is_blocked():
     assert determine_release_state(Evidence()) == "BLOCKED_BY_SEV0_OR_SEV1"
 
 
@@ -10,14 +10,29 @@ def test_structural_review_when_ci_only():
         has_data_model_code_config_run_linkage=True,
         metric_table_regenerable_from_predictions=True,
     )
-    assert determine_release_state(evidence) == "READY_FOR_STRUCTURAL_REVIEW"
+    assert determine_release_state(evidence) == "STRUCTURAL_REVIEW"
 
 
-def test_preview_when_reviewer_missing():
+def test_preview_candidate_when_reviewer_missing():
     evidence = Evidence(
         has_data_model_code_config_run_linkage=True,
         metric_table_regenerable_from_predictions=True,
         ci_artifact_hash_recorded=True,
         real_data_run_evidence=True,
+        security_gate_pass=True,
+    )
+    assert determine_release_state(evidence) == "PREVIEW_CANDIDATE"
+
+
+def test_ready_for_preview_when_reviewer_approved():
+    evidence = Evidence(
+        has_data_model_code_config_run_linkage=True,
+        metric_table_regenerable_from_predictions=True,
+        ci_artifact_hash_recorded=True,
+        real_data_run_evidence=True,
+        security_gate_pass=True,
+        reviewer_assigned=True,
+        reviewer_approval=True,
+        rollback_rehearsal_complete=True,
     )
     assert determine_release_state(evidence) == "READY_FOR_PREVIEW"
