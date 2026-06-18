@@ -32,8 +32,18 @@ def _set_csv_field(path: Path, row_prefix: str, field: str, value: str) -> None:
 
 def _set_yaml_field(path: Path, field: str, value: str) -> None:
     text = path.read_text(encoding="utf-8")
-    text = re.sub(rf"^{field}: .*$", f"{field}: sha256:{value}", text, flags=re.M)
+    text = re.sub(rf"^{field}: .*$", f"{field}: {value}", text, flags=re.M)
     path.write_text(text, encoding="utf-8")
+
+
+def _set_yaml_sha256_field(path: Path, field: str, value: str) -> None:
+    _set_yaml_field(path, field, f"sha256:{value}")
+
+
+def _git_head(repo: Path) -> str:
+    import subprocess
+
+    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(repo), text=True).strip()
 
 
 def main() -> None:
@@ -56,11 +66,22 @@ def main() -> None:
 
     manifest_hash = _sha256(manifest)
     binder_hash = _sha256(binder)
+    run_manifest = repo / "artifacts/runs" / args.run_id / "artifact_manifest.json"
 
     _set_csv_field(review, "REV-WMH-004", "artifact_hash", manifest_hash)
     _set_csv_field(finding, "FIND-WMH-001", "closure_hash", manifest_hash)
-    _set_yaml_field(decision, "package_manifest_sha256", manifest_hash)
-    _set_yaml_field(decision, "evidence_binder_sha256", binder_hash)
+    _set_yaml_sha256_field(decision, "package_manifest_sha256", manifest_hash)
+    _set_yaml_sha256_field(decision, "evidence_binder_sha256", binder_hash)
+
+    if run_manifest.exists():
+        run_hash = _sha256(run_manifest)
+        run_rel = run_manifest.relative_to(repo).as_posix()
+        _set_csv_field(review, "REV-WMH-002", "artifact_hash", run_hash)
+        _set_csv_field(review, "REV-WMH-002", "artifact_or_scope", run_rel)
+        _set_csv_field(finding, "FIND-WMH-003", "closure_hash", run_hash)
+        _set_csv_field(finding, "FIND-WMH-003", "evidence_path", run_rel)
+        _set_yaml_sha256_field(decision, "artifact_manifest_sha256", run_hash)
+        _set_yaml_field(decision, "code_commit", _git_head(repo))
 
     review_hash = _sha256(review)
     _set_csv_field(finding, "FIND-WMH-004", "closure_hash", review_hash)
