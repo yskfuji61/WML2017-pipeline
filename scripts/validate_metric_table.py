@@ -40,10 +40,14 @@ def main() -> None:
         if dup.any():
             failures.append(f"duplicate case_id within split: {df.loc[dup, 'case_id'].tolist()}")
 
-    for metric in ("dice", "hd95", "lesion_recall", "lesion_f1"):
+    for metric in ("dice", "lesion_recall", "lesion_f1"):
         if metric in df.columns:
             if (df[metric] < -1e-6).any() or (df[metric] > 1.0 + 1e-6).any():
                 failures.append(f"{metric} outside [0,1] range")
+
+    for metric in ("hd95", "avd"):
+        if metric in df.columns and (df[metric] < -1e-6).any():
+            failures.append(f"{metric} must be non-negative")
 
     if args.prediction_dir and "case_id" in df.columns and "prediction_sha256" in df.columns:
         pred_dir = Path(args.prediction_dir)
