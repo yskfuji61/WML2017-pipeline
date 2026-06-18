@@ -54,7 +54,10 @@ def _require_ok(step: dict) -> None:
 
 def _copy_to_nested(src: Path, dst: Path) -> None:
     dst.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, dst)
+    if src.resolve() != dst.resolve():
+        shutil.copy2(src, dst)
+    elif not dst.exists():
+        raise FileNotFoundError(src)
     write_hash_sidecar(dst)
 
 
@@ -257,6 +260,7 @@ def main() -> None:
             "--run-id",
             args.run_id,
             "--allow-shape-only-geometry",
+            "--skip-missing-predictions",
             "--model-artifact",
             str(model_dst) if model_dst.exists() else "",
             "--config-path",

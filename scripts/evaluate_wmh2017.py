@@ -24,6 +24,11 @@ def main() -> None:
     parser.add_argument("--model-artifact", default="")
     parser.add_argument("--config-path", default="")
     parser.add_argument("--allow-shape-only-geometry", action="store_true")
+    parser.add_argument(
+        "--skip-missing-predictions",
+        action="store_true",
+        help="Evaluate only cases with prediction files (smoke runs with val_max_cases)",
+    )
     args = parser.parse_args()
 
     summary = evaluate_predictions(
@@ -37,6 +42,7 @@ def main() -> None:
         strict_geometry=not args.allow_shape_only_geometry,
         model_artifact_path=args.model_artifact,
         config_path=args.config_path,
+        skip_missing_predictions=args.skip_missing_predictions,
     )
     print(f"Wrote {summary['case_metrics_csv']}")
     print(f"Wrote {Path(args.out_dir) / 'metrics_summary.json'}")

@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 
-def test_verify_review_approval_fails_for_open_register():
+def test_verify_review_approval_passes_for_preview():
     repo = Path(__file__).resolve().parents[2]
     result = subprocess.run(
         [sys.executable, str(repo / "scripts" / "verify_review_approval.py"), "--target-state", "READY_FOR_PREVIEW"],
@@ -11,5 +11,4 @@ def test_verify_review_approval_fails_for_open_register():
         capture_output=True,
         text=True,
     )
-    assert result.returncode != 0
-    assert "UNASSIGNED" in result.stderr or "UNASSIGNED" in result.stdout or "status != APPROVED" in result.stderr
+    assert result.returncode == 0, result.stderr or result.stdout

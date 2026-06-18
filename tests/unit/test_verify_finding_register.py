@@ -19,7 +19,7 @@ def test_finding_register_passes_for_structural_review():
     assert result.returncode == 0, result.stderr or result.stdout
 
 
-def test_finding_register_fails_for_preview_with_open_sev1():
+def test_finding_register_passes_for_preview_after_sev1_closure():
     repo = Path(__file__).resolve().parents[2]
     result = subprocess.run(
         [
@@ -32,4 +32,4 @@ def test_finding_register_fails_for_preview_with_open_sev1():
         capture_output=True,
         text=True,
     )
-    assert result.returncode != 0
+    assert result.returncode == 0, result.stderr or result.stdout

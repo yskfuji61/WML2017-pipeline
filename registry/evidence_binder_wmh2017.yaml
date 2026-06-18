@@ -2,8 +2,8 @@ binder_id: WMH2017_EVIDENCE_BINDER
 package_id: WMH2017-LOCAL-POC-SCAFFOLD
 package_version: 0.2.3
 target_state: READY_FOR_PREVIEW
-binder_status: OPEN
-run_id: null
+binder_status: CLOSED
+run_id: wmh2017_preview_20260618_e48ed25
 required_sections:
   package_identity:
     required: true

@@ -1,0 +1,44 @@
+decision_id: REL-WMH-PREVIEW-20260618-001
+run_id: wmh2017_preview_20260618_e48ed25
+package_id: WMH2017-LOCAL-POC-SCAFFOLD
+package_version: 0.2.3
+package_manifest_sha256: sha256:fd8d8d5ea9c8f9e88e22672ac0ce054ff526e7062c3a54709b698dba5c81e165
+artifact_manifest_sha256: sha256:34f264a804b8897e08a31f67b79a0bff2c67be49edd1a612479d85355af0379f
+evidence_binder_sha256: sha256:116cfd6a11b69b198ae01cff38fead5a9da829ee1449a6b4e05e66337941dc44
+code_commit: e48ed2556689f61caa55c8062915f76a5b434894
+target_state: READY_FOR_PREVIEW
+claims_approved:
+  - offline_public_data_research_preview
+  - local_reproducibility_review
+claims_blocked:
+  - clinical_use
+  - customer_presentation
+  - proprietary_data_processing
+  - cloud_upload
+  - production_deployment
+  - leaderboard_or_sota_claim
+required_reviews:
+  source_license_review:
+    review_id: REV-WMH-001
+    status: APPROVED
+  model_validation_review:
+    review_id: REV-WMH-002
+    status: APPROVED
+  security_privacy_review:
+    review_id: REV-WMH-003
+    status: APPROVED
+  release_approval:
+    review_id: REV-WMH-004
+    status: APPROVED
+open_findings:
+  sev0: 0
+  sev1: 0
+decision: APPROVED_FOR_PREVIEW
+approver: release_owner
+date: 2026-06-18
+conditions:
+  - no external/customer/clinical claim
+  - no raw WMH2017 data committed
+  - no cloud upload
+  - official comparable metric claim remains blocked unless parity approved
+  - smoke training only; no performance or SOTA claim

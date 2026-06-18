@@ -80,6 +80,7 @@ verify-binder:
 	  --target-state READY_FOR_PREVIEW
 
 preview-candidate: setup lint typecheck test security manifest parity-report rollback-rehearsal
+	$(PYTHON) scripts/sync_release_manifest_hashes.py --run-id $(RUN_ID)
 	$(PYTHON) scripts/verify_package_identity.py
 	$(PYTHON) scripts/verify_finding_register.py --target-state READY_FOR_PREVIEW
 	test -n "$(WMH2017_ROOT)"

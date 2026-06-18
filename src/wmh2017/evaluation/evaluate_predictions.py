@@ -22,7 +22,7 @@ from wmh2017.lineage.runtime_fingerprint import git_commit_or_unknown, package_v
 from wmh2017.security.path_redaction import redact_path
 
 
-def _prediction_path_for_case(prediction_dir: Path, case_id: str) -> Path:
+def _prediction_path_for_case(prediction_dir: Path, case_id: str) -> Path | None:
     candidates = [
         prediction_dir / f"{case_id}_pred.nii.gz",
         prediction_dir / f"{case_id}_pred.nii",
@@ -34,7 +34,7 @@ def _prediction_path_for_case(prediction_dir: Path, case_id: str) -> Path:
     for p in candidates:
         if p.exists():
             return p
-    raise FileNotFoundError(f"prediction not found for case_id={case_id} in {prediction_dir}")
+    return None
 
 
 def evaluate_predictions(
@@ -49,6 +49,7 @@ def evaluate_predictions(
     metric_script_path: str | Path = "src/wmh2017/evaluation/evaluate_predictions.py",
     model_artifact_path: str | Path = "",
     config_path: str | Path = "",
+    skip_missing_predictions: bool = False,
 ) -> dict[str, Any]:
     manifest_csv = Path(manifest_csv)
     split_csv = Path(split_csv)
@@ -81,6 +82,10 @@ def evaluate_predictions(
             raise ValueError(f"case_id={case_id} has no label path; local validation requires labels")
 
         pred_path = _prediction_path_for_case(prediction_dir, case_id)
+        if pred_path is None:
+            if skip_missing_predictions:
+                continue
+            raise FileNotFoundError(f"prediction not found for case_id={case_id} in {prediction_dir}")
         pred_meta = load_image_metadata(pred_path)
         label_meta = load_image_metadata(label_path)
         assert_compatible_image_geometry(
@@ -127,6 +132,12 @@ def evaluate_predictions(
             "created_at_utc": created_at,
         }
         records.append(record)
+
+    if not records:
+        raise ValueError(
+            f"no cases evaluated for split={assigned_split}; "
+            f"predictions missing under {prediction_dir}"
+        )
 
     result_df = pd.DataFrame(records)
     missing = validate_case_metrics_columns(result_df.columns.tolist())
