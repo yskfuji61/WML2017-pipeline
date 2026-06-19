@@ -215,6 +215,9 @@ def train_smoke_model_stage(state: PipelineState) -> StageResult | None:
             "split_manifest": state.split_csv.as_posix(),
         }
     )
+    if ctx.max_epochs is not None:
+        cfg.setdefault("training", {})
+        cfg["training"]["max_epochs"] = int(ctx.max_epochs)
     train_config.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
     write_hash_sidecar(train_config)
     eval_cfg = {

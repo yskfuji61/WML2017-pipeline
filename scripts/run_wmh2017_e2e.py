@@ -26,6 +26,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-train", action="store_true")
     parser.add_argument("--no-inspect-images", action="store_true")
     parser.add_argument("--allow-dirty-git", action="store_true")
+    parser.add_argument(
+        "--max-epochs",
+        type=int,
+        default=None,
+        help="Override training.max_epochs in the materialized config (full runs only).",
+    )
     return parser.parse_args()
 
 
@@ -44,6 +50,7 @@ def main() -> None:
         skip_train=args.skip_train,
         no_inspect_images=args.no_inspect_images,
         allow_dirty_git=args.allow_dirty_git,
+        max_epochs=args.max_epochs,
     )
     result = run_pipeline(ctx)
     print(f"Wrote run directory: {result.work_dir}")

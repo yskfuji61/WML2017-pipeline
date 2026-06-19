@@ -5,10 +5,12 @@ PYTHON ?= .venv/bin/python
 endif
 RUN_ID ?= local_$(shell date +%Y%m%d_%H%M%S)
 WMH2017_ROOT ?=
+EPOCHS ?=
+FULL_CONFIG ?= configs/wmh2017_monai_unet3d_full.yaml
 PACKAGE_ID ?= WMH2017-LOCAL-POC-SCAFFOLD
 PACKAGE_VERSION ?= 0.2.3
 
-.PHONY: setup doctor lint typecheck test security sbom fingerprint manifest sync-manifests e2e verify-package verify-lineage verify-binder preview-candidate rollback-rehearsal parity-report
+.PHONY: setup doctor lint typecheck test security sbom fingerprint manifest sync-manifests e2e e2e-full verify-package verify-lineage verify-binder preview-candidate rollback-rehearsal parity-report
 
 doctor:
 	$(PYTHON) scripts/check_environment.py
@@ -75,6 +77,15 @@ e2e:
 	  --files-root "$(WMH2017_ROOT)" \
 	  --work-dir "artifacts/runs/$(RUN_ID)" \
 	  --run-id "$(RUN_ID)"
+
+e2e-full:
+	test -n "$(WMH2017_ROOT)"
+	$(PYTHON) scripts/run_wmh2017_e2e.py \
+	  --files-root "$(WMH2017_ROOT)" \
+	  --work-dir "artifacts/runs/$(RUN_ID)" \
+	  --run-id "$(RUN_ID)" \
+	  --config "$(FULL_CONFIG)" \
+	  $(if $(EPOCHS),--max-epochs $(EPOCHS),)
 
 verify-package:
 	$(PYTHON) scripts/verify_release_package.py \

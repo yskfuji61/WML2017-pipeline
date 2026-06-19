@@ -64,14 +64,31 @@ Or use the tiny wrapper:
   --config configs/wmh2017_monai_tiny_smoke.yaml
 ```
 
-## 5. Platform notes (torch / MPS / CUDA)
+## 5. Full training run (train + eval chain)
+
+Use `make e2e-full` for the full MONAI 3D U-Net config with evaluation and manifest wiring.
+The default config is `configs/wmh2017_monai_unet3d_full.yaml` (50 epochs). Override epochs for
+short validation runs without editing the config:
+
+```bash
+export WMH2017_ROOT="<LOCAL_WMH2017_FILES_ROOT>"
+make e2e-full RUN_ID=wmh2017_full_short_seed42 EPOCHS=3 WMH2017_ROOT="$WMH2017_ROOT"
+```
+
+Dry-run the command expansion without executing training:
+
+```bash
+make -n e2e-full EPOCHS=3 RUN_ID=wmh2017_full_short_seed42 WMH2017_ROOT="$WMH2017_ROOT"
+```
+
+## 6. Platform notes (torch / MPS / CUDA)
 
 - `requirements-lock.txt` pins versions but not wheel hashes; torch wheels differ by platform.
 - Record the approved wheel index in run evidence when using CUDA.
 - On Apple Silicon, MONAI smoke uses an MPS ConvTranspose3d compatibility patch; this is
   wiring validation only, not native-MPS equivalence.
 
-## 6. Prohibited without review
+## 7. Prohibited without review
 
 - Proprietary/private/PHI data
 - Cloud upload of medical data
