@@ -7,14 +7,17 @@ that installed package versions match requirements-lock.txt when present.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LOCK_FILE = REPO_ROOT / "requirements-lock.txt"
+IMPORT_SMOKE_JSON = REPO_ROOT / "reports/env/import_smoke.json"
 
 REQUIRED_MODULES = (
     "numpy",
@@ -76,35 +79,104 @@ def _version_ok(module: str, observed: str, expected: dict[str, str]) -> tuple[b
     return False, f"expected {expected_version}, observed {observed}"
 
 
+def _mps_available() -> bool | None:
+    ok, _ = _import_probe("torch")
+    if not ok:
+        return None
+    code = (
+        "import torch; "
+        "print('true' if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available() else 'false')"
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        text=True,
+        capture_output=True,
+        check=False,
+        env={
+            **os.environ,
+            "OMP_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+        },
+    )
+    if completed.returncode != 0:
+        return None
+    value = (completed.stdout or "").strip().lower()
+    if value == "true":
+        return True
+    if value == "false":
+        return False
+    return None
+
+
+def _write_import_smoke(payload: dict) -> None:
+    IMPORT_SMOKE_JSON.parent.mkdir(parents=True, exist_ok=True)
+    IMPORT_SMOKE_JSON.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     print(f"python: {sys.executable}")
     print(f"version: {sys.version.split()[0]}")
     expected = _parse_lock_versions()
     failures: list[str] = []
+    module_results: dict[str, dict[str, str | bool]] = {}
 
     for module in REQUIRED_MODULES:
         ok, detail = _import_probe(module)
+        version_ok, version_msg = _version_ok(module, detail, expected) if ok else (False, detail)
+        module_results[module] = {
+            "ok": ok and version_ok,
+            "detail": detail if ok else detail,
+            "version_match": version_ok if ok else False,
+        }
         if not ok:
             failures.append(f"{module}: FAIL ({detail})")
             print(f"{module}: FAIL ({detail})")
             continue
-        version_ok, version_msg = _version_ok(module, detail, expected)
         if version_ok:
             print(f"{module}: OK ({detail})")
         else:
             failures.append(f"{module}: VERSION_MISMATCH ({version_msg})")
             print(f"{module}: VERSION_MISMATCH ({version_msg})")
 
+    mps_available = _mps_available()
+    if mps_available is True:
+        print("mps_available: true")
+    elif mps_available is False:
+        print("mps_available: false")
+    else:
+        print("mps_available: unknown")
+
     wmh_root = os.environ.get("WMH2017_ROOT", "")
+    wmh_root_ok = False
     if wmh_root:
         root = Path(wmh_root).expanduser()
         if root.is_dir():
+            wmh_root_ok = True
             print(f"WMH2017_ROOT: OK ({root})")
         else:
             failures.append(f"WMH2017_ROOT not a directory: {wmh_root}")
             print("WMH2017_ROOT: FAIL (not a directory)")
     else:
         print("WMH2017_ROOT: unset (set before e2e/smoke runs)")
+
+    imports_ok = not failures
+    payload = {
+        "checked_at_utc": datetime.now(tz=UTC).isoformat(),
+        "python_executable": sys.executable,
+        "python_version": sys.version.split()[0],
+        "imports_ok": imports_ok,
+        "modules": module_results,
+        "mps_available": mps_available,
+        "wmh2017_root_set": bool(wmh_root),
+        "wmh2017_root_ok": wmh_root_ok,
+        "failures": failures,
+    }
+    _write_import_smoke(payload)
+    print(f"\nWrote import smoke report: {IMPORT_SMOKE_JSON}")
 
     if failures:
         print("\nenvironment doctor FAIL")

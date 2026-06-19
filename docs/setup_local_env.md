@@ -18,6 +18,9 @@ make doctor
 If `make doctor` reports import segfault/SIGABRT, recreate `.venv` and ensure you are
 using a supported Python (3.10–3.11). Do not mix conda and `.venv` interpreters.
 
+The doctor also writes `reports/env/import_smoke.json` (gitignored) with import results
+and MPS availability. Confirm `"imports_ok": true` before starting training runs.
+
 ## 2. WMH2017_ROOT
 
 Point `WMH2017_ROOT` at the Dataverse **`files`** directory (not `training/`):

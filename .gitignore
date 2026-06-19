@@ -83,6 +83,7 @@ results/
 logs/
 
 # Generated reports with local absolute paths
+reports/env/
 reports/dataset_manifest.csv
 reports/label_value_audit.csv
 reports/overlays/*
