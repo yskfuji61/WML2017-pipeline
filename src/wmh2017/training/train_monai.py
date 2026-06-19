@@ -375,7 +375,7 @@ def main(config_path: str) -> None:
             best_epoch = epoch
             epochs_without_improvement = 0
             if mode == "full" and bool(train_cfg.get("save_best_only", True)):
-                torch.save(
+                torch.save(  # nosec B614 — local trusted best checkpoint only; not loading untrusted weights
                     {
                         "run_id": run_id,
                         "model_state_dict": model.state_dict(),
@@ -396,7 +396,7 @@ def main(config_path: str) -> None:
 
     if mode == "smoke" and bool(train_cfg.get("save_checkpoint", True)):
         checkpoint_path = str(ckpt_dir / "model_smoke.pt")
-        torch.save(
+        torch.save(  # nosec B614 — local smoke checkpoint only; not loading untrusted weights
             {
                 "run_id": run_id,
                 "model_state_dict": model.state_dict(),
@@ -409,7 +409,9 @@ def main(config_path: str) -> None:
 
     if bool(train_cfg.get("save_predictions", True)):
         if mode == "full" and checkpoint_path and Path(checkpoint_path).exists():
-            state = torch.load(checkpoint_path, map_location=device, weights_only=False)
+            state = torch.load(  # nosec B614 — reload local best checkpoint written by this run only
+                checkpoint_path, map_location=device, weights_only=False
+            )
             model.load_state_dict(state["model_state_dict"])
         pred_count = _save_predictions(
             model=model,
