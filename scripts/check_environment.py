@@ -28,6 +28,8 @@ REQUIRED_MODULES = (
     "monai",
 )
 
+DOC_PLACEHOLDER_PATTERN = re.compile(r"^<[^>]+>$|LOCAL_WMH2017_FILES_ROOT", re.IGNORECASE)
+
 
 def _parse_lock_versions() -> dict[str, str]:
     if not LOCK_FILE.exists():
@@ -43,12 +45,23 @@ def _parse_lock_versions() -> dict[str, str]:
     return versions
 
 
+def _distribution_name(module: str) -> str:
+    return module.split(".")[0].lower()
+
+
+def _is_doc_placeholder(value: str) -> bool:
+    stripped = value.strip()
+    if not stripped:
+        return True
+    return bool(DOC_PLACEHOLDER_PATTERN.search(stripped))
+
+
 def _import_probe(module: str) -> tuple[bool, str]:
+    dist_name = _distribution_name(module)
     code = (
-        "import importlib; "
-        f"m=importlib.import_module({module!r}); "
-        "v=getattr(m,'__version__',getattr(getattr(m,'version',None),'version','ok')); "
-        "print(v)"
+        "import importlib, importlib.metadata; "
+        f"importlib.import_module({module!r}); "
+        f"print(importlib.metadata.version({dist_name!r}))"
     )
     completed = subprocess.run(
         [sys.executable, "-c", code],
@@ -70,13 +83,23 @@ def _import_probe(module: str) -> tuple[bool, str]:
 
 
 def _version_ok(module: str, observed: str, expected: dict[str, str]) -> tuple[bool, str]:
-    key = module.split(".")[0].lower()
+    key = _distribution_name(module)
     expected_version = expected.get(key)
     if not expected_version or expected_version == "ok":
         return True, ""
     if observed.startswith(expected_version):
         return True, ""
     return False, f"expected {expected_version}, observed {observed}"
+
+
+def _check_wmh2017_root(raw: str) -> tuple[str, bool, str | None]:
+    """Return (status_label, is_valid_dir, warning_message)."""
+    if not raw or _is_doc_placeholder(raw):
+        return "unset", False, None
+    root = Path(raw).expanduser()
+    if root.is_dir():
+        return "ok", True, None
+    return "invalid", False, f"WMH2017_ROOT not a directory: {raw}"
 
 
 def _mps_available() -> bool | None:
@@ -121,7 +144,8 @@ def main() -> int:
     print(f"python: {sys.executable}")
     print(f"version: {sys.version.split()[0]}")
     expected = _parse_lock_versions()
-    failures: list[str] = []
+    import_failures: list[str] = []
+    warnings: list[str] = []
     module_results: dict[str, dict[str, str | bool]] = {}
 
     for module in REQUIRED_MODULES:
@@ -133,13 +157,13 @@ def main() -> int:
             "version_match": version_ok if ok else False,
         }
         if not ok:
-            failures.append(f"{module}: FAIL ({detail})")
+            import_failures.append(f"{module}: FAIL ({detail})")
             print(f"{module}: FAIL ({detail})")
             continue
         if version_ok:
             print(f"{module}: OK ({detail})")
         else:
-            failures.append(f"{module}: VERSION_MISMATCH ({version_msg})")
+            import_failures.append(f"{module}: VERSION_MISMATCH ({version_msg})")
             print(f"{module}: VERSION_MISMATCH ({version_msg})")
 
     mps_available = _mps_available()
@@ -151,19 +175,18 @@ def main() -> int:
         print("mps_available: unknown")
 
     wmh_root = os.environ.get("WMH2017_ROOT", "")
-    wmh_root_ok = False
-    if wmh_root:
+    wmh_status, wmh_root_ok, wmh_warning = _check_wmh2017_root(wmh_root)
+    if wmh_status == "ok":
         root = Path(wmh_root).expanduser()
-        if root.is_dir():
-            wmh_root_ok = True
-            print(f"WMH2017_ROOT: OK ({root})")
-        else:
-            failures.append(f"WMH2017_ROOT not a directory: {wmh_root}")
-            print("WMH2017_ROOT: FAIL (not a directory)")
-    else:
+        print(f"WMH2017_ROOT: OK ({root})")
+    elif wmh_status == "unset":
         print("WMH2017_ROOT: unset (set before e2e/smoke runs)")
+    else:
+        print("WMH2017_ROOT: WARN (invalid path; required before e2e/smoke runs)")
+        if wmh_warning:
+            warnings.append(wmh_warning)
 
-    imports_ok = not failures
+    imports_ok = not import_failures
     payload = {
         "checked_at_utc": datetime.now(tz=UTC).isoformat(),
         "python_executable": sys.executable,
@@ -171,16 +194,24 @@ def main() -> int:
         "imports_ok": imports_ok,
         "modules": module_results,
         "mps_available": mps_available,
-        "wmh2017_root_set": bool(wmh_root),
+        "wmh2017_root_set": bool(wmh_root) and not _is_doc_placeholder(wmh_root),
         "wmh2017_root_ok": wmh_root_ok,
-        "failures": failures,
+        "wmh2017_root_status": wmh_status,
+        "import_failures": import_failures,
+        "warnings": warnings,
+        "failures": import_failures,
     }
     _write_import_smoke(payload)
     print(f"\nWrote import smoke report: {IMPORT_SMOKE_JSON}")
 
-    if failures:
+    if warnings:
+        print("\nenvironment doctor WARN")
+        for item in warnings:
+            print(f"  - {item}")
+
+    if import_failures:
         print("\nenvironment doctor FAIL")
-        for item in failures:
+        for item in import_failures:
             print(f"  - {item}")
         return 1
 

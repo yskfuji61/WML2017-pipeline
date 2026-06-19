@@ -21,6 +21,10 @@ using a supported Python (3.10–3.11). Do not mix conda and `.venv` interpreter
 The doctor also writes `reports/env/import_smoke.json` (gitignored) with import results
 and MPS availability. Confirm `"imports_ok": true` before starting training runs.
 
+`imports_ok` covers the Python import stack only. `WMH2017_ROOT` is checked separately:
+do **not** export doc placeholders such as `<LOCAL_WMH2017_FILES_ROOT>` literally — either unset
+it for `make doctor`, or point it at your local `files/` directory before `make e2e`.
+
 ## 2. WMH2017_ROOT
 
 Point `WMH2017_ROOT` at the Dataverse **`files`** directory (not `training/`):
