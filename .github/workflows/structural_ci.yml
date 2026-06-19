@@ -33,8 +33,29 @@ jobs:
         run: pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation tests/security tests/supply_chain
       - name: Architecture gates
         run: |
-          python scripts/verify_no_raw_data_committed.py
+          python scripts/security/verify_no_raw_data_committed.py .
+          python scripts/security/verify_no_overclaim.py .
+          python scripts/security/verify_no_env_secrets.py .
+          python scripts/security/verify_no_unapproved_remote_uri.py .
           python scripts/verify_no_legacy_imports.py
+      - name: Manager report claim gate
+        run: |
+          python scripts/reporting/generate_biweekly_report.py \
+            --period-start 2026-06-16 --period-end 2026-06-30 \
+            --output reports/biweekly/2026-06-30_report.md
+          python scripts/reporting/verify_manager_report_claims.py \
+            --report reports/biweekly/2026-06-30_report.md
+      - name: Metric formula lock
+        run: python scripts/validation/verify_metric_formula_lock.py --spec docs/model_validation/metric_formula_spec.md
+      - name: Register validation
+        run: python scripts/validate_registers.py
+      - name: Record CI URL
+        if: success()
+        run: python scripts/release/update_latest_green_ci.py
+        env:
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_SHA: ${{ github.sha }}
       - name: Generate structural manifest
         run: |
           mkdir -p reports/ci

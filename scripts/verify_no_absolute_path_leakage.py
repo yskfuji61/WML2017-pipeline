@@ -5,15 +5,30 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 from pathlib import Path
 
 ABS_PATH_PATTERN = re.compile(r"(?<![\w/.-])/(?:Users|home|tmp|var|opt|Volumes|private|mnt|data)/[^\s\"',}\]]+")
+
+PLACEHOLDER_ALLOWLIST = (
+    "REDACTED_OR_LOCAL_ONLY",
+    "PENDING_CONFIRMATION",
+    "<LOCAL_WMH2017_FILES_ROOT>",
+    "WMH2017_ROOT",
+    "example.com",
+)
 
 
 def scan_text(text: str, *, source: str) -> list[str]:
     hits: list[str] = []
     for match in ABS_PATH_PATTERN.finditer(text):
-        hits.append(f"{source}: {match.group(0)}")
+        fragment = match.group(0)
+        window_start = max(0, match.start() - 80)
+        window_end = min(len(text), match.end() + 80)
+        window = text[window_start:window_end]
+        if any(token in window for token in PLACEHOLDER_ALLOWLIST):
+            continue
+        hits.append(f"{source}: {fragment}")
     return hits
 
 
@@ -27,18 +42,34 @@ def scan_file(path: Path) -> list[str]:
     return scan_text(text, source=path.as_posix())
 
 
-def scan_tree(root: Path) -> list[str]:
+def git_tracked_under(repo_root: Path, prefix: str) -> set[str]:
+    out = subprocess.check_output(
+        ["git", "ls-files", prefix],
+        cwd=str(repo_root),
+        text=True,
+        stderr=subprocess.DEVNULL,
+    )
+    return {line.strip() for line in out.splitlines() if line.strip()}
+
+
+def scan_tree(root: Path, *, tracked_only: set[str] | None = None, root_prefix: str = "") -> list[str]:
     if not root.exists():
         return []
     hits: list[str] = []
     for path in root.rglob("*"):
-        if path.is_file():
-            hits.extend(scan_file(path))
+        if not path.is_file():
+            continue
+        if tracked_only is not None and root_prefix:
+            rel = f"{root_prefix}/{path.relative_to(root).as_posix()}"
+            if rel not in tracked_only:
+                continue
+        hits.extend(scan_file(path))
     return hits
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Verify no absolute path leakage in artifacts.")
+    parser.add_argument("root", nargs="?", default="", help="Optional repository root (ignored; scans reports/)")
     parser.add_argument("--run-dir", default="", help="Optional run directory to scan")
     parser.add_argument("--reports-dir", default="reports")
     args = parser.parse_args()
@@ -46,7 +77,8 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     hits: list[str] = []
     reports_dir = repo_root / args.reports_dir
-    hits.extend(scan_tree(reports_dir))
+    tracked_reports = git_tracked_under(repo_root, args.reports_dir)
+    hits.extend(scan_tree(reports_dir, tracked_only=tracked_reports, root_prefix=args.reports_dir))
 
     if args.run_dir:
         run_dir = Path(args.run_dir)

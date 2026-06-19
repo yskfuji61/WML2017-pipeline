@@ -1,0 +1,21 @@
+{
+  "claim_id": "CLAIM-LOCAL-DICE-001",
+  "claim_text": "Local validation Dice was computed for this run.",
+  "allowed_wording": "local validation metric",
+  "prohibited_wording": "official benchmark / clinical / SOTA / customer-ready / production-ready / READY_FOR_RELEASE",
+  "evidence": [
+    {
+      "artifact": "metrics_summary.json",
+      "sha256": "PENDING_CONFIRMATION",
+      "generated_by": "python scripts/evaluate_wmh2017.py",
+      "depends_on": [
+        "prediction_manifest_hash",
+        "split_manifest_hash",
+        "dataset_manifest_hash",
+        "metric_script_hash",
+        "code_commit"
+      ]
+    }
+  ],
+  "status": "SUPPORTED_LOCAL_ONLY"
+}

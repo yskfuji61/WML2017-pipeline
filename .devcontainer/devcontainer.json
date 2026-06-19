@@ -1,0 +1,22 @@
+{
+  "name": "WML2017 Public PoC",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {},
+  "postCreateCommand": "pip install -r requirements-lock.txt && pip install -e '.[dev,test,medical-image]'",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      }
+    }
+  },
+  "remoteEnv": {
+    "WMH2017_ROOT": "${localEnv:WMH2017_ROOT}",
+    "MLFLOW_TRACKING_URI": "file:./mlruns"
+  },
+  "labels": {
+    "dlp": "public_data_only",
+    "phi_pii": "prohibited",
+    "cloud_upload": "prohibited"
+  }
+}

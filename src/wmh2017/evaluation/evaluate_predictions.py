@@ -51,6 +51,7 @@ def evaluate_predictions(
     model_artifact_path: str | Path = "",
     config_path: str | Path = "",
     skip_missing_predictions: bool = False,
+    prediction_manifest_path: str | Path = "",
 ) -> dict[str, Any]:
     manifest_csv = Path(manifest_csv)
     split_csv = Path(split_csv)
@@ -70,6 +71,7 @@ def evaluate_predictions(
     created_at = datetime.now(timezone.utc).isoformat()
     model_hash = sha256_path(model_artifact_path) if model_artifact_path else ""
     config_hash = sha256_path(config_path) if config_path else ""
+    pred_manifest_hash = sha256_path(prediction_manifest_path) if prediction_manifest_path else ""
 
     records: list[dict[str, Any]] = []
     for _, srow in cases.iterrows():
@@ -176,6 +178,7 @@ def evaluate_predictions(
         "prediction_dir": str(prediction_dir),
         "model_artifact_hash": model_hash,
         "config_hash": config_hash,
+        "prediction_manifest_hash": pred_manifest_hash,
         "metric_script_hash": sha256_path(metric_script_path),
         "code_commit": git_commit_or_unknown(),
         "package_versions": package_versions(),

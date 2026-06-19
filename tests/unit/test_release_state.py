@@ -36,3 +36,19 @@ def test_ready_for_preview_when_reviewer_approved():
         rollback_rehearsal_complete=True,
     )
     assert determine_release_state(evidence) == "READY_FOR_PREVIEW"
+
+
+def test_production_claim_does_not_return_ready_for_release():
+    evidence = Evidence(
+        has_data_model_code_config_run_linkage=True,
+        metric_table_regenerable_from_predictions=True,
+        ci_artifact_hash_recorded=True,
+        real_data_run_evidence=True,
+        security_gate_pass=True,
+        reviewer_assigned=True,
+        reviewer_approval=True,
+        rollback_rehearsal_complete=True,
+        production_claim=True,
+        monitoring_and_rollback=True,
+    )
+    assert determine_release_state(evidence) == "READY_FOR_PREVIEW"

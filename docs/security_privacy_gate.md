@@ -24,3 +24,10 @@ data, customer data, or cloud-uploaded data without prior written approval.
 - Dataset terms prohibit the intended action.
 - Logs contain absolute private paths or sensitive metadata that cannot be masked.
 - A reviewer cannot determine whether a file is public, internal, confidential, or restricted.
+
+## DLP rule (v4)
+
+No proprietary/private/PHI/PII data use, storage, model training, export, upload, or report inclusion.
+Local redacted metadata inspection for DLP/security review is allowed only to determine whether review is required.
+Raw metadata values must not be printed, committed, logged, exported, or included in reports.
+If PHI/PII-like metadata is found, stop and require security/privacy review.

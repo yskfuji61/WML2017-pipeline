@@ -43,10 +43,11 @@ def is_forbidden(rel: str) -> str | None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Verify no raw medical data is committed.")
-    parser.add_argument("--repo-root", default=".")
+    parser.add_argument("root", nargs="?", default=".", help="Repository root")
+    parser.add_argument("--repo-root", default="", help="Deprecated alias for root")
     args = parser.parse_args()
 
-    repo_root = Path(args.repo_root).resolve()
+    repo_root = Path(args.repo_root or args.root).resolve()
     offenders: list[str] = []
     for rel in git_tracked_files(repo_root):
         reason = is_forbidden(rel)

@@ -76,6 +76,7 @@ def main() -> None:
     parser.add_argument("--cdx-out", default="reports/security/sbom.cdx.json")
     parser.add_argument("--license-out", default="reports/security/license_report.json")
     parser.add_argument("--package-version", default="0.2.3")
+    parser.add_argument("--sign", action="store_true", help="Write SHA256 signature sidecar for SBOM (Wave 3)")
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
@@ -101,6 +102,10 @@ def main() -> None:
 
     print(f"Wrote CycloneDX SBOM: {cdx_out} ({component_count} components)")
     print(f"Wrote license report: {license_out}")
+    if args.sign:
+        sig_path = cdx_out.with_suffix(cdx_out.suffix + ".sha256")
+        sig_path.write_text(sha256_file(cdx_out) + "\n", encoding="utf-8")
+        print(f"Wrote SBOM signature sidecar: {sig_path}")
 
 
 if __name__ == "__main__":

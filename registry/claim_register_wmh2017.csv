@@ -1,0 +1,2 @@
+claim_id,claim_text,allowed_wording,prohibited_wording,status,reviewer
+CLAIM-LOCAL-DICE-001,Local validation Dice computed,local validation metric,official benchmark / SOTA / READY_FOR_RELEASE,SUPPORTED_LOCAL_ONLY,PENDING_CONFIRMATION

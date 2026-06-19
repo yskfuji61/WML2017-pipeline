@@ -15,7 +15,20 @@ release_ladder: STRUCTURAL_REVIEW -> PREVIEW_CANDIDATE -> READY_FOR_PREVIEW -> L
 upper_bound_without_real_run_evidence: STRUCTURAL_REVIEW
 upper_bound_without_preview_or_human_review: READY_FOR_PREVIEW
 ready_for_release: false
+historical_preview_run_id: wmh2017_preview_20260618_e48ed25
+v4_intermediate_states: READY_FOR_STRUCTURAL_REVIEW, REAL_SMOKE_RUN_EVIDENCE_AVAILABLE, STRUCTURAL_REVIEW_HARDENED, REAL_WMH2017_SMOKE_RUN_EVIDENCE_AVAILABLE
 ```
+
+## v4 intermediate states (additive)
+
+| v4 state | Meaning | Maps to controlled ladder |
+|---|---|---|
+| READY_FOR_STRUCTURAL_REVIEW | Alias of STRUCTURAL_REVIEW | STRUCTURAL_REVIEW |
+| REAL_SMOKE_RUN_EVIDENCE_AVAILABLE | Tiny real local smoke succeeded | PREVIEW_CANDIDATE or higher |
+| STRUCTURAL_REVIEW_HARDENED | CI/security gates hardened | PREVIEW_CANDIDATE |
+| REAL_WMH2017_SMOKE_RUN_EVIDENCE_AVAILABLE | Full minimal WMH2017 smoke evidence | READY_FOR_PREVIEW candidate |
+
+Historical preview evidence (`wmh2017_preview_20260618_e48ed25`) is retained during v4 alignment.
 
 ## State mapping
 

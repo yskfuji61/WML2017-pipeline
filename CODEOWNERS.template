@@ -1,0 +1,4 @@
+# CODEOWNERS template (v4)
+# Replace PENDING_CONFIRMATION with real GitHub team/user after approval.
+
+* @PENDING_CONFIRMATION

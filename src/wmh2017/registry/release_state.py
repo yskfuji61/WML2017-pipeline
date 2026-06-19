@@ -12,6 +12,9 @@ RELEASE_LADDER = (
     "READY_FOR_RELEASE",
 )
 
+# This public-data local PoC repository must never reach READY_FOR_RELEASE.
+POC_MAX_RELEASE_STATE = "READY_FOR_PREVIEW"
+
 
 @dataclass
 class Evidence:
@@ -57,7 +60,5 @@ def determine_release_state(evidence: Evidence) -> str:
     if evidence.production_claim and not evidence.monitoring_and_rollback:
         return "BLOCKED_BY_SEV0_OR_SEV1"
     if evidence.rollback_rehearsal_complete and evidence.reviewer_approval:
-        if evidence.production_claim and evidence.monitoring_and_rollback:
-            return "READY_FOR_RELEASE"
-        return "READY_FOR_PREVIEW"
-    return "READY_FOR_PREVIEW"
+        return POC_MAX_RELEASE_STATE
+    return POC_MAX_RELEASE_STATE

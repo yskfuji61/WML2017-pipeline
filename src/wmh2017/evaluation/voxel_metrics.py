@@ -10,7 +10,6 @@ Claim boundary:
 from __future__ import annotations
 
 import numpy as np
-from scipy.ndimage import binary_erosion, distance_transform_edt
 
 from wmh2017.data.label_policy import wmh_foreground_mask
 
@@ -73,6 +72,8 @@ def avd_wmh_label1(
 
 
 def _surface(mask: np.ndarray) -> np.ndarray:
+    from scipy.ndimage import binary_erosion
+
     mask_b = np.asarray(mask).astype(bool)
     if not mask_b.any():
         return mask_b
@@ -104,6 +105,8 @@ def hausdorff95_binary(
 
     pred_surface = _surface(pred_b)
     target_surface = _surface(target_b)
+
+    from scipy.ndimage import distance_transform_edt
 
     # Distance transform of the inverse surface gives distance to nearest surface voxel.
     sampling = spacing if spacing is not None else None

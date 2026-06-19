@@ -12,8 +12,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
-from scipy.ndimage import generate_binary_structure
-from scipy.ndimage import label as cc_label
 
 from wmh2017.data.label_policy import wmh_foreground_mask
 
@@ -27,6 +25,8 @@ class LesionMetricPolicy:
 
 
 def _structure_for_connectivity(ndim: int, connectivity: int) -> np.ndarray:
+    from scipy.ndimage import generate_binary_structure
+
     if ndim != 3:
         return generate_binary_structure(ndim, ndim)
     if connectivity <= 6:
@@ -38,6 +38,8 @@ def _structure_for_connectivity(ndim: int, connectivity: int) -> np.ndarray:
 
 def connected_components(mask: np.ndarray, connectivity: int = 26) -> tuple[np.ndarray, int]:
     """Return connected-component labels and count for a binary mask."""
+    from scipy.ndimage import label as cc_label
+
     mask_b = np.asarray(mask).astype(bool)
     structure = _structure_for_connectivity(mask_b.ndim, connectivity)
     labeled, count = cc_label(mask_b, structure=structure)

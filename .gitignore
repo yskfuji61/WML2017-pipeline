@@ -26,6 +26,9 @@ venv/
 Datasets/
 Heritages/
 data/raw/
+data/external/
+data/private/
+data/proprietary/
 external/raw/
 external/datasets/
 
@@ -37,7 +40,27 @@ external/datasets/
 *.nrrd
 *.dcm
 
-# Run artifacts (generated locally)
+!.env.example
+
+# local MLflow
+mlruns/
+!mlruns/.gitkeep
+
+# raw or derived run artifacts
+artifacts/runs/*/raw/
+artifacts/runs/*/predictions/
+artifacts/runs/**/*.nii
+artifacts/runs/**/*.nii.gz
+artifacts/runs/**/*.dcm
+artifacts/runs/**/*.nrrd
+artifacts/runs/**/*.mha
+artifacts/runs/**/*.mhd
+
+# generated medical-image-derived figures
+reports/figures/overlays/*.png
+reports/figures/overlays/**/*.png
+reports/figures/error_maps/*.png
+reports/figures/error_maps/**/*.png
 artifacts/runs/*
 !artifacts/runs/.gitkeep
 artifacts/checkpoints/*

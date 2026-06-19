@@ -1,10 +1,7 @@
-# Official WMH Evaluator License Review
+# License review
 
-| Field | Value |
-|-------|-------|
-| disposition | NOT_REVIEWED |
-| reviewer | UNASSIGNED |
-| review_date | NOT_REVIEWED |
-| allowed_use | local parity fixture comparison only until APPROVED |
+- disposition: NOT_REVIEWED
+- reviewer: PENDING_CONFIRMATION
+- official_benchmark_claim_allowed: false
 
-Human reviewer must complete before `official_comparable` claim is allowed.
+Do not treat evaluator as trusted until this review is APPROVED.

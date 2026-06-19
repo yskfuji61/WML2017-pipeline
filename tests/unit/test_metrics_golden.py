@@ -1,4 +1,7 @@
 import numpy as np
+import pytest
+
+pytest.importorskip("scipy.ndimage", exc_type=ImportError)
 
 from wmh2017.evaluation.lesion_metrics import lesion_recall_f1_binary, lesion_recall_f1_wmh_label1
 from wmh2017.evaluation.voxel_metrics import (

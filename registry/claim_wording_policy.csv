@@ -1,0 +1,13 @@
+pattern_id,context_class,example,allowed_in_repo
+ready_for_release_positive,prohibited_positive_claim,This repository is READY_FOR_RELEASE.,false
+ready_for_release_negative,allowed_negative_boundary,READY_FOR_RELEASE must never be claimed.,true
+clinical_ready_en,prohibited_positive_claim,The model is clinically validated.,false
+clinical_negative,allowed_negative_boundary,Clinical use is prohibited.,true
+customer_ready_en,prohibited_positive_claim,This is customer ready.,false
+production_ready_en,prohibited_positive_claim,This is production ready.,false
+sota_positive_en,prohibited_positive_claim,This is SOTA.,false
+sota_negative,allowed_negative_boundary,No SOTA claim is made.,true
+clinical_ready_ja,prohibited_positive_claim,臨床利用可能です。,false
+customer_ready_ja,prohibited_positive_claim,顧客提示可能です。,false
+production_ready_ja,prohibited_positive_claim,本番利用可能です。,false
+ai_diagnosis_ja,prohibited_positive_claim,AI診断できます。,false

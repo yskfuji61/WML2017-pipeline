@@ -1,7 +1,2 @@
-split_id,purpose,source_cases,train_cases,val_cases,test_cases,scanner_policy,allowed_claim,forbidden_use,status,notes
-SPLIT-SMOKE-001,pipeline smoke,challenge training subset,TBD,TBD,0,not_for_claims,no_performance_claim,benchmark_or_sota_claim,DRAFT,Small cases only; may be regenerated
-SPLIT-STRAT-48-12-001,local validation,challenge training 60,48,12,0,stratify_by_site_scanner_if_possible,local_validation_only,test_or_leaderboard_claim,DRAFT,Primary early validation split
-SPLIT-LOSO-001,reproduction analysis,challenge training 60,59 per fold,1 per fold,0,subject_leave_one_out,reproduction_analysis_only,sota_claim_without_protocol,DRAFT,High cost; not first smoke target
-SPLIT-CROSS-SCANNER-001,scanner robustness,challenge training 60,TBD,TBD,0,scanner_holdout,robustness_analysis_only,claiming_generalization_without_holdout,DRAFT,Use for scanner shift analysis
-SPLIT-OFFICIAL-HIDDEN,official benchmark,challenge evaluator/test protocol,unknown,unknown,110,official_hidden_or_equivalent,official_benchmark_only,local_tuning_or_model_selection,LOCKED_POLICY,Do not emulate as local train/val tuning
-SPLIT-LOCAL-HELDOUT-TEST110,local heldout audit,2022 released test 110,0,0,110,challenge_test_immutable,local_heldout_evaluation_only,training_validation_threshold_tuning_model_selection,DRAFT,Only if local test masks are present and allowed by policy
+split_register_id,split_id,seed,manifest_hash,split_manifest_path,split_hash,status,reviewer,notes
+SP-WMH-001,WMH2017-TRAIN-VAL-SEED20260616,20260616,MISSING_WMH2017_ROOT_OR_PENDING,artifacts/manifests/split_manifest.json,MISSING_WMH2017_ROOT_OR_PENDING,PENDING_CONFIRMATION,PENDING_CONFIRMATION,v4 PR-1 register row

@@ -10,7 +10,7 @@ Tracking gaps from the 78-point audit and Wave 1–2 remediation. Status values:
 | GAP-004 | Sev1 | supply-chain | Official evaluator not commit/hash/license pinned | OPEN | 1 | pin YAML + fail-closed fetch; fetch still PENDING |
 | GAP-005 | Sev1 | security | Missing scan reports treated as PASS | CLOSED | 1 | scan_report.py + Makefile markers |
 | GAP-006 | Sev2 | CI | No PR gate for release evidence register structure | CLOSED | 1 | evidence_binder_ci.yml |
-| GAP-007 | Sev2 | CI | GitHub Actions green CI URLs not recorded | OPEN | 1 | latest_green_ci.md uses PENDING until CI run |
+| GAP-007 | Sev2 | CI | GitHub Actions green CI URLs not recorded | CLOSED | 3 | scripts/release/update_latest_green_ci.py + structural_ci step |
 | GAP-008 | Sev2 | CI | Actions not SHA-pinned | CLOSED | 2 | all workflows + architecture test |
 | GAP-009 | Sev2 | architecture | E2E orchestrator monolithic | CLOSED | 2 | src/wmh2017/e2e/ stage split |
 | GAP-010 | Sev2 | schema | Full JSON Schema contract for all artifacts | CLOSED | 2 | registry/schemas/* + contract tests |

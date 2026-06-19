@@ -1,0 +1,31 @@
+tracking_uri: "file:./mlruns"
+experiment_name: "wmh2017-local-public-poc"
+tags:
+  project: "WML2017-pipeline"
+  data_scope: "public_data_only"
+  clinical_use: "prohibited"
+  customer_use: "prohibited"
+  cloud_upload: "prohibited"
+  release_state: "not_ready_for_release"
+artifact_policy:
+  allow:
+    - configs
+    - logs
+    - metrics
+    - manifests
+    - overlays_public_data_only
+    - prediction_manifest
+    - evidence_summary
+  prohibit:
+    - raw_mri_data
+    - nii
+    - nii_gz
+    - dicom
+    - nrrd
+    - mha
+    - mhd
+    - proprietary_data
+    - phi
+    - pii
+    - credentials
+    - customer_material
