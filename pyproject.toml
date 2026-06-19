@@ -35,6 +35,10 @@ dev = [
 pythonpath = [".", "src"]
 testpaths = ["tests"]
 addopts = "-q"
+markers = [
+  "requires_scipy: metric needs scipy.ndimage at runtime",
+  "requires_torch: needs torch/monai stack at runtime",
+]
 
 [tool.ruff]
 line-length = 120
