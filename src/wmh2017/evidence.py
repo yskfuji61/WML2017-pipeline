@@ -70,8 +70,8 @@ def write_evidence_summary(run_dir: Path, *, run_id: str, status: str) -> Path:
         f"# Evidence summary — {run_id}",
         "",
         f"- status: {status}",
-        f"- claim_boundary: public_data_local_poc_only",
-        f"- local validation only; not official benchmark, clinical, customer, production, SOTA, or READY_FOR_RELEASE",
+        "- claim_boundary: public_data_local_poc_only",
+        "- local validation only; not official benchmark, clinical, customer, production, SOTA, or READY_FOR_RELEASE",
         f"- dice_local_or_equivalent: {dice}",
         "",
     ]
@@ -135,17 +135,20 @@ def materialize_v4_artifacts(
     _copy_if_exists(run_dir / "evaluation" / "case_metrics.csv", run_dir / "case_metrics.csv")
     write_evidence_summary(run_dir, run_id=run_id, status=status)
 
-    return {k: str(run_dir / k) for k in (
-        "run_context.json",
-        "runtime_fingerprint.json",
-        "dataset_manifest.json",
-        "split_manifest.json",
-        "train_config.materialized.yaml",
-        "prediction_manifest.json",
-        "metrics_summary.json",
-        "case_metrics.csv",
-        "evidence_summary.md",
-    )}
+    return {
+        k: str(run_dir / k)
+        for k in (
+            "run_context.json",
+            "runtime_fingerprint.json",
+            "dataset_manifest.json",
+            "split_manifest.json",
+            "train_config.materialized.yaml",
+            "prediction_manifest.json",
+            "metrics_summary.json",
+            "case_metrics.csv",
+            "evidence_summary.md",
+        )
+    }
 
 
 def record_failed_run(run_dir: Path, *, run_id: str, seed: int, reason: str) -> None:

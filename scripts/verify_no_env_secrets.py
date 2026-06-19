@@ -22,7 +22,10 @@ SKIP_FILES = {
 SECRET_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("aws_access_key", re.compile(r"AKIA[0-9A-Z]{16}")),
     ("private_key_block", re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
-    ("generic_api_key", re.compile(r"(?i)(?:api[_-]?key|secret[_-]?key|access[_-]?token)\s*[:=]\s*['\"]?[A-Za-z0-9_\-./]{16,}")),
+    (
+        "generic_api_key",
+        re.compile(r"(?i)(?:api[_-]?key|secret[_-]?key|access[_-]?token)\s*[:=]\s*['\"]?[A-Za-z0-9_\-./]{16,}"),
+    ),
     ("password_assignment", re.compile(r"(?i)(?:password|passwd|pwd)\s*[:=]\s*['\"][^'\"]{8,}['\"]")),
     ("github_pat", re.compile(r"ghp_[A-Za-z0-9]{20,}")),
     ("github_oauth", re.compile(r"gho_[A-Za-z0-9]{20,}")),

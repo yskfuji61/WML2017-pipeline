@@ -1,8 +1,8 @@
 """Register schema smoke tests."""
 
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 
 def test_validate_registers_passes():

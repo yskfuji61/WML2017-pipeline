@@ -21,10 +21,7 @@ def main() -> None:
     root = Path(args.root).resolve()
     hits = scan_tree(root)
     if hits:
-        lines = [
-            f"{hit.path}:{hit.line_no} [{hit.pattern_id}] {hit.line[:200]}"
-            for hit in hits[:50]
-        ]
+        lines = [f"{hit.path}:{hit.line_no} [{hit.pattern_id}] {hit.line[:200]}" for hit in hits[:50]]
         raise SystemExit("overclaim gate FAIL:\n" + "\n".join(lines))
     print("overclaim gate PASS")
 

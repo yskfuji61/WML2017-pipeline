@@ -1,5 +1,6 @@
-from wmh2017.schemas import manifest_json_from_csv, redact_path
 import pandas as pd
+
+from wmh2017.schemas import manifest_json_from_csv, redact_path
 
 
 def test_redact_path():

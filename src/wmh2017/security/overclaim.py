@@ -53,7 +53,10 @@ class OverclaimHit:
 
 PROHIBITED_RULES: list[tuple[str, re.Pattern[str]]] = [
     ("ready_for_release_positive", re.compile(r"\bREADY_FOR_RELEASE\b", re.I)),
-    ("clinical_ready_en", re.compile(r"\b(?:clinically validated|clinical(?:ly)? ready|clinical use is (?:approved|allowed))\b", re.I)),
+    (
+        "clinical_ready_en",
+        re.compile(r"\b(?:clinically validated|clinical(?:ly)? ready|clinical use is (?:approved|allowed))\b", re.I),
+    ),
     ("customer_ready_en", re.compile(r"\bcustomer[- ]ready\b", re.I)),
     ("production_ready_en", re.compile(r"\bproduction[- ]ready\b", re.I)),
     ("sota_positive_en", re.compile(r"\b(?:this (?:is )?SOTA|SOTA achieved|state of the art)\b", re.I)),
@@ -182,7 +185,10 @@ def classify_line(line: str, pattern_id: str) -> ClaimContext:
             return ClaimContext.ALLOWED_NEGATIVE
 
     if pattern_id == "sota_positive_en":
-        if any(token in lower for token in ("do not", "not ", "without ", "no sota", "overclaim", "forbidden", "prohibited")):
+        if any(
+            token in lower
+            for token in ("do not", "not ", "without ", "no sota", "overclaim", "forbidden", "prohibited")
+        ):
             return ClaimContext.ALLOWED_NEGATIVE
 
     if any(marker in lower for marker in NEGATIVE_MARKERS):

@@ -1,8 +1,8 @@
 """Biweekly report works with zero runs."""
 
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 
 def test_generate_biweekly_report_zero_runs(tmp_path):

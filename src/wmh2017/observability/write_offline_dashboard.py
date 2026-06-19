@@ -12,7 +12,7 @@ def write_offline_dashboard(run_dir: Path, output: Path | None = None) -> Path:
     out.parent.mkdir(parents=True, exist_ok=True)
 
     event_log = run_dir / "observability" / "event_log.jsonl"
-    lines = ["# Offline run dashboard", "", f"- run_dir: REDACTED_OR_LOCAL_ONLY", ""]
+    lines = ["# Offline run dashboard", "", "- run_dir: REDACTED_OR_LOCAL_ONLY", ""]
     if event_log.exists():
         lines.append("## Events")
         for row in event_log.read_text(encoding="utf-8").splitlines()[:50]:
@@ -26,6 +26,6 @@ def write_offline_dashboard(run_dir: Path, output: Path | None = None) -> Path:
 
     summary = run_dir / "observability" / "offline_run_summary.json"
     if summary.exists():
-        lines.extend(["", "## Summary", f"- present: true"])
+        lines.extend(["", "## Summary", "- present: true"])
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return out

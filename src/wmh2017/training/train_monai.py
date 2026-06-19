@@ -203,9 +203,7 @@ def _run_validation_dice(
             label_mask = (label == 1).astype(np.uint8)
             x = _normalize_for_inference(image)
             tensor = torch.from_numpy(x[None, None].astype(np.float32)).to(device)
-            logits = monai["sliding_window_inference"](
-                tensor, roi_size=roi_size, sw_batch_size=1, predictor=model
-            )
+            logits = monai["sliding_window_inference"](tensor, roi_size=roi_size, sw_batch_size=1, predictor=model)
             probs = torch.softmax(logits, dim=1)[:, 1]
             pred = (probs[0].detach().cpu().numpy() >= threshold).astype(np.uint8)
             dice_scores.append(float(dice_wmh_label1(pred, label_mask)))
@@ -231,9 +229,7 @@ def _save_predictions(
             image = load_array(row["image"])
             x = _normalize_for_inference(image)
             tensor = torch.from_numpy(x[None, None].astype(np.float32)).to(device)
-            logits = monai["sliding_window_inference"](
-                tensor, roi_size=roi_size, sw_batch_size=1, predictor=model
-            )
+            logits = monai["sliding_window_inference"](tensor, roi_size=roi_size, sw_batch_size=1, predictor=model)
             probs = torch.softmax(logits, dim=1)[:, 1]
             pred = (probs[0].detach().cpu().numpy() >= threshold).astype(np.uint8)
             save_array_like(row["image"], pred_dir / f"{row['case_id']}_pred.nii.gz", pred)

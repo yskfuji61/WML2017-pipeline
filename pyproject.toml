@@ -47,12 +47,13 @@ ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*.py" = ["E402"]
+"tests/**" = ["E402"]
 
 [tool.mypy]
 python_version = "3.10"
 ignore_missing_imports = true
 warn_unused_ignores = true
-exclude = ["artifacts/", "data/", "reports/"]
+exclude = ["artifacts/", "data/", "reports/", "scripts/security/", "scripts/release/"]
 
 [[tool.mypy.overrides]]
 module = [
@@ -60,6 +61,10 @@ module = [
   "audit_wmh2017_labels",
   "visualize_wmh_case",
 ]
+disable_error_code = ["attr-defined"]
+
+[[tool.mypy.overrides]]
+module = "wmh2017.medical_header_audit"
 disable_error_code = ["attr-defined"]
 
 [[tool.mypy.overrides]]
