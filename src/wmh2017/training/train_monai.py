@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 
 from wmh2017.audit.run_labeling import (
+    architecture_parity_block,
     checkpoint_filename,
     completion_message,
     mps_execution_claim,
@@ -518,6 +519,11 @@ def main(config_path: str) -> None:
                 device.type,
                 patched=bool(device_runtime.get("mps_convtranspose_patched", False)),
                 mode=mode,
+            ),
+            "architecture_parity": architecture_parity_block(
+                device_type=device.type,
+                patched=bool(device_runtime.get("mps_convtranspose_patched", False)),
+                patch_name=str(device_runtime.get("model_patch") or "ConvTranspose3d_to_InterpConv3d"),
             ),
         },
     }

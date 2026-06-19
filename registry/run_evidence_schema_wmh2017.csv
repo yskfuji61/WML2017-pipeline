@@ -26,5 +26,6 @@ case_metrics_sha256,true,Case metrics hash,Metric evidence
 metrics_summary_path,true,Summary JSON,Metric evidence
 metrics_summary_sha256,true,Summary hash,Metric evidence
 claim_boundary,true,Allowed and forbidden claims,Overclaim prevention
+safety.architecture_parity,false,MPS ConvTranspose substitution parity metadata,Architecture equivalence disclosure
 known_limitations,true,Limitations recorded,Release decision input
 stop_conditions_checked,true,Stop condition evidence,Safety gate
