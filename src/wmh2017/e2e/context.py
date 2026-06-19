@@ -20,6 +20,7 @@ class E2ERunContext:
     no_inspect_images: bool
     allow_dirty_git: bool
     max_epochs: int | None = None
+    overwrite_run: bool = False
 
 
 def validate_run_context(ctx: E2ERunContext) -> None:

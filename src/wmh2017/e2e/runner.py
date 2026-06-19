@@ -22,7 +22,7 @@ from wmh2017.lineage.lineage_graph import (
     build_lineage_graph,
     write_lineage_graph,
 )
-from wmh2017.lineage.run_context import init_run_directory
+from wmh2017.lineage.run_context import clear_run_work_dir, init_run_directory
 from wmh2017.lineage.runtime_fingerprint import git_dirty, write_runtime_fingerprint
 from wmh2017.observability.event_log import (
     EVENT_ARTIFACT_HASHED,
@@ -101,6 +101,8 @@ def run_pipeline(ctx: E2ERunContext) -> E2EResult:
     validate_run_context(ctx)
     events: list[dict] = [emit_event(EVENT_RUN_STARTED, run_id=ctx.run_id)]
     try:
+        if ctx.overwrite_run:
+            clear_run_work_dir(ctx.work_dir, ctx.repo_root)
         init_run_directory(ctx.work_dir, run_id=ctx.run_id, wmh2017_root=ctx.files_root, seed=ctx.seed)
         write_runtime_fingerprint(ctx.work_dir / "runtime_fingerprint.json", repo_root=ctx.repo_root)
 

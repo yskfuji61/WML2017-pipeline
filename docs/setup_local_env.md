@@ -79,11 +79,14 @@ short validation runs without editing the config:
 
 ```bash
 export WMH2017_ROOT="<LOCAL_WMH2017_FILES_ROOT>"
-make e2e-full RUN_ID=wmh2017_full_short_seed42 EPOCHS=3 WMH2017_ROOT="$WMH2017_ROOT" ALLOW_DIRTY_GIT=1
+make e2e-full RUN_ID=wmh2017_full_short_seed42 EPOCHS=3 WMH2017_ROOT="$WMH2017_ROOT" ALLOW_DIRTY_GIT=1 OVERWRITE_RUN=1
 ```
 
 Local trees often stay dirty from gitignored manifests and security scans. Use `ALLOW_DIRTY_GIT=1`
 for local PoC runs only; release/preview gates still require a clean tree.
+
+If a prior local run left an incomplete directory under `artifacts/runs/<RUN_ID>/`, pass
+`OVERWRITE_RUN=1` to remove that gitignored work dir and rerun with the same `RUN_ID`.
 
 Dry-run the command expansion without executing training:
 

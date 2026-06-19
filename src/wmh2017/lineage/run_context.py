@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -67,6 +68,27 @@ def build_git_state() -> dict[str, Any]:
         "branch": branch,
         "dirty": git_dirty(),
     }
+
+
+def _is_under_artifacts_runs(run_dir: Path, repo_root: Path) -> bool:
+    runs_root = (repo_root / "artifacts" / "runs").resolve()
+    try:
+        run_dir.resolve().relative_to(runs_root)
+        return True
+    except ValueError:
+        return False
+
+
+def clear_run_work_dir(run_dir: str | Path, repo_root: str | Path) -> bool:
+    """Remove a prior local run directory under artifacts/runs. Returns True if removed."""
+    root = Path(run_dir)
+    repo = Path(repo_root)
+    if not _is_under_artifacts_runs(root, repo):
+        raise ValueError(f"refuse to overwrite run dir outside artifacts/runs: {root}")
+    if not root.exists():
+        return False
+    shutil.rmtree(root)
+    return True
 
 
 def init_run_directory(

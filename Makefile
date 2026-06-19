@@ -8,7 +8,9 @@ WMH2017_ROOT ?=
 EPOCHS ?=
 FULL_CONFIG ?= configs/wmh2017_monai_unet3d_full.yaml
 ALLOW_DIRTY_GIT ?=
+OVERWRITE_RUN ?=
 E2E_DIRTY_FLAG = $(if $(filter 1 true yes,$(ALLOW_DIRTY_GIT)),--allow-dirty-git,)
+E2E_OVERWRITE_FLAG = $(if $(filter 1 true yes,$(OVERWRITE_RUN)),--overwrite-run,)
 PACKAGE_ID ?= WMH2017-LOCAL-POC-SCAFFOLD
 PACKAGE_VERSION ?= 0.2.3
 
@@ -79,7 +81,8 @@ e2e:
 	  --files-root "$(WMH2017_ROOT)" \
 	  --work-dir "artifacts/runs/$(RUN_ID)" \
 	  --run-id "$(RUN_ID)" \
-	  $(E2E_DIRTY_FLAG)
+	  $(E2E_DIRTY_FLAG) \
+	  $(E2E_OVERWRITE_FLAG)
 
 e2e-full:
 	test -n "$(WMH2017_ROOT)"
@@ -89,7 +92,8 @@ e2e-full:
 	  --run-id "$(RUN_ID)" \
 	  --config "$(FULL_CONFIG)" \
 	  $(if $(EPOCHS),--max-epochs $(EPOCHS),) \
-	  $(E2E_DIRTY_FLAG)
+	  $(E2E_DIRTY_FLAG) \
+	  $(E2E_OVERWRITE_FLAG)
 
 verify-package:
 	$(PYTHON) scripts/verify_release_package.py \

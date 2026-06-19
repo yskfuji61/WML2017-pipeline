@@ -32,6 +32,11 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Override training.max_epochs in the materialized config (full runs only).",
     )
+    parser.add_argument(
+        "--overwrite-run",
+        action="store_true",
+        help="Remove an existing gitignored artifacts/runs work dir before starting.",
+    )
     return parser.parse_args()
 
 
@@ -51,6 +56,7 @@ def main() -> None:
         no_inspect_images=args.no_inspect_images,
         allow_dirty_git=args.allow_dirty_git,
         max_epochs=args.max_epochs,
+        overwrite_run=args.overwrite_run,
     )
     result = run_pipeline(ctx)
     print(f"Wrote run directory: {result.work_dir}")
