@@ -503,7 +503,9 @@ def main(config_path: str) -> None:
             "requested": use_amp,
             "effective": amp_enabled,
             "autocast_device": autocast_device,
-            "compute_precision": "float32" if device.type in {"mps", "cpu"} else ("mixed" if amp_enabled else "float32"),
+            "compute_precision": "float32"
+            if device.type in {"mps", "cpu"}
+            else ("mixed" if amp_enabled else "float32"),
             "precision_policy": amp_precision_policy,
             "policy": (
                 "Speed on MPS via GPU backend; accuracy preserved with float32 (no MPS fp16 autocast). "

@@ -24,9 +24,7 @@ def mps_execution_claim(device_type: str, *, patched: bool, mode: str) -> str:
     if not patched:
         return "MPS selected without ConvTranspose3d patch"
     scope = "full training" if mode == "full" else "smoke"
-    return (
-        f"MPS-compatible patched {scope}; not native-MPS equivalence with ConvTranspose3d"
-    )
+    return f"MPS-compatible patched {scope}; not native-MPS equivalence with ConvTranspose3d"
 
 
 def architecture_parity_block(

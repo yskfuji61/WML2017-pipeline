@@ -12,7 +12,7 @@ import os
 import re
 import subprocess
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -188,7 +188,7 @@ def main() -> int:
 
     imports_ok = not import_failures
     payload = {
-        "checked_at_utc": datetime.now(tz=UTC).isoformat(),
+        "checked_at_utc": datetime.now(tz=timezone.utc).isoformat(),
         "python_executable": sys.executable,
         "python_version": sys.version.split()[0],
         "imports_ok": imports_ok,
