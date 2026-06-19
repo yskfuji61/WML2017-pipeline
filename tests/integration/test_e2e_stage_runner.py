@@ -5,7 +5,6 @@ import pytest
 
 from wmh2017.e2e.context import E2ERunContext
 from wmh2017.e2e.runner import run_pipeline
-from wmh2017.lineage.runtime_fingerprint import git_dirty
 
 
 def _make_ctx(tmp_path: Path, **overrides: object) -> E2ERunContext:
@@ -56,7 +55,7 @@ def _run_with_mocks(ctx: E2ERunContext, fake_run):
             with patch("wmh2017.e2e.stages.write_hash_sidecar"):
                 with patch("wmh2017.lineage.run_context.init_run_directory"):
                     with patch("wmh2017.lineage.runtime_fingerprint.write_runtime_fingerprint"):
-                        with patch("wmh2017.lineage.runtime_fingerprint.git_dirty", return_value=False):
+                        with patch("wmh2017.e2e.runner.git_dirty", return_value=False):
                             return run_pipeline(ctx)
 
 
@@ -82,8 +81,6 @@ def test_run_pipeline_rejects_dirty_git_without_flag(tmp_path: Path):
     ctx = _make_ctx(tmp_path, allow_dirty_git=False, skip_train=True)
     with patch("wmh2017.lineage.run_context.init_run_directory"):
         with patch("wmh2017.lineage.runtime_fingerprint.write_runtime_fingerprint"):
-            with patch("wmh2017.lineage.runtime_fingerprint.git_dirty", return_value=True):
+            with patch("wmh2017.e2e.runner.git_dirty", return_value=True):
                 with pytest.raises(SystemExit, match="dirty"):
                     run_pipeline(ctx)
-
-    assert git_dirty() or True
