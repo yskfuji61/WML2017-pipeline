@@ -184,6 +184,13 @@ def _peak_rss_kb(raw_rss: int) -> float:
     return round(float(raw_rss), 3)
 
 
+def _amp_policy(use_amp: bool, device_type: str) -> tuple[bool, str | None]:
+    """Return (amp_enabled, autocast_device). AMP autocast is CUDA-only in this PoC."""
+    if use_amp and device_type == "cuda":
+        return True, "cuda"
+    return False, None
+
+
 def _build_train_dataset(
     monai: dict[str, Any],
     train_rows: list[dict[str, str]],
@@ -326,8 +333,8 @@ def main(config_path: str) -> None:
     global_step = 0
     checkpoint_path = ""
     best_checkpoint_path = str(ckpt_dir / "model_best.pt") if mode == "full" else str(ckpt_dir / "model_smoke.pt")
-    amp_enabled = use_amp and device.type in {"cuda", "mps"}
-    scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled and device.type == "cuda") if amp_enabled else None
+    amp_enabled, autocast_device = _amp_policy(use_amp, device.type)
+    scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled) if amp_enabled else None
     first_epoch_resource: dict[str, Any] | None = None
 
     for epoch in range(max_epochs):
@@ -341,8 +348,7 @@ def main(config_path: str) -> None:
             images = batch["image"].to(device)
             labels = batch["label"].long().to(device)
             opt.zero_grad(set_to_none=True)
-            if amp_enabled:
-                autocast_device = "cuda" if device.type == "cuda" else "mps"
+            if amp_enabled and autocast_device:
                 with torch.autocast(device_type=autocast_device, enabled=True):
                     logits = model(images)
                     loss = loss_fn(logits, labels)
@@ -479,6 +485,12 @@ def main(config_path: str) -> None:
             "num_workers_requested": num_workers_requested,
             "num_workers_effective": num_workers,
             "darwin_spawn_policy": "num_workers forced to 0 on macOS for MONAI DataLoader stability",
+        },
+        "amp": {
+            "requested": use_amp,
+            "effective": amp_enabled,
+            "autocast_device": autocast_device,
+            "policy": "cuda-only autocast; MPS/CPU run full precision in this PoC",
         },
         "resource": {"first_epoch": first_epoch_resource} if first_epoch_resource else None,
         "safety": {
