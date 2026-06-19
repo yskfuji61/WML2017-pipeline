@@ -12,6 +12,7 @@ from pathlib import Path
 
 import yaml
 
+from wmh2017.audit.run_record import update_run_manifest_metric
 from wmh2017.e2e.context import E2ERunContext
 from wmh2017.e2e.result import StageResult
 from wmh2017.evaluation.metric_schema import validate_case_metrics_columns
@@ -250,7 +251,9 @@ def train_smoke_model_stage(state: PipelineState) -> StageResult | None:
     require_ok(step)
     state.stage_status["training"] = "PASS"
 
-    model_src = ctx.work_dir / "checkpoints" / "model_smoke.pt"
+    model_src = ctx.work_dir / "checkpoints" / "model_best.pt"
+    if not model_src.exists():
+        model_src = ctx.work_dir / "checkpoints" / "model_smoke.pt"
     model_dst = ckpt_dir / "model.pt"
     if model_src.exists():
         copy_to_nested(model_src, model_dst)
@@ -355,5 +358,10 @@ def evaluate_stage(state: PipelineState) -> StageResult | None:
             metrics_summary,
             producer="src/wmh2017/evaluation/evaluate_predictions.py",
             inputs=["case_metrics"],
+        )
+        update_run_manifest_metric(
+            ctx.run_id,
+            metrics_summary,
+            manifest_path=ctx.repo_root / "registry/runs/run_manifest.csv",
         )
     return state._record("evaluation", "PASS", [str(eval_dir / "case_metrics.csv")])

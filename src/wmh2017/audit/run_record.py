@@ -68,3 +68,26 @@ def append_run_manifest(row: dict[str, Any], path: str | Path = "registry/runs/r
         old = pd.read_csv(p)
         df = pd.concat([old, df], ignore_index=True)
     df.to_csv(p, index=False)
+
+
+def update_run_manifest_metric(
+    run_id: str,
+    metric_json_path: str | Path,
+    *,
+    manifest_path: str | Path = "registry/runs/run_manifest.csv",
+) -> bool:
+    """Update metric_json_path/hash for an existing run_id row. Returns True if updated."""
+    p = Path(manifest_path)
+    if not p.exists():
+        return False
+    df = pd.read_csv(p)
+    if "run_id" not in df.columns:
+        return False
+    matches = df["run_id"].astype(str) == str(run_id)
+    if not matches.any():
+        return False
+    metric_path = str(metric_json_path)
+    df.loc[matches, "metric_json_path"] = metric_path
+    df.loc[matches, "metric_json_hash"] = sha256_path(metric_path)
+    df.to_csv(p, index=False)
+    return True
