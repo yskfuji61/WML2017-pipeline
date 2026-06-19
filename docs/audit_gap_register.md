@@ -18,3 +18,15 @@ Tracking gaps from the 78-point audit and Wave 1–2 remediation. Status values:
 | GAP-012 | Sev2 | ADR | No docs/adr/ decision records | CLOSED | 2 | docs/adr/ ADR-0001–0006 |
 | GAP-013 | Sev1 | evaluator | LICENSE_REVIEW disposition NOT_REVIEWED | OPEN | 1 | human review required before fetch |
 | GAP-014 | Sev2 | artifacts | Real E2E artifacts gitignored; CI cannot hash-verify locally | OPEN | 1 | FIX-5: CI path-leak gate + derived artifact policy; register hashes; local artifacts remain gitignored |
+
+## Training-start independence (OPEN gaps)
+
+The following OPEN gaps are **not blockers for starting local WMH2017 training runs** (smoke, short full, or full e2e). They remain required before **release-grade** claims (official parity, evaluator fetch, CI hash-verification of local artifacts):
+
+| gap_id | training-start impact | release-claim impact |
+|--------|----------------------|----------------------|
+| GAP-004 | Independent — official evaluator pin/fetch not needed for MONAI train/eval | Required for official benchmark parity |
+| GAP-013 | Independent — local train/eval does not fetch official evaluator | Required before evaluator fetch |
+| GAP-014 | Independent — local artifacts stay gitignored by design; hashes recorded in run_manifest after local runs | Required for CI-side artifact hash verification |
+
+Status for these gaps remains **OPEN** until their respective release evidence is completed.
