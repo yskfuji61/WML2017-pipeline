@@ -1,4 +1,4 @@
-"""Executable MONAI smoke training for WMH2017.
+"""Executable MONAI smoke/full training for WMH2017.
 
 The goal is not SOTA performance. The goal is to prove that data loading,
 label==1 policy, train/val split, one short training loop, validation inference,
@@ -23,6 +23,12 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from wmh2017.audit.run_labeling import (
+    checkpoint_filename,
+    completion_message,
+    mps_execution_claim,
+    run_purpose_for_mode,
+)
 from wmh2017.audit.run_record import append_run_manifest, make_run_row, write_json
 from wmh2017.data.preprocessing import normalize_nonzero_channelwise
 from wmh2017.evaluation.voxel_metrics import dice_wmh_label1
@@ -338,7 +344,7 @@ def main(config_path: str) -> None:
     epochs_without_improvement = 0
     global_step = 0
     checkpoint_path = ""
-    best_checkpoint_path = str(ckpt_dir / "model_best.pt") if mode == "full" else str(ckpt_dir / "model_smoke.pt")
+    best_checkpoint_path = str(ckpt_dir / checkpoint_filename(mode))
     amp_enabled, autocast_device, amp_precision_policy = _amp_policy(use_amp, device.type)
     scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled) if amp_enabled else None
     first_epoch_resource: dict[str, Any] | None = None
@@ -439,7 +445,7 @@ def main(config_path: str) -> None:
             break
 
     if mode == "smoke" and bool(train_cfg.get("save_checkpoint", True)):
-        checkpoint_path = str(ckpt_dir / "model_smoke.pt")
+        checkpoint_path = str(ckpt_dir / checkpoint_filename(mode))
         torch.save(  # nosec B614 — local smoke checkpoint only; not loading untrusted weights
             {
                 "run_id": run_id,
@@ -508,10 +514,10 @@ def main(config_path: str) -> None:
             "test_split_used": False,
             "label_policy": "label==1 foreground; label==2 ignored as foreground",
             "claim_boundary": "local PoC smoke only" if mode == "smoke" else "local PoC full training only",
-            "mps_execution_claim": (
-                "MPS-compatible patched smoke; not native-MPS equivalence with ConvTranspose3d"
-                if device.type == "mps"
-                else "standard device path without MPS ConvTranspose3d patch"
+            "mps_execution_claim": mps_execution_claim(
+                device.type,
+                patched=bool(device_runtime.get("mps_convtranspose_patched", False)),
+                mode=mode,
             ),
         },
     }
@@ -520,7 +526,7 @@ def main(config_path: str) -> None:
 
     row = make_run_row(
         run_id=run_id,
-        run_purpose="wmh2017_monai_smoke_training",
+        run_purpose=run_purpose_for_mode(mode),
         config_path=config_path,
         dataset_manifest=dataset_manifest,
         split_manifest=split_manifest,
@@ -535,7 +541,7 @@ def main(config_path: str) -> None:
     )
     append_run_manifest(row, run_cfg.get("run_manifest", "registry/runs/run_manifest.csv"))
 
-    print(f"Completed MONAI smoke training run_id={run_id}")
+    print(completion_message(mode, run_id))
     print(f"Wrote train log: {log_path}")
     print(f"Wrote run evidence: {evidence_path}")
     if checkpoint_path:
