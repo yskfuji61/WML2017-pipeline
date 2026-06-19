@@ -7,6 +7,8 @@ RUN_ID ?= local_$(shell date +%Y%m%d_%H%M%S)
 WMH2017_ROOT ?=
 EPOCHS ?=
 FULL_CONFIG ?= configs/wmh2017_monai_unet3d_full.yaml
+ALLOW_DIRTY_GIT ?=
+E2E_DIRTY_FLAG = $(if $(filter 1 true yes,$(ALLOW_DIRTY_GIT)),--allow-dirty-git,)
 PACKAGE_ID ?= WMH2017-LOCAL-POC-SCAFFOLD
 PACKAGE_VERSION ?= 0.2.3
 
@@ -76,7 +78,8 @@ e2e:
 	$(PYTHON) scripts/run_wmh2017_e2e.py \
 	  --files-root "$(WMH2017_ROOT)" \
 	  --work-dir "artifacts/runs/$(RUN_ID)" \
-	  --run-id "$(RUN_ID)"
+	  --run-id "$(RUN_ID)" \
+	  $(E2E_DIRTY_FLAG)
 
 e2e-full:
 	test -n "$(WMH2017_ROOT)"
@@ -85,7 +88,8 @@ e2e-full:
 	  --work-dir "artifacts/runs/$(RUN_ID)" \
 	  --run-id "$(RUN_ID)" \
 	  --config "$(FULL_CONFIG)" \
-	  $(if $(EPOCHS),--max-epochs $(EPOCHS),)
+	  $(if $(EPOCHS),--max-epochs $(EPOCHS),) \
+	  $(E2E_DIRTY_FLAG)
 
 verify-package:
 	$(PYTHON) scripts/verify_release_package.py \

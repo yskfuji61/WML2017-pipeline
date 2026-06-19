@@ -79,8 +79,11 @@ short validation runs without editing the config:
 
 ```bash
 export WMH2017_ROOT="<LOCAL_WMH2017_FILES_ROOT>"
-make e2e-full RUN_ID=wmh2017_full_short_seed42 EPOCHS=3 WMH2017_ROOT="$WMH2017_ROOT"
+make e2e-full RUN_ID=wmh2017_full_short_seed42 EPOCHS=3 WMH2017_ROOT="$WMH2017_ROOT" ALLOW_DIRTY_GIT=1
 ```
+
+Local trees often stay dirty from gitignored manifests and security scans. Use `ALLOW_DIRTY_GIT=1`
+for local PoC runs only; release/preview gates still require a clean tree.
 
 Dry-run the command expansion without executing training:
 

@@ -55,7 +55,7 @@ export WMH2017_ROOT="<LOCAL_WMH2017_FILES_ROOT>"
 
 ```bash
 export WMH2017_ROOT="<LOCAL_WMH2017_FILES_ROOT>"
-make e2e-full EPOCHS=3 RUN_ID=wmh2017_full_short_seed42 WMH2017_ROOT="$WMH2017_ROOT"
+make e2e-full EPOCHS=3 RUN_ID=wmh2017_full_short_seed42 WMH2017_ROOT="$WMH2017_ROOT" ALLOW_DIRTY_GIT=1
 ```
 
 **Verify locally:**
