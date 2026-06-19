@@ -1,6 +1,14 @@
 # Current repository state
 
-Last updated: 2026-06-18 (PR-0 v4 alignment)
+Last updated: 2026-06-19 (audit refactor FIX-1)
+
+## Manifest canonical sources
+
+| Artifact | Role |
+|---|---|
+| `reports/dataset_manifest.csv` | **Canonical** local dataset index (gitignored; regenerate locally) |
+| `data/splits/wmh2017_train_val_seed42.csv` | **Canonical** train/val split (tracked) |
+| `artifacts/manifests/*.json` | Redacted v4 derivatives via `scripts/data/sync_v4_manifests_from_csv.py` |
 
 ## Controlled release state
 

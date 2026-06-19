@@ -1,0 +1,11 @@
+{
+  "split_id": "WMH2017-TRAIN-VAL-SEED42",
+  "seed": 42,
+  "status": "OK",
+  "source_csv": "data/splits/wmh2017_train_val_seed42.csv",
+  "train_count": 48,
+  "val_count": 12,
+  "policy": "training_only_no_test",
+  "created_at_utc": "2026-06-19T03:51:34.498530+00:00",
+  "split_hash": "ebdcc528b3a2c4570a433ac009f9a98cde804a00fc02111c575ef8b5c35f4a56"
+}

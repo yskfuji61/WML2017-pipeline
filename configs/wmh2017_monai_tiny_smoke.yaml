@@ -1,14 +1,14 @@
 # Tiny WMH2017 smoke config (v4 PR-SMOKE-1)
 run:
   run_id: wmh2017_tiny_smoke
-  seed: 20260616
+  seed: 42
   device: auto
   output_dir: artifacts/runs/wmh2017_tiny_smoke
   run_manifest: registry/runs/run_manifest.csv
 
 data:
   dataset_manifest: reports/dataset_manifest.csv
-  split_manifest: data/splits/wmh2017_train_val_seed20260616.csv
+  split_manifest: data/splits/wmh2017_train_val_seed42.csv
   image_key: flair_pre_path
   label_key: wmh_path
   patch_size: [32, 32, 32]

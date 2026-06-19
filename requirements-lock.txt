@@ -8,7 +8,11 @@ nibabel==5.2.1
 matplotlib==3.9.2
 
 # CPU/Mac/CUDA torch wheels differ by platform. Do not silently upgrade.
-# For CUDA, install the organization-approved wheel index and record it in the run manifest.
+# Record the approved wheel index in run evidence when deviating from default pip:
+#   Mac (MPS): default pip torch==2.4.1 wheel for arm64
+#   Linux CPU: default pip torch==2.4.1 wheel
+#   Linux CUDA: organization-approved index URL (record in run_manifest / runtime_fingerprint)
+# MPS smoke uses ConvTranspose3d compatibility patch; not native-MPS equivalence proof.
 torch==2.4.1
 monai==1.4.0
 

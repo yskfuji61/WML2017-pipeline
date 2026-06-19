@@ -38,6 +38,9 @@ jobs:
           python scripts/security/verify_no_env_secrets.py .
           python scripts/security/verify_no_unapproved_remote_uri.py .
           python scripts/verify_no_legacy_imports.py
+          python scripts/verify_no_absolute_path_leakage.py --reports-dir reports/learning_evidence
+          python scripts/verify_no_absolute_path_leakage.py --reports-dir artifacts/manifests
+          python scripts/verify_no_absolute_path_leakage.py --reports-dir docs/experiment_notes
       - name: Manager report claim gate
         run: |
           python scripts/reporting/generate_biweekly_report.py \

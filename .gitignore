@@ -24,6 +24,7 @@ venv/
 
 # Raw datasets (never commit)
 Datasets/
+Datasets/*.zip
 Heritages/
 data/raw/
 data/external/
@@ -66,6 +67,9 @@ artifacts/runs/*
 artifacts/checkpoints/*
 artifacts/predictions/*
 artifacts/logs/*
+artifacts/artifacts.bak/
+!artifacts/manifests/
+!artifacts/manifests/*.json
 !artifacts/checkpoints/.gitkeep
 !artifacts/predictions/.gitkeep
 !artifacts/logs/.gitkeep
@@ -88,6 +92,8 @@ reports/security/*
 reports/rollback/*
 reports/evaluation/*
 reports/ci/*
+reports/learning_evidence/*
+!reports/learning_evidence/*.md
 !reports/overlays/.gitkeep
 !reports/metrics/.gitkeep
 !reports/runs/.gitkeep

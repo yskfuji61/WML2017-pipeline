@@ -1,0 +1,5112 @@
+{
+  "dataset_id": "wmh2017_public_poc",
+  "status": "OK",
+  "root": "REDACTED_OR_LOCAL_ONLY",
+  "source_csv": "reports/dataset_manifest.csv",
+  "case_count": 170,
+  "created_at_utc": "2026-06-19T03:51:34.500388+00:00",
+  "dlp_class": "PUBLIC_CHALLENGE_DATA",
+  "cases": [
+    {
+      "case_id": "150",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.3000466,
+            1.2108999,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "151",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2999284,
+            1.2109001,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "152",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.3000555,
+            1.2108999,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "153",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2999554,
+            1.2108999,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "154",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.3000664,
+            1.2108999,
+            2.9999998
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "155",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.3001183,
+            1.2109001,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "156",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.3000555,
+            1.2108999,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "157",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.3000556,
+            1.2109001,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "158",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2999555,
+            1.2109001,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "159",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2999555,
+            1.2109001,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "111",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "117",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "118",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "119",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "120",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "121",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "122",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "123",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "124",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "125",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2000178,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "127",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "128",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "129",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "130",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "131",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.1999002,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "133",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.1999002,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "134",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "135",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "136",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.1999979,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "138",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "139",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "140",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "141",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "142",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "143",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "145",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "146",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "147",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "148",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "149",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "160",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.55999756,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "161",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.55999756,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "162",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.55999756,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "163",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.56000608,
+            1.0416667,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "164",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.55999756,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "165",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.55999756,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "166",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.55999756,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "167",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.55999756,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "168",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.56001282,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "169",
+      "site": "Amsterdam",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.56001282,
+            1.0416665,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "70",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            0.99999994,
+            3.0000005
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "71",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999976
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "72",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            0.99999994,
+            3.0000026
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "73",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            3.0000012
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "74",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999964
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "75",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            3.0000026
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "76",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999993
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "77",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.999999
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "78",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            0.99999994,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "79",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            3.0000014
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "80",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "81",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000007
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "82",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000012
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "83",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "84",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999957
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "85",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999993
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "86",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999969
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "87",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000005
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "88",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            0.99999994,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "89",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999993
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "90",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999988
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "91",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000019
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "92",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0000001,
+            1.0,
+            2.9999986
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "93",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            3.0000031
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "94",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000017
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "95",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "96",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "97",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000014
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "98",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            2.9999983
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "99",
+      "site": "Singapore",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            0.99999994,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "1",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833337,
+            2.9999993
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "10",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833337,
+            2.9999971
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "12",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "13",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833325,
+            3.0000007
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "14",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "15",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833331,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "16",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833319,
+            0.95833319,
+            3.0000005
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "18",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "20",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833337,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "22",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833337,
+            2.9999943
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "24",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            2.9999998
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "26",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            2.9999998
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "28",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833337,
+            2.9999971
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "3",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833337,
+            3.0000043
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "30",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833337,
+            2.9999983
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "32",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833343,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "34",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            2.9999995
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "36",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "38",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833325,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "40",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "42",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833337,
+            3.0000017
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "43",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833325,
+            3.0000005
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "44",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            3.0000014
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "45",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833337,
+            2.9999964
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "46",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833337,
+            2.9999959
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "47",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833337,
+            2.999999
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "48",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833319,
+            2.9999971
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "5",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833325,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "7",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833337,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "9",
+      "site": "Utrecht",
+      "challenge_split": "test",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            3.0000007
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "100",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "101",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "102",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.1999002,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "103",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "104",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "105",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "106",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "107",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "108",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.1999848,
+            0.97659999,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "109",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "110",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "112",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "113",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "114",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "115",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "116",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "126",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "132",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "137",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "144",
+      "site": "Amsterdam",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.2,
+            0.97659993,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "50",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            3.0000024
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "51",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "52",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999998
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "53",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "54",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "55",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "56",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999988
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "57",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            2.9999983
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "58",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            0.99999994,
+            2.9999983
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "59",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000012
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "60",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            0.99999994,
+            3.0000005
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "61",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000007
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "62",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0000001,
+            3.0000041
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "63",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0000001,
+            1.0,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "64",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.99999994,
+            1.0,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "65",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "66",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "67",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "68",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0000033
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "69",
+      "site": "Singapore",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            1.0,
+            1.0,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "0",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833325,
+            2.9999993
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "11",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833325,
+            3.0000014
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "17",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            3.000001
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "19",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833325,
+            3.0000038
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "2",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            3.0000005
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "21",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833343,
+            0.95833337,
+            3.0000029
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "23",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833331,
+            2.9999971
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "25",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833325,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "27",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833325,
+            2.9999967
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "29",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.0000005
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "31",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833331,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "33",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.0000002
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "35",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            2.9999988
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "37",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833325,
+            0.95833319,
+            3.0000052
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "39",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.0000026
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "4",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833319,
+            2.9999995
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "41",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833343,
+            3.0000031
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "49",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833325,
+            2.9999998
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "6",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833331,
+            0.95833331,
+            3.0
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    },
+    {
+      "case_id": "8",
+      "site": "Utrecht",
+      "challenge_split": "training",
+      "modalities": {
+        "flair": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": "",
+          "shape": [
+            0,
+            0,
+            0
+          ],
+          "spacing": [
+            0.95833337,
+            0.95833331,
+            3.0000019
+          ]
+        },
+        "t1": {
+          "path": "REDACTED_OR_LOCAL_ONLY",
+          "sha256": null
+        }
+      },
+      "label": {
+        "path": "REDACTED_OR_LOCAL_ONLY",
+        "sha256": "",
+        "label_policy": "label==1 foreground; label==2 ignored"
+      }
+    }
+  ],
+  "manifest_hash": "aa56a93532de6a296b16233a024f99abbc28d28eeee82597a48cfd2a424634ed"
+}

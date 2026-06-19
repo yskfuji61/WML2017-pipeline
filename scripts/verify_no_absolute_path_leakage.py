@@ -71,14 +71,22 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Verify no absolute path leakage in artifacts.")
     parser.add_argument("root", nargs="?", default="", help="Optional repository root (ignored; scans reports/)")
     parser.add_argument("--run-dir", default="", help="Optional run directory to scan")
-    parser.add_argument("--reports-dir", default="reports")
+    parser.add_argument("--reports-dir", default="reports", help="Primary tracked prefix to scan")
+    parser.add_argument(
+        "--also-scan",
+        action="append",
+        default=[],
+        help="Additional tracked prefix to scan (repeatable), e.g. docs/experiment_notes",
+    )
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
     hits: list[str] = []
-    reports_dir = repo_root / args.reports_dir
-    tracked_reports = git_tracked_under(repo_root, args.reports_dir)
-    hits.extend(scan_tree(reports_dir, tracked_only=tracked_reports, root_prefix=args.reports_dir))
+    prefixes = [args.reports_dir, *args.also_scan]
+    for prefix in prefixes:
+        scan_root = repo_root / prefix
+        tracked = git_tracked_under(repo_root, prefix)
+        hits.extend(scan_tree(scan_root, tracked_only=tracked, root_prefix=prefix))
 
     if args.run_dir:
         run_dir = Path(args.run_dir)

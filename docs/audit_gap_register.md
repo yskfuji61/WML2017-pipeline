@@ -17,4 +17,4 @@ Tracking gaps from the 78-point audit and Wave 1–2 remediation. Status values:
 | GAP-011 | Sev2 | ML risk | No dedicated docs/ml_risk/ reports | CLOSED | 2 | docs/ml_risk/* (7 reports) |
 | GAP-012 | Sev2 | ADR | No docs/adr/ decision records | CLOSED | 2 | docs/adr/ ADR-0001–0006 |
 | GAP-013 | Sev1 | evaluator | LICENSE_REVIEW disposition NOT_REVIEWED | OPEN | 1 | human review required before fetch |
-| GAP-014 | Sev2 | artifacts | Real E2E artifacts gitignored; CI cannot hash-verify locally | OPEN | 1 | register records hashes; release_candidate_ci with WMH2017_ROOT |
+| GAP-014 | Sev2 | artifacts | Real E2E artifacts gitignored; CI cannot hash-verify locally | OPEN | 1 | FIX-5: CI path-leak gate + derived artifact policy; register hashes; local artifacts remain gitignored |

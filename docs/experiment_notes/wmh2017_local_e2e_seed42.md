@@ -15,7 +15,7 @@
 |---|---|
 | dataset | MICCAI 2017 WMH Segmentation Challenge (Dataverse 2022 release) |
 | DOI | 10.34894/AECRSD |
-| WMH2017_ROOT | `/Users/yusukefujinami/WML MICCAI Pipeline/Datasets/MICCAI2017_WMH/files` |
+| WMH2017_ROOT | `<LOCAL_WMH2017_FILES_ROOT>` |
 | cases scanned | training 60 / test 110 |
 | primary input | `pre/FLAIR.nii.gz` |
 | primary label | `wmh.nii.gz` (foreground = label==1 only) |

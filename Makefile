@@ -8,7 +8,15 @@ WMH2017_ROOT ?=
 PACKAGE_ID ?= WMH2017-LOCAL-POC-SCAFFOLD
 PACKAGE_VERSION ?= 0.2.3
 
-.PHONY: setup lint typecheck test security sbom fingerprint manifest e2e verify-package verify-lineage verify-binder preview-candidate rollback-rehearsal parity-report
+.PHONY: setup doctor lint typecheck test security sbom fingerprint manifest sync-manifests e2e verify-package verify-lineage verify-binder preview-candidate rollback-rehearsal parity-report
+
+doctor:
+	$(PYTHON) scripts/check_environment.py
+
+sync-manifests:
+	$(PYTHON) scripts/data/sync_v4_manifests_from_csv.py \
+	  --dataset-csv reports/dataset_manifest.csv \
+	  --split-csv data/splits/wmh2017_train_val_seed42.csv
 
 setup:
 	$(PYTHON) -m pip install --upgrade pip
