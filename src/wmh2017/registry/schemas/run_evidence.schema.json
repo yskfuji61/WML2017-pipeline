@@ -16,6 +16,15 @@
     "checkpoint_path": {"type": "string"},
     "prediction_dir": {"type": "string"},
     "train_log": {"type": "string"},
+    "threshold_policy": {
+      "type": "object",
+      "properties": {
+        "training_threshold": {"type": "number"},
+        "sweep_best_threshold": {"type": ["number", "null"]},
+        "sweep_split": {"type": "string"},
+        "selection_policy": {"type": "string"}
+      }
+    },
     "safety": {
       "type": "object",
       "required": ["claim_boundary"],

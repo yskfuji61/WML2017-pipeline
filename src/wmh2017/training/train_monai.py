@@ -33,13 +33,16 @@ from wmh2017.audit.run_labeling import (
 from wmh2017.audit.run_record import append_run_manifest, make_run_row, write_json
 from wmh2017.data.preprocessing import normalize_nonzero_channelwise
 from wmh2017.evaluation.voxel_metrics import dice_wmh_label1
-from wmh2017.io.images import load_array, save_array_like
+from wmh2017.inference.export_probabilities import infer_foreground_probability, save_case_prediction
+from wmh2017.io.images import load_array
+from wmh2017.training.loss_factory import build_loss
 from wmh2017.training.mps_compat import (
     apply_mps_safe_convtranspose_patch,
     enable_mps_cpu_fallback,
     record_mps_convtranspose_patch,
     resolve_training_device,
 )
+from wmh2017.training.transforms import build_monai_transforms
 
 
 def _load_config(path: str | Path) -> dict[str, Any]:
@@ -69,7 +72,10 @@ def _require_monai_stack() -> tuple[Any, Any]:
             Lambdad,
             LoadImaged,
             NormalizeIntensityd,
+            RandAffined,
             RandCropByPosNegLabeld,
+            RandFlipd,
+            RandShiftIntensityd,
             ResizeWithPadOrCropd,
         )
     except ImportError as e:
@@ -92,6 +98,9 @@ def _require_monai_stack() -> tuple[Any, Any]:
         "LoadImaged": LoadImaged,
         "NormalizeIntensityd": NormalizeIntensityd,
         "RandCropByPosNegLabeld": RandCropByPosNegLabeld,
+        "RandFlipd": RandFlipd,
+        "RandAffined": RandAffined,
+        "RandShiftIntensityd": RandShiftIntensityd,
         "ResizeWithPadOrCropd": ResizeWithPadOrCropd,
     }
 
@@ -141,39 +150,13 @@ def _build_model(monai: dict[str, Any], cfg: dict[str, Any]) -> Any:
     )
 
 
-def _label_to_foreground_mask(label: np.ndarray) -> np.ndarray:
-    """Map WMH label==1 foreground; label==2 ignored. Module-level for DataLoader pickling."""
-    return (label == 1).astype(np.int64)
-
-
-def _transforms(monai: dict[str, Any], patch_size: list[int] | tuple[int, int, int], train: bool) -> Any:
-    ops = [
-        monai["LoadImaged"](keys=["image", "label"]),
-        monai["EnsureChannelFirstd"](keys=["image", "label"]),
-        monai["Lambdad"](keys=["image"], func=normalize_nonzero_channelwise),
-        monai["Lambdad"](keys=["label"], func=_label_to_foreground_mask),
-    ]
-    if train:
-        ops.append(
-            monai["RandCropByPosNegLabeld"](
-                keys=["image", "label"],
-                label_key="label",
-                spatial_size=tuple(patch_size),
-                pos=1,
-                neg=1,
-                num_samples=1,
-                image_key="image",
-                image_threshold=0,
-                allow_smaller=True,
-            )
-        )
-    ops.extend(
-        [
-            monai["ResizeWithPadOrCropd"](keys=["image", "label"], spatial_size=tuple(patch_size)),
-            monai["EnsureTyped"](keys=["image", "label"]),
-        ]
-    )
-    return monai["Compose"](ops)
+def _transforms(
+    monai: dict[str, Any],
+    patch_size: list[int] | tuple[int, int, int],
+    train: bool,
+    train_cfg: dict[str, Any] | None = None,
+) -> Any:
+    return build_monai_transforms(monai, patch_size, train=train, train_cfg=train_cfg)
 
 
 def _normalize_for_inference(image: np.ndarray) -> np.ndarray:
@@ -209,8 +192,9 @@ def _build_train_dataset(
     train_rows: list[dict[str, str]],
     patch_size: list[int],
     cache_rate: float,
+    train_cfg: dict[str, Any] | None = None,
 ) -> Any:
-    transform = _transforms(monai, patch_size, train=True)
+    transform = _transforms(monai, patch_size, train=True, train_cfg=train_cfg)
     if cache_rate > 0:
         return monai["CacheDataset"](data=train_rows, transform=transform, cache_rate=float(cache_rate))
     return monai["Dataset"](data=train_rows, transform=transform)
@@ -256,19 +240,25 @@ def _save_predictions(
     threshold: float,
     pred_dir: Path,
 ) -> int:
-    model.eval()
-    roi_size = tuple(patch_size)
+    probs_dir = pred_dir / "probs"
     count = 0
-    with torch.no_grad():
-        for row in val_rows:
-            image = load_array(row["image"])
-            x = _normalize_for_inference(image)
-            tensor = torch.from_numpy(x[None, None].astype(np.float32)).to(device)
-            logits = monai["sliding_window_inference"](tensor, roi_size=roi_size, sw_batch_size=1, predictor=model)
-            probs = torch.softmax(logits, dim=1)[:, 1]
-            pred = (probs[0].detach().cpu().numpy() >= threshold).astype(np.uint8)
-            save_array_like(row["image"], pred_dir / f"{row['case_id']}_pred.nii.gz", pred)
-            count += 1
+    for row in val_rows:
+        probs = infer_foreground_probability(
+            model=model,
+            torch=torch,
+            monai=monai,
+            image_path=row["image"],
+            patch_size=patch_size,
+            device=device,
+        )
+        save_case_prediction(
+            probs=probs,
+            threshold=threshold,
+            reference_image_path=row["image"],
+            pred_path=pred_dir / f"{row['case_id']}_pred.nii.gz",
+            prob_path=probs_dir / f"{row['case_id']}.npz",
+        )
+        count += 1
     return count
 
 
@@ -320,7 +310,7 @@ def main(config_path: str) -> None:
     if not train_rows or not val_rows:
         raise ValueError("train and val rows are required for training")
 
-    train_ds = _build_train_dataset(monai, train_rows, patch_size, cache_rate)
+    train_ds = _build_train_dataset(monai, train_rows, patch_size, cache_rate, train_cfg)
     train_loader = monai["DataLoader"](train_ds, batch_size=1, shuffle=True, num_workers=num_workers)
 
     model = _build_model(monai, cfg)
@@ -333,7 +323,7 @@ def main(config_path: str) -> None:
             )
         device_runtime = record_mps_convtranspose_patch(device_runtime, patched_layers)
     model = model.to(device)
-    loss_fn = monai["DiceCELoss"](to_onehot_y=True, softmax=True)
+    loss_fn = build_loss(train_cfg, monai)
     opt = torch.optim.Adam(model.parameters(), lr=float(train_cfg.get("learning_rate", 1e-4)))
 
     max_epochs = int(train_cfg.get("max_epochs", 1))
@@ -513,6 +503,11 @@ def main(config_path: str) -> None:
             ),
         },
         "resource": {"first_epoch": first_epoch_resource} if first_epoch_resource else None,
+        "threshold_policy": {
+            "training_threshold": threshold,
+            "sweep_best_threshold": None,
+            "sweep_split": "val",
+        },
         "safety": {
             "test_split_used": False,
             "label_policy": "label==1 foreground; label==2 ignored as foreground",
