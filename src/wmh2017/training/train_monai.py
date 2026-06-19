@@ -272,7 +272,10 @@ def main(config_path: str) -> None:
     image_key = str(data_cfg.get("image_key", "flair_pre_path"))
     label_key = str(data_cfg.get("label_key", "wmh_path"))
     patch_size = list(data_cfg.get("patch_size", [32, 32, 32]))
-    num_workers = int(data_cfg.get("num_workers", 0))
+    num_workers_requested = int(data_cfg.get("num_workers", 0))
+    num_workers = num_workers_requested
+    if sys.platform == "darwin" and num_workers > 0:
+        num_workers = 0
     cache_rate = float(data_cfg.get("cache_rate", 0.0))
     val_max_cases = int(data_cfg.get("val_max_cases", 2))
     mode = _training_mode(train_cfg)
@@ -472,6 +475,11 @@ def main(config_path: str) -> None:
         "train_log": str(log_path),
         "checkpoint_path": checkpoint_path,
         "prediction_dir": str(pred_dir),
+        "data_loader": {
+            "num_workers_requested": num_workers_requested,
+            "num_workers_effective": num_workers,
+            "darwin_spawn_policy": "num_workers forced to 0 on macOS for MONAI DataLoader stability",
+        },
         "resource": {"first_epoch": first_epoch_resource} if first_epoch_resource else None,
         "safety": {
             "test_split_used": False,
