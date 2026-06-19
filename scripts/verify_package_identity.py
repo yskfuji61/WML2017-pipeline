@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify package identity consistency across registry sources."""
+
 from __future__ import annotations
 
 import argparse

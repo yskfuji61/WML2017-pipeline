@@ -1,4 +1,5 @@
 """Canonical run ID generation for WMH2017 preview runs."""
+
 from __future__ import annotations
 
 import re
@@ -23,9 +24,7 @@ def build_preview_run_id(*, date: datetime | None = None) -> str:
 
 def validate_run_id(run_id: str) -> None:
     if not RUN_ID_PATTERN.match(run_id):
-        raise ValueError(
-            f"run_id must match wmh2017_preview_YYYYMMDD_gitsha, got: {run_id}"
-        )
+        raise ValueError(f"run_id must match wmh2017_preview_YYYYMMDD_gitsha, got: {run_id}")
 
 
 def assert_run_dir_unique(run_dir_exists: bool, run_id: str) -> None:

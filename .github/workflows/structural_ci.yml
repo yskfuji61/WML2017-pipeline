@@ -14,8 +14,8 @@ jobs:
       run:
         working-directory: .
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@b4ffde65f46336ab88eb683be4bdff4116d1812d # v4.2.2
+      - uses: actions/setup-python@0a5c6159137363b2f2ceefdb6592affe52c45527 # v5.4.0
         with:
           python-version: "3.11"
       - name: Install
@@ -24,7 +24,9 @@ jobs:
           python -m pip install -r requirements-lock.txt
           python -m pip install -e ".[dev,test]"
       - name: Lint
-        run: ruff check src scripts tests
+        run: |
+          ruff check src scripts tests
+          ruff format --check src scripts tests
       - name: Typecheck
         run: mypy src scripts
       - name: Tests
@@ -56,7 +58,7 @@ jobs:
             --package-version 0.2.3
       - name: Upload structural reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: structural-reports
           path: |

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify finding register closure for target release state."""
+
 from __future__ import annotations
 
 import argparse

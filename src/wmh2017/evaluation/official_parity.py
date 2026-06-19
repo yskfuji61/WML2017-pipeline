@@ -5,6 +5,7 @@ It consumes an explicit official-evaluator result file supplied by a human/opera
 and verifies that local metrics are numerically compatible within configured
 tolerances before any leaderboard-comparable claim is made.
 """
+
 from __future__ import annotations
 
 import json
@@ -112,10 +113,7 @@ def compare_official_parity(
     if missing_metrics and not cfg.allow_missing_metrics:
         raise ValueError(f"required metrics missing from local or official table: {missing_metrics}")
 
-    comparable_metrics = [
-        m for m in cfg.required_metrics
-        if m in local.columns and m in official.columns
-    ]
+    comparable_metrics = [m for m in cfg.required_metrics if m in local.columns and m in official.columns]
     if not comparable_metrics:
         raise ValueError("no comparable metrics found between local and official tables")
 
@@ -130,7 +128,11 @@ def compare_official_parity(
         for metric in comparable_metrics:
             local_value = row[f"{metric}_local"]
             official_value = row[f"{metric}_official"]
-            diff = abs(float(local_value) - float(official_value)) if pd.notna(local_value) and pd.notna(official_value) else np.inf
+            diff = (
+                abs(float(local_value) - float(official_value))
+                if pd.notna(local_value) and pd.notna(official_value)
+                else np.inf
+            )
             tolerance = float(tolerances.get(metric, 1e-6))
             record[f"{metric}_local"] = float(local_value) if pd.notna(local_value) else np.nan
             record[f"{metric}_official"] = float(official_value) if pd.notna(official_value) else np.nan
@@ -144,7 +146,9 @@ def compare_official_parity(
     for metric in comparable_metrics:
         diff_col = f"{metric}_abs_diff"
         ok_col = f"{metric}_within_tolerance"
-        max_abs_diff = float(diff_df[diff_col].replace([np.inf, -np.inf], np.nan).max()) if not diff_df.empty else np.inf
+        max_abs_diff = (
+            float(diff_df[diff_col].replace([np.inf, -np.inf], np.nan).max()) if not diff_df.empty else np.inf
+        )
         all_within = bool(diff_df[ok_col].all()) if ok_col in diff_df.columns else False
         metric_summaries[metric] = {
             "tolerance": float(tolerances.get(metric, 1e-6)),

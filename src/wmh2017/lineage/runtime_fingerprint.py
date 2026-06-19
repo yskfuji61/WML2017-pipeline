@@ -1,4 +1,5 @@
 """Capture runtime environment fingerprint for reproducibility audits."""
+
 from __future__ import annotations
 
 import json

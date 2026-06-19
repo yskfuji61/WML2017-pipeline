@@ -6,6 +6,7 @@ Claim boundary:
 - Foreground is strictly `label == 1`; `label == 2` is ignored and must never be
   converted to foreground via `mask > 0`.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -60,7 +61,9 @@ def absolute_volume_difference_percent(
     return float(abs(pred_volume - target_volume) / target_volume * 100.0)
 
 
-def avd_wmh_label1(pred_mask: np.ndarray, target_mask: np.ndarray, *, spacing: tuple[float, ...] | None = None) -> float:
+def avd_wmh_label1(
+    pred_mask: np.ndarray, target_mask: np.ndarray, *, spacing: tuple[float, ...] | None = None
+) -> float:
     """AVD (%) for WMH label 1 only."""
     return absolute_volume_difference_percent(
         wmh_foreground_mask(pred_mask),
@@ -107,16 +110,20 @@ def hausdorff95_binary(
     dt_to_target = distance_transform_edt(~target_surface, sampling=sampling)
     dt_to_pred = distance_transform_edt(~pred_surface, sampling=sampling)
 
-    distances = np.concatenate([
-        dt_to_target[pred_surface].astype(float),
-        dt_to_pred[target_surface].astype(float),
-    ])
+    distances = np.concatenate(
+        [
+            dt_to_target[pred_surface].astype(float),
+            dt_to_pred[target_surface].astype(float),
+        ]
+    )
     if distances.size == 0:
         return float(missing_score)
     return float(np.percentile(distances, 95))
 
 
-def hd95_wmh_label1(pred_mask: np.ndarray, target_mask: np.ndarray, *, spacing: tuple[float, ...] | None = None) -> float:
+def hd95_wmh_label1(
+    pred_mask: np.ndarray, target_mask: np.ndarray, *, spacing: tuple[float, ...] | None = None
+) -> float:
     """HD95 for WMH label 1 only."""
     return hausdorff95_binary(
         wmh_foreground_mask(pred_mask),

@@ -3,6 +3,7 @@
 NIfTI is used for real WMH2017 runs. NumPy .npy is supported for CI fixtures so
 integration tests do not need to vendor medical images.
 """
+
 from __future__ import annotations
 
 import hashlib

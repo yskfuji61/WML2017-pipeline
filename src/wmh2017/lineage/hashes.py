@@ -1,4 +1,5 @@
 """Hash utilities for run artifacts."""
+
 from __future__ import annotations
 
 import hashlib

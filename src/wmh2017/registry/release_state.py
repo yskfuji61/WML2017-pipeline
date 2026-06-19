@@ -1,4 +1,5 @@
 """Release state determination for WMH2017 offline research package."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

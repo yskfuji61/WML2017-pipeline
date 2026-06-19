@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify official evaluator pin against source record and tree hash."""
+
 from __future__ import annotations
 
 import argparse

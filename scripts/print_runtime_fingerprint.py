@@ -1,4 +1,5 @@
 """Write runtime fingerprint JSON for a run."""
+
 from __future__ import annotations
 
 import argparse

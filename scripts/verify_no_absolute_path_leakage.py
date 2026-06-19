@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Detect absolute filesystem paths in run evidence and reports."""
+
 from __future__ import annotations
 
 import argparse
 import re
 from pathlib import Path
 
-ABS_PATH_PATTERN = re.compile(
-    r"(?<![\w/.-])/(?:Users|home|tmp|var|opt|Volumes|private|mnt|data)/[^\s\"',}\]]+"
-)
+ABS_PATH_PATTERN = re.compile(r"(?<![\w/.-])/(?:Users|home|tmp|var|opt|Volumes|private|mnt|data)/[^\s\"',}\]]+")
 
 
 def scan_text(text: str, *, source: str) -> list[str]:

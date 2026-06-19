@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fail if git-tracked files include raw medical imaging data."""
+
 from __future__ import annotations
 
 import argparse
@@ -54,8 +55,7 @@ def main() -> None:
 
     if offenders:
         raise SystemExit(
-            "raw data gate FAIL: tracked files must not include medical imaging data:\n"
-            + "\n".join(offenders)
+            "raw data gate FAIL: tracked files must not include medical imaging data:\n" + "\n".join(offenders)
         )
     print("raw data gate PASS")
 

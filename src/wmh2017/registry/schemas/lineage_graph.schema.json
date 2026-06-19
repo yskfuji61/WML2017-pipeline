@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wmh2017/lineage_graph/v1",
+  "title": "lineage_graph",
+  "type": "object",
+  "required": ["lineage_id", "run_id", "package_version", "code_commit", "nodes", "edges"],
+  "properties": {
+    "lineage_id": {"type": "string"},
+    "run_id": {"type": "string"},
+    "package_version": {"type": "string"},
+    "code_commit": {"type": "string"},
+    "nodes": {"type": "array"},
+    "edges": {"type": "array"}
+  }
+}

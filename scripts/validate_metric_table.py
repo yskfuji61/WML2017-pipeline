@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate case_metrics.csv against v2 metric table contract."""
+
 from __future__ import annotations
 
 import argparse

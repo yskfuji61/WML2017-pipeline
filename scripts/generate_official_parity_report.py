@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate official metric parity report from synthetic fixtures."""
+
 from __future__ import annotations
 
 import argparse

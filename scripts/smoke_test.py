@@ -15,6 +15,7 @@ Runs three checks:
 Usage:
     python scripts/smoke_test.py --use_dummy_data
 """
+
 from __future__ import annotations
 
 import argparse
@@ -56,8 +57,9 @@ def check_model_forward() -> bool:
         return False
     try:
         in_ch = 14  # 7 slice offsets × 2 modalities (FLAIR + T1); WMH default
-        model = ConvNeXtNnUNetSeg(in_channels=in_ch, backbone="convnext_tiny",
-                                  pretrained=False, dec_ch=256, deep_sup=False)
+        model = ConvNeXtNnUNetSeg(
+            in_channels=in_ch, backbone="convnext_tiny", pretrained=False, dec_ch=256, deep_sup=False
+        )
         model.eval()
         x = torch.randn(1, in_ch, 256, 256)
         with torch.no_grad():
@@ -77,6 +79,7 @@ def check_model_forward() -> bool:
 def _post_process(prob, base_thr, low_thr=0.0, high_vol=0):
     """Replicates the production post_process used in cross_arch_ensemble_native.py."""
     import numpy as np
+
     binary = (prob >= base_thr).astype(np.uint8)
     if low_thr > 0 and high_vol > 0 and int(binary.sum()) > high_vol:
         binary = (prob >= low_thr).astype(np.uint8)
@@ -108,7 +111,7 @@ def check_cross_arch_dummy() -> bool:
         # For 'large' case we expect adaptive switch to fire (volume > 4000)
         base_pred = int((combined >= 0.30).sum())
         adaptive_fired = base_pred > 4000
-        switched = (n_pred != base_pred)
+        switched = n_pred != base_pred
         if adaptive_fired and not switched:
             print(f"  [FAIL] case={case}: adaptive should have fired (base={base_pred}) but didn't")
             return False
@@ -122,8 +125,11 @@ def check_cross_arch_dummy() -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--use_dummy_data", action="store_true",
-                        help="Run end-to-end checks with synthetic numpy volumes (no medical data).")
+    parser.add_argument(
+        "--use_dummy_data",
+        action="store_true",
+        help="Run end-to-end checks with synthetic numpy volumes (no medical data).",
+    )
     args = parser.parse_args()
 
     print("=== Smoke test ===")

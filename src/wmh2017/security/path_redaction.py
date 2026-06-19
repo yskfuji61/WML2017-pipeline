@@ -1,4 +1,5 @@
 """Redact local absolute paths before writing run evidence."""
+
 from __future__ import annotations
 
 from pathlib import Path

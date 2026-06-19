@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify official metric parity report and claim boundaries (v2 schema)."""
+
 from __future__ import annotations
 
 import argparse

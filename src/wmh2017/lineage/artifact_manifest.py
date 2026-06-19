@@ -1,4 +1,5 @@
 """Artifact manifest DAG for run lineage."""
+
 from __future__ import annotations
 
 import json

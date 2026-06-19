@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify evidence binder closure for target release state (v2 §8.2)."""
+
 from __future__ import annotations
 
 import argparse
@@ -74,11 +75,7 @@ def main() -> None:
             failures.append(f"check 2 missing package identity artifact: {rel}")
 
     # 3. artifact sha256 match (run artifacts with sidecars)
-    if (
-        _required_for(sections.get("real_run", {}), args.target_state)
-        and args.run_id
-        and not args.structure_only
-    ):
+    if _required_for(sections.get("real_run", {}), args.target_state) and args.run_id and not args.structure_only:
         for pattern in sections.get("real_run", {}).get("artifacts", []):
             rel = pattern.replace("{run_id}", args.run_id)
             path = repo_root / rel
@@ -195,11 +192,7 @@ def main() -> None:
                 failures.append(f"check 14 blocked claims accidentally approved: {approved & BLOCKED_CLAIMS}")
 
     # lineage section existence
-    if (
-        _required_for(sections.get("lineage", {}), args.target_state)
-        and args.run_id
-        and not args.structure_only
-    ):
+    if _required_for(sections.get("lineage", {}), args.target_state) and args.run_id and not args.structure_only:
         lineage_rel = f"artifacts/runs/{args.run_id}/lineage/lineage_graph.json"
         if not (repo_root / lineage_rel).exists():
             failures.append(f"missing lineage artifact: {lineage_rel}")

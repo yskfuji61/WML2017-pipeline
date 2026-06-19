@@ -1,4 +1,5 @@
 """Lineage graph generation for WMH2017 run evidence (v2 schema)."""
+
 from __future__ import annotations
 
 import json

@@ -41,12 +41,16 @@ def main() -> None:
     parser.add_argument("--allow-missing-cases", action="store_true")
     args = parser.parse_args()
 
-    required = tuple(args.required_metric) if args.required_metric else (
-        "dice",
-        "hd95",
-        "avd_percent",
-        "lesion_recall",
-        "lesion_f1",
+    required = (
+        tuple(args.required_metric)
+        if args.required_metric
+        else (
+            "dice",
+            "hd95",
+            "avd_percent",
+            "lesion_recall",
+            "lesion_f1",
+        )
     )
     report = compare_official_parity(
         local_metrics_path=args.local,

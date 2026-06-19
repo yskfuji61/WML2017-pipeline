@@ -13,6 +13,17 @@ Auditable **offline** WMH2017 public-data research PoC package (not clinical, cu
 
 **Blocked claims:** clinical use, customer presentation, proprietary-data processing, unapproved cloud upload, production deployment, SOTA / leaderboard equivalence.
 
+## Current verified evidence
+
+- Latest structural CI: see [docs/release_evidence/latest_green_ci.md](docs/release_evidence/latest_green_ci.md)
+- Latest security scan: see [docs/release_evidence/latest_green_ci.md](docs/release_evidence/latest_green_ci.md)
+- Latest real WMH2017 E2E: [docs/release_evidence/real_wmh2017_e2e_run.md](docs/release_evidence/real_wmh2017_e2e_run.md)
+- Latest human review: [docs/release_evidence/human_review_record.md](docs/release_evidence/human_review_record.md)
+- Official evaluator parity: [docs/release_evidence/official_evaluator_parity.md](docs/release_evidence/official_evaluator_parity.md) (evaluator NOT_FETCHED)
+- ML risk reports: [docs/ml_risk/](docs/ml_risk/)
+- Architecture decisions: [docs/adr/](docs/adr/)
+- Current blocked claims: clinical use, customer presentation, proprietary-data processing, unapproved cloud upload, production deployment, SOTA / leaderboard equivalence
+
 Active package lives at repository root (`src/wmh2017/`).
 
 ## Quick start

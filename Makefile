@@ -17,6 +17,7 @@ setup:
 
 lint:
 	$(PYTHON) -m ruff check src scripts tests
+	$(PYTHON) -m ruff format --check src scripts tests
 
 typecheck:
 	$(PYTHON) -m mypy src scripts

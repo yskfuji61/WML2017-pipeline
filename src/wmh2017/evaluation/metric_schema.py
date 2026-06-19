@@ -1,4 +1,5 @@
 """Case metrics schema for WMH2017 local evaluation."""
+
 from __future__ import annotations
 
 REQUIRED_CASE_METRIC_COLUMNS = frozenset(

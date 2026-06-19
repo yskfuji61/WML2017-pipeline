@@ -31,8 +31,7 @@ def _counts_summary(df):
             for (split, site), n in df.groupby(["challenge_split", "site"]).size().to_dict().items()
         },
         "by_scanner_code": {
-            str(scanner): int(n)
-            for scanner, n in df.groupby(["scanner_code"]).size().to_dict().items()
+            str(scanner): int(n) for scanner, n in df.groupby(["scanner_code"]).size().to_dict().items()
         },
     }
 
@@ -64,7 +63,9 @@ def main() -> None:
     )
     parser.add_argument("--out", default="registry/dataset_manifest.csv")
     parser.add_argument("--summary-out", default="", help="Optional JSON audit summary path.")
-    parser.add_argument("--hash-files", action="store_true", help="Compute sha256 for primary NIfTI files; may be slow.")
+    parser.add_argument(
+        "--hash-files", action="store_true", help="Compute sha256 for primary NIfTI files; may be slow."
+    )
     parser.add_argument(
         "--sha256sums",
         default="",
@@ -75,7 +76,9 @@ def main() -> None:
         action="store_true",
         help="Inspect NIfTI shape/spacing/affine metadata for primary FLAIR/T1/WMH files. Requires nibabel.",
     )
-    parser.add_argument("--strict-counts", action="store_true", help="Fail unless expected 60 training / 110 test structure is found.")
+    parser.add_argument(
+        "--strict-counts", action="store_true", help="Fail unless expected 60 training / 110 test structure is found."
+    )
     parser.add_argument(
         "--fail-on-metadata-error",
         action="store_true",

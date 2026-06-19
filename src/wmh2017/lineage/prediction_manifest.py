@@ -1,4 +1,5 @@
 """Prediction manifest and prediction-label linkage for run lineage."""
+
 from __future__ import annotations
 
 import csv
@@ -55,7 +56,10 @@ def build_prediction_manifest(
 def write_prediction_manifest(path: Path, rows: list[dict[str, Any]]) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
-        path.write_text("run_id,case_id,assigned_split,prediction_path_redacted,prediction_sha256,label_path_redacted,label_sha256\n", encoding="utf-8")
+        path.write_text(
+            "run_id,case_id,assigned_split,prediction_path_redacted,prediction_sha256,label_path_redacted,label_sha256\n",
+            encoding="utf-8",
+        )
         return path
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))

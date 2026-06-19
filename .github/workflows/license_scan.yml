@@ -1,0 +1,37 @@
+name: license-scan
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  license-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb683be4bdff4116d1812d # v4.2.2
+      - uses: actions/setup-python@0a5c6159137363b2f2ceefdb6592affe52c45527 # v5.4.0
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-lock.txt
+          python -m pip install -e ".[dev,test]"
+      - name: Generate SBOM and license report
+        run: make sbom
+      - name: Verify license report exists and is non-empty
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("reports/security/license_report.json")
+          if not path.exists():
+              raise SystemExit(f"missing license report: {path}")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          if not data:
+              raise SystemExit("license report is empty")
+          print("license report PASS")
+          PY

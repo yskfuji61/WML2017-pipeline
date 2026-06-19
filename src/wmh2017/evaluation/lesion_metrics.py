@@ -6,6 +6,7 @@ Claim boundary:
   or leaderboard-comparable claims. This module is intended for local sanity and
   reproducible validation.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -80,7 +81,9 @@ def lesion_recall_f1_binary(pred: np.ndarray, target: np.ndarray, *, connectivit
     }
 
 
-def lesion_recall_f1_wmh_label1(pred_mask: np.ndarray, target_mask: np.ndarray, *, connectivity: int = 26) -> dict[str, float | int]:
+def lesion_recall_f1_wmh_label1(
+    pred_mask: np.ndarray, target_mask: np.ndarray, *, connectivity: int = 26
+) -> dict[str, float | int]:
     """Lesion recall/F1 for WMH label 1 only. label==2 is not foreground."""
     return lesion_recall_f1_binary(
         wmh_foreground_mask(pred_mask),

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Run rollback rehearsal scenarios and write evidence reports (v2 schema)."""
+
 from __future__ import annotations
 
 import argparse

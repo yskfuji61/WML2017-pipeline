@@ -1,6 +1,6 @@
 # Audit gap register
 
-Tracking gaps from the 78-point audit and Wave 1 remediation. Status values: `OPEN`, `CLOSED`, `WAVE2`.
+Tracking gaps from the 78-point audit and Wave 1–2 remediation. Status values: `OPEN`, `CLOSED`.
 
 | gap_id | severity | area | description | status | wave | evidence |
 |--------|----------|------|-------------|--------|------|----------|
@@ -11,10 +11,10 @@ Tracking gaps from the 78-point audit and Wave 1 remediation. Status values: `OP
 | GAP-005 | Sev1 | security | Missing scan reports treated as PASS | CLOSED | 1 | scan_report.py + Makefile markers |
 | GAP-006 | Sev2 | CI | No PR gate for release evidence register structure | CLOSED | 1 | evidence_binder_ci.yml |
 | GAP-007 | Sev2 | CI | GitHub Actions green CI URLs not recorded | OPEN | 1 | latest_green_ci.md uses PENDING until CI run |
-| GAP-008 | Sev2 | CI | Actions not SHA-pinned | WAVE2 | 2 | deferred |
-| GAP-009 | Sev2 | architecture | E2E orchestrator monolithic | WAVE2 | 2 | deferred stage split |
-| GAP-010 | Sev2 | schema | Full JSON Schema contract for all artifacts | WAVE2 | 2 | release_evidence only in Wave 1 |
-| GAP-011 | Sev2 | ML risk | No dedicated docs/ml_risk/ reports | WAVE2 | 2 | deferred |
-| GAP-012 | Sev2 | ADR | No docs/adr/ decision records | WAVE2 | 2 | deferred |
+| GAP-008 | Sev2 | CI | Actions not SHA-pinned | CLOSED | 2 | all workflows + architecture test |
+| GAP-009 | Sev2 | architecture | E2E orchestrator monolithic | CLOSED | 2 | src/wmh2017/e2e/ stage split |
+| GAP-010 | Sev2 | schema | Full JSON Schema contract for all artifacts | CLOSED | 2 | registry/schemas/* + contract tests |
+| GAP-011 | Sev2 | ML risk | No dedicated docs/ml_risk/ reports | CLOSED | 2 | docs/ml_risk/* (7 reports) |
+| GAP-012 | Sev2 | ADR | No docs/adr/ decision records | CLOSED | 2 | docs/adr/ ADR-0001–0006 |
 | GAP-013 | Sev1 | evaluator | LICENSE_REVIEW disposition NOT_REVIEWED | OPEN | 1 | human review required before fetch |
 | GAP-014 | Sev2 | artifacts | Real E2E artifacts gitignored; CI cannot hash-verify locally | OPEN | 1 | register records hashes; release_candidate_ci with WMH2017_ROOT |

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fetch official WMH evaluator source under reviewed, pinned supply-chain controls."""
+
 from __future__ import annotations
 
 import argparse
@@ -107,9 +108,7 @@ def main() -> None:
 
     actual_hash = _tree_sha256(output_dir)
     if actual_hash != args.expected_tree_sha256:
-        raise SystemExit(
-            f"tree sha256 mismatch after fetch: expected {args.expected_tree_sha256}, got {actual_hash}"
-        )
+        raise SystemExit(f"tree sha256 mismatch after fetch: expected {args.expected_tree_sha256}, got {actual_hash}")
 
     sha_path = output_dir.parent / "evaluator.sha256"
     sha_path.write_text(actual_hash + "\n", encoding="utf-8")

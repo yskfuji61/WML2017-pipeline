@@ -9,6 +9,7 @@ Safety boundaries:
 - label value 2 is ignored as foreground by converting labels to label==1.
 - raw data and checkpoints remain outside git-controlled source paths by default.
 """
+
 from __future__ import annotations
 
 import json
@@ -91,7 +92,9 @@ def _set_seed(seed: int, torch: Any) -> None:
         torch.cuda.manual_seed_all(seed)
 
 
-def _case_rows(manifest_csv: str | Path, split_csv: str | Path, assigned_split: str, image_key: str, label_key: str) -> list[dict[str, str]]:
+def _case_rows(
+    manifest_csv: str | Path, split_csv: str | Path, assigned_split: str, image_key: str, label_key: str
+) -> list[dict[str, str]]:
     manifest = pd.read_csv(manifest_csv)
     split = pd.read_csv(split_csv)
     split = split[split["assigned_split"].astype(str).str.lower() == assigned_split.lower()].copy()
@@ -147,10 +150,12 @@ def _transforms(monai: dict[str, Any], patch_size: list[int] | tuple[int, int, i
                 allow_smaller=True,
             )
         )
-    ops.extend([
-        monai["ResizeWithPadOrCropd"](keys=["image", "label"], spatial_size=tuple(patch_size)),
-        monai["EnsureTyped"](keys=["image", "label"]),
-    ])
+    ops.extend(
+        [
+            monai["ResizeWithPadOrCropd"](keys=["image", "label"], spatial_size=tuple(patch_size)),
+            monai["EnsureTyped"](keys=["image", "label"]),
+        ]
+    )
     return monai["Compose"](ops)
 
 
@@ -229,7 +234,9 @@ def main(config_path: str) -> None:
             loss.backward()
             opt.step()
             global_step += 1
-            logs.append({"epoch": epoch, "step": step, "global_step": global_step, "loss": float(loss.detach().cpu().item())})
+            logs.append(
+                {"epoch": epoch, "step": step, "global_step": global_step, "loss": float(loss.detach().cpu().item())}
+            )
 
     checkpoint_path = ""
     if bool(train_cfg.get("save_checkpoint", True)):
@@ -255,7 +262,9 @@ def main(config_path: str) -> None:
                 image = load_array(row["image"])
                 x = _normalize_for_inference(image)
                 tensor = torch.from_numpy(x[None, None].astype(np.float32)).to(device)
-                logits = monai["sliding_window_inference"](tensor, roi_size=roi_size, sw_batch_size=sw_batch_size, predictor=model)
+                logits = monai["sliding_window_inference"](
+                    tensor, roi_size=roi_size, sw_batch_size=sw_batch_size, predictor=model
+                )
                 probs = torch.softmax(logits, dim=1)[:, 1]
                 pred = (probs[0].detach().cpu().numpy() >= float(train_cfg.get("threshold", 0.5))).astype(np.uint8)
                 save_array_like(row["image"], pred_dir / f"{row['case_id']}_pred.nii.gz", pred)

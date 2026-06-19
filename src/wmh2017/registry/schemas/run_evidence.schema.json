@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wmh2017/run_evidence/v1",
+  "title": "run_evidence",
+  "type": "object",
+  "required": ["run_id", "status", "device", "safety"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "status": {"type": "string"},
+    "device": {"type": "string"},
+    "device_requested": {"type": "string"},
+    "device_selected": {"type": "string"},
+    "global_step": {"type": "integer"},
+    "train_case_count": {"type": "integer"},
+    "val_prediction_count": {"type": "integer"},
+    "checkpoint_path": {"type": "string"},
+    "prediction_dir": {"type": "string"},
+    "train_log": {"type": "string"},
+    "safety": {
+      "type": "object",
+      "required": ["claim_boundary"],
+      "properties": {
+        "claim_boundary": {"type": "string"},
+        "test_split_used": {"type": "boolean"},
+        "label_policy": {"type": "string"},
+        "mps_execution_claim": {"type": "string"}
+      }
+    }
+  }
+}

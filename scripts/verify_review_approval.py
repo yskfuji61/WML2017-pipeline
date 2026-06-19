@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify review approval register for target release state (v2 schema)."""
+
 from __future__ import annotations
 
 import argparse

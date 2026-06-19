@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate CycloneDX SBOM and license report from locked dependencies."""
+
 from __future__ import annotations
 
 import argparse

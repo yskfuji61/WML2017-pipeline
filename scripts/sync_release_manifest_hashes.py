@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Sync manifest hash references after make manifest (single pass, no re-manifest)."""
+
 from __future__ import annotations
 
 import argparse

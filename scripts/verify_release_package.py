@@ -94,7 +94,13 @@ def iter_manifest_files(root: Path, excluded_rel: str | None = None) -> list[Pat
 
 
 def default_status(rel: str) -> str:
-    if rel.startswith("artifacts/") or rel.startswith("data/splits/") or rel.startswith("reports/metrics/") or rel.startswith("reports/overlays/") or rel.startswith("reports/runs/"):
+    if (
+        rel.startswith("artifacts/")
+        or rel.startswith("data/splits/")
+        or rel.startswith("reports/metrics/")
+        or rel.startswith("reports/overlays/")
+        or rel.startswith("reports/runs/")
+    ):
         return "placeholder_or_generated_area"
     if rel.startswith("core/pipeline/"):
         return "inherited_reference_not_primary_smoke_path"
@@ -115,7 +121,6 @@ def default_owner(rel: str) -> str:
     return "documentation_owner"
 
 
-
 def relative_to_root(path: Path, root: Path, option_name: str) -> str:
     """Return a repo-relative path or fail with an actionable CLI error."""
     resolved = path.resolve()
@@ -133,7 +138,9 @@ def main() -> None:
     parser.add_argument("--repo-root", default=".")
     parser.add_argument("--out", default="reports/release_package_manifest.json")
     parser.add_argument("--run-dir", default="", help="Optional run directory for run-level manifest validation.")
-    parser.add_argument("--structural-only", action="store_true", help="Validate repo structure only; skip run artifact checks.")
+    parser.add_argument(
+        "--structural-only", action="store_true", help="Validate repo structure only; skip run artifact checks."
+    )
     parser.add_argument("--package-id", default="WMH2017-LOCAL-POC-SCAFFOLD")
     parser.add_argument("--package-version", default="0.2.3")
     args = parser.parse_args()

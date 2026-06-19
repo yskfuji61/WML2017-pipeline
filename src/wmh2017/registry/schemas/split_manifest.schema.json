@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wmh2017/split_manifest/v1",
+  "title": "split_manifest_csv",
+  "type": "object",
+  "required": [
+    "split_id",
+    "case_id",
+    "challenge_split",
+    "source_split",
+    "assigned_split",
+    "site",
+    "scanner",
+    "scanner_code",
+    "group_id",
+    "seed",
+    "reason",
+    "created_at"
+  ],
+  "properties": {
+    "split_id": {"type": "string"},
+    "case_id": {"type": "string"},
+    "challenge_split": {"type": "string"},
+    "source_split": {"type": "string"},
+    "assigned_split": {"type": "string"}
+  }
+}

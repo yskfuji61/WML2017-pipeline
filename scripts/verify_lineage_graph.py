@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify lineage graph completeness for a run (v2)."""
+
 from __future__ import annotations
 
 import argparse

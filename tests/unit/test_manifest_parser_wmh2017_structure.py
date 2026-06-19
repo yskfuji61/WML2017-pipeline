@@ -28,7 +28,9 @@ def test_manifest_parser_handles_wmh2017_layout(tmp_path):
     _make_case(files, "test/Amsterdam/Philips_VU .PETMR_01./161")
 
     _touch(files / "additional_annotations" / "observer_o3" / "training" / "Utrecht" / "0" / "result.nii.gz")
-    _touch(files / "additional_annotations" / "observer_o4" / "training" / "Amsterdam" / "GE3T" / "100" / "result.nii.gz")
+    _touch(
+        files / "additional_annotations" / "observer_o4" / "training" / "Amsterdam" / "GE3T" / "100" / "result.nii.gz"
+    )
 
     df = build_manifest(files)
 

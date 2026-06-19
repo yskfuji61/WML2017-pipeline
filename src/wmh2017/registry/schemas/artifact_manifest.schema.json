@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wmh2017/artifact_manifest/v1",
+  "title": "artifact_manifest",
+  "type": "object",
+  "required": ["run_id", "artifacts"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "sha256", "producer"],
+        "properties": {
+          "name": {"type": "string"},
+          "path": {"type": "string"},
+          "sha256": {"type": "string"},
+          "producer": {"type": "string"},
+          "inputs": {"type": "array"}
+        }
+      }
+    }
+  }
+}

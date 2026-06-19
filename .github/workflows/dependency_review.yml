@@ -1,0 +1,16 @@
+name: dependency-review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb683be4bdff4116d1812d # v4.2.2
+      - uses: actions/dependency-review-action@9128146f346abd548ce32461e9a4592541553e43 # v4.6.0
+        with:
+          fail-on-severity: high

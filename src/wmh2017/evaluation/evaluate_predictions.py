@@ -3,6 +3,7 @@
 This is local validation only. Official challenge comparison requires an
 explicit official-code cross-check and reviewer approval.
 """
+
 from __future__ import annotations
 
 import json
@@ -142,8 +143,7 @@ def evaluate_predictions(
 
     if not records:
         raise ValueError(
-            f"no cases evaluated for split={assigned_split}; "
-            f"predictions missing under {prediction_dir}"
+            f"no cases evaluated for split={assigned_split}; " f"predictions missing under {prediction_dir}"
         )
 
     result_df = pd.DataFrame(records)

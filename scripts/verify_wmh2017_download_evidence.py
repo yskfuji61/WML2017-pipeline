@@ -82,7 +82,9 @@ def verify_download_evidence(evidence_dir: str | Path) -> dict:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Verify packaged WMH2017 download evidence without raw medical images.")
+    parser = argparse.ArgumentParser(
+        description="Verify packaged WMH2017 download evidence without raw medical images."
+    )
     parser.add_argument("--evidence-dir", required=True)
     parser.add_argument("--out", default="")
     args = parser.parse_args()

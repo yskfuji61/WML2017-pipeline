@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fail-closed security policy enforcement for WMH2017 pipeline (v2 schema)."""
+
 from __future__ import annotations
 
 import argparse
@@ -93,13 +94,19 @@ def check_pip_audit(report: dict | list, exceptions: list[dict[str, str]]) -> tu
                 continue
             failures.append(f"pip-audit {sev}: {dep.get('name')} {alias}")
     status = "PASS" if not failures else "FAIL"
-    return status, failures, {
-        "critical_vulnerabilities": critical,
-        "high_vulnerabilities_without_exception": len(failures),
-    }
+    return (
+        status,
+        failures,
+        {
+            "critical_vulnerabilities": critical,
+            "high_vulnerabilities_without_exception": len(failures),
+        },
+    )
 
 
-def check_detect_secrets(report_dir: Path, audit_txt: Path, exceptions: list[dict[str, str]]) -> tuple[str, list[str], dict]:
+def check_detect_secrets(
+    report_dir: Path, audit_txt: Path, exceptions: list[dict[str, str]]
+) -> tuple[str, list[str], dict]:
     failures: list[str] = []
     unaudited = 0
     detect_json = report_dir / "detect_secrets.json"
@@ -117,7 +124,9 @@ def check_detect_secrets(report_dir: Path, audit_txt: Path, exceptions: list[dic
         text = audit_txt.read_text(encoding="utf-8")
         if "Unaudited secrets" in text or "Potential secrets" in text:
             unaudited += 1
-            if not _exception_covers(exceptions, tool="detect-secrets", finding_id="baseline:unaudited", severity="HIGH"):
+            if not _exception_covers(
+                exceptions, tool="detect-secrets", finding_id="baseline:unaudited", severity="HIGH"
+            ):
                 failures.append("detect-secrets audit: unaudited baseline entries remain")
     status = "PASS" if not failures else "FAIL"
     return status, failures, {"unaudited_findings": unaudited}

@@ -18,6 +18,7 @@ from wmh2017.io.images import load_image_metadata
 def load_mask(path: str):
     try:
         import nibabel as nib
+
         return nib.load(path).get_fdata()
     except ImportError as e:
         raise SystemExit("nibabel is required for label audit. Install nibabel or add SimpleITK loader.") from e
@@ -28,7 +29,9 @@ def _summary(rows: list[dict], output_csv: Path) -> dict:
     status_counts = df["status"].value_counts(dropna=False).to_dict() if "status" in df.columns else {}
     ok = df[df["status"] == "ok"].copy() if "status" in df.columns else pd.DataFrame()
     return {
-        "status": "ok" if not any(str(k).startswith("error") or k == "missing_mask" for k in status_counts) else "failed",
+        "status": "ok"
+        if not any(str(k).startswith("error") or k == "missing_mask" for k in status_counts)
+        else "failed",
         "label_audit_csv": str(output_csv),
         "label_audit_sha256": sha256_path(output_csv) if output_csv.exists() else "",
         "n_rows": int(len(df)),
@@ -78,17 +81,19 @@ def main() -> None:
             "mask_expected_sha256": r.get("mask_expected_sha256", ""),
         }
         if not mask_path:
-            rows.append({
-                **row_base,
-                "status": "missing_mask",
-                "values": "",
-                "has_label2": "",
-                "foreground_voxels": "",
-                "ignore_voxels": "",
-                "shape": "",
-                "spacing": "",
-                "affine_sha256": "",
-            })
+            rows.append(
+                {
+                    **row_base,
+                    "status": "missing_mask",
+                    "values": "",
+                    "has_label2": "",
+                    "foreground_voxels": "",
+                    "ignore_voxels": "",
+                    "shape": "",
+                    "spacing": "",
+                    "affine_sha256": "",
+                }
+            )
             continue
         try:
             audit = audit_mask(load_mask(mask_path))
@@ -100,27 +105,31 @@ def main() -> None:
                     "spacing": "x".join(f"{float(x):.8g}" for x in meta.spacing),
                     "affine_sha256": meta.affine_sha256,
                 }
-            rows.append({
-                **row_base,
-                "status": "ok",
-                "values": "|".join(map(str, audit.values)),
-                "has_label2": audit.has_label2,
-                "foreground_voxels": audit.foreground_voxels,
-                "ignore_voxels": audit.ignore_voxels,
-                **geometry,
-            })
+            rows.append(
+                {
+                    **row_base,
+                    "status": "ok",
+                    "values": "|".join(map(str, audit.values)),
+                    "has_label2": audit.has_label2,
+                    "foreground_voxels": audit.foreground_voxels,
+                    "ignore_voxels": audit.ignore_voxels,
+                    **geometry,
+                }
+            )
         except Exception as e:
-            rows.append({
-                **row_base,
-                "status": f"error:{type(e).__name__}",
-                "values": str(e),
-                "has_label2": "",
-                "foreground_voxels": "",
-                "ignore_voxels": "",
-                "shape": "",
-                "spacing": "",
-                "affine_sha256": "",
-            })
+            rows.append(
+                {
+                    **row_base,
+                    "status": f"error:{type(e).__name__}",
+                    "values": str(e),
+                    "has_label2": "",
+                    "foreground_voxels": "",
+                    "ignore_voxels": "",
+                    "shape": "",
+                    "spacing": "",
+                    "affine_sha256": "",
+                }
+            )
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

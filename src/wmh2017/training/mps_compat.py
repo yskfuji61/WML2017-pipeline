@@ -9,6 +9,7 @@ nearest-neighbor upsample (``view`` + ``expand`` + ``reshape``, MPS-native) plus
 This is a smoke/compatibility path, not a claim of numerical equivalence with
 the original ``ConvTranspose3d`` architecture.
 """
+
 from __future__ import annotations
 
 import os
@@ -117,11 +118,7 @@ class InterpConv3d(nn.Module):
         if (sd, sh, sw) == (1, 1, 1):
             return x
         n, c, d, h, w = x.shape
-        return (
-            x.view(n, c, d, 1, h, 1, w, 1)
-            .expand(n, c, d, sd, h, sh, w, sw)
-            .reshape(n, c, d * sd, h * sh, w * sw)
-        )
+        return x.view(n, c, d, 1, h, 1, w, 1).expand(n, c, d, sd, h, sh, w, sw).reshape(n, c, d * sd, h * sh, w * sw)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self._upsample_nearest_3d(x, self.scale_factor)

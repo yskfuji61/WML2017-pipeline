@@ -15,6 +15,12 @@ Verifier: `python scripts/verify_release_evidence_register.py --run-id wmh2017_p
 | [artifact_hash_manifest.md](artifact_hash_manifest.md) | SHA256 manifest for preview run |
 | [release_decision.md](release_decision.md) | Release decision summary |
 
+## ML risk reports
+
+| Document | Purpose |
+|----------|---------|
+| [docs/ml_risk/](../ml_risk/) | Split isolation, preprocessing parity, metric parity, limitations |
+
 ## Blocked claims
 
 Clinical use, customer presentation, proprietary-data processing, cloud upload, production deployment, leaderboard/SOTA equivalence remain blocked.

@@ -1,4 +1,5 @@
 """Security scan report loading and completion validation."""
+
 from __future__ import annotations
 
 import json

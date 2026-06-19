@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """CLI gate: active code must not import legacy core/pipeline modules."""
+
 from __future__ import annotations
 
 import argparse

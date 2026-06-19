@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify release evidence register CSV structure and optional artifact hashes."""
+
 from __future__ import annotations
 
 import argparse
