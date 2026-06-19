@@ -14,6 +14,9 @@ from __future__ import annotations
 
 import json
 import random
+import resource
+import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -169,6 +172,13 @@ def _training_mode(train_cfg: dict[str, Any]) -> str:
     return str(train_cfg.get("mode", "smoke")).lower()
 
 
+def _peak_rss_kb(raw_rss: int) -> float:
+    """Normalize ru_maxrss to kilobytes across Linux (KB) and macOS (bytes)."""
+    if sys.platform == "darwin":
+        return round(float(raw_rss) / 1024.0, 3)
+    return round(float(raw_rss), 3)
+
+
 def _build_train_dataset(
     monai: dict[str, Any],
     train_rows: list[dict[str, str]],
@@ -310,8 +320,11 @@ def main(config_path: str) -> None:
     best_checkpoint_path = str(ckpt_dir / "model_best.pt") if mode == "full" else str(ckpt_dir / "model_smoke.pt")
     amp_enabled = use_amp and device.type in {"cuda", "mps"}
     scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled and device.type == "cuda") if amp_enabled else None
+    first_epoch_resource: dict[str, Any] | None = None
 
     for epoch in range(max_epochs):
+        epoch_started = time.perf_counter()
+        epoch_rss_before = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         model.train()
         epoch_losses: list[float] = []
         for step, batch in enumerate(train_loader):
@@ -360,6 +373,17 @@ def main(config_path: str) -> None:
             threshold=threshold,
         )
         mean_epoch_loss = float(np.mean(epoch_losses)) if epoch_losses else 0.0
+        if mode == "full" and epoch == 0:
+            epoch_rss_after = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            first_epoch_resource = {
+                "epoch_index": 0,
+                "wall_time_seconds": round(time.perf_counter() - epoch_started, 3),
+                "peak_rss_kb": _peak_rss_kb(max(epoch_rss_before, epoch_rss_after)),
+                "train_case_count": len(train_rows),
+                "val_case_count": val_n,
+                "patch_size": patch_size,
+                "max_epochs_configured": max_epochs,
+            }
         logs.append(
             {
                 "epoch": epoch,
@@ -443,6 +467,7 @@ def main(config_path: str) -> None:
         "train_log": str(log_path),
         "checkpoint_path": checkpoint_path,
         "prediction_dir": str(pred_dir),
+        "resource": {"first_epoch": first_epoch_resource} if first_epoch_resource else None,
         "safety": {
             "test_split_used": False,
             "label_policy": "label==1 foreground; label==2 ignored as foreground",
