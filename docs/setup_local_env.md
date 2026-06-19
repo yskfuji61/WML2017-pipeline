@@ -100,6 +100,9 @@ make -n e2e-full EPOCHS=3 RUN_ID=wmh2017_full_short_seed42 WMH2017_ROOT="$WMH201
 - Record the approved wheel index in run evidence when using CUDA.
 - On Apple Silicon, MONAI smoke uses an MPS ConvTranspose3d compatibility patch; this is
   wiring validation only, not native-MPS equivalence.
+- **Speed vs accuracy on MPS:** full training uses the MPS device for acceleration but keeps
+  **float32 compute** (no fp16 autocast on MPS). Config `use_amp: true` applies to CUDA only;
+  this avoids the PyTorch MPS autocast limitations and preserves numerical fidelity in the PoC.
 
 ## 7. Prohibited without review
 

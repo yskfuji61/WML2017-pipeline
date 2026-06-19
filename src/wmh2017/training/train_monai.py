@@ -184,11 +184,17 @@ def _peak_rss_kb(raw_rss: int) -> float:
     return round(float(raw_rss), 3)
 
 
-def _amp_policy(use_amp: bool, device_type: str) -> tuple[bool, str | None]:
-    """Return (amp_enabled, autocast_device). AMP autocast is CUDA-only in this PoC."""
+def _amp_policy(use_amp: bool, device_type: str) -> tuple[bool, str | None, str]:
+    """Return AMP/autocast settings with an explicit compute-precision policy.
+
+    Speed on Apple Silicon comes from the MPS device, not fp16 autocast.
+    MPS autocast is disabled to preserve float32 numerical fidelity in this PoC.
+    """
     if use_amp and device_type == "cuda":
-        return True, "cuda"
-    return False, None
+        return True, "cuda", "cuda_amp_optional"
+    if device_type == "mps":
+        return False, None, "mps_float32_accuracy_first"
+    return False, None, "float32_full_precision"
 
 
 def _build_train_dataset(
@@ -333,7 +339,7 @@ def main(config_path: str) -> None:
     global_step = 0
     checkpoint_path = ""
     best_checkpoint_path = str(ckpt_dir / "model_best.pt") if mode == "full" else str(ckpt_dir / "model_smoke.pt")
-    amp_enabled, autocast_device = _amp_policy(use_amp, device.type)
+    amp_enabled, autocast_device, amp_precision_policy = _amp_policy(use_amp, device.type)
     scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled) if amp_enabled else None
     first_epoch_resource: dict[str, Any] | None = None
 
@@ -490,7 +496,12 @@ def main(config_path: str) -> None:
             "requested": use_amp,
             "effective": amp_enabled,
             "autocast_device": autocast_device,
-            "policy": "cuda-only autocast; MPS/CPU run full precision in this PoC",
+            "compute_precision": "float32" if device.type in {"mps", "cpu"} else ("mixed" if amp_enabled else "float32"),
+            "precision_policy": amp_precision_policy,
+            "policy": (
+                "Speed on MPS via GPU backend; accuracy preserved with float32 (no MPS fp16 autocast). "
+                "CUDA may use AMP when use_amp=true."
+            ),
         },
         "resource": {"first_epoch": first_epoch_resource} if first_epoch_resource else None,
         "safety": {
