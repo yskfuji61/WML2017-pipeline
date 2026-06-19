@@ -134,12 +134,17 @@ def _build_model(monai: dict[str, Any], cfg: dict[str, Any]) -> Any:
     )
 
 
+def _label_to_foreground_mask(label: np.ndarray) -> np.ndarray:
+    """Map WMH label==1 foreground; label==2 ignored. Module-level for DataLoader pickling."""
+    return (label == 1).astype(np.int64)
+
+
 def _transforms(monai: dict[str, Any], patch_size: list[int] | tuple[int, int, int], train: bool) -> Any:
     ops = [
         monai["LoadImaged"](keys=["image", "label"]),
         monai["EnsureChannelFirstd"](keys=["image", "label"]),
         monai["Lambdad"](keys=["image"], func=normalize_nonzero_channelwise),
-        monai["Lambdad"](keys=["label"], func=lambda x: (x == 1).astype(np.int64)),
+        monai["Lambdad"](keys=["label"], func=_label_to_foreground_mask),
     ]
     if train:
         ops.append(
