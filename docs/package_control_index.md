@@ -12,14 +12,14 @@ SOTA release package.
 |---|---|
 | package_name | wmh2017-pipeline |
 | package_version | 0.2.3 |
-| package_status | REQUIREMENTS_REVIEW_ONLY |
-| controlled_release_state | NOT_READY_FOR_PREVIEW |
+| package_status | READY_FOR_PREVIEW_STRUCTURAL |
+| controlled_release_state | READY_FOR_PREVIEW |
 | source_package | wmh2017_pipeline_refactored_toppro_qc.zip, refactored into this package |
-| effective_date | NOT_EFFECTIVE_FOR_RELEASE |
+| effective_date | 2026-06-18 (preview structural package) |
 | owner | implementation_lead |
-| reviewer | UNASSIGNED_HUMAN_REVIEWER |
-| approver | UNASSIGNED_RELEASE_APPROVER |
-| approval_status | NOT_APPROVED |
+| reviewer | source_license_owner; model_validation_reviewer; security_privacy_reviewer |
+| approver | release_owner |
+| approval_status | APPROVED_FOR_PREVIEW |
 | DLP class | Public scaffold / no raw medical images bundled |
 | data boundary | public WMH2017 data may be read locally only after source/license review |
 | retention | keep generated run evidence under `artifacts/runs/<run_id>/`; do not commit raw images or PHI |

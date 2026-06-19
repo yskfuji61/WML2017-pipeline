@@ -8,7 +8,7 @@ Auditable **offline** WMH2017 public-data research PoC package (not clinical, cu
 |---|---|
 | package_version | `0.2.3` |
 | local planning state | `READY_FOR_STRUCTURAL_REVIEW` |
-| controlled release state | `NOT_READY_FOR_PREVIEW` |
+| controlled release state | `READY_FOR_PREVIEW` (structural package approved; not clinical/production) |
 | first goal | `READY_FOR_PREVIEW` (not `READY_FOR_RELEASE`) |
 
 **Blocked claims:** clinical use, customer presentation, proprietary-data processing, unapproved cloud upload, production deployment, SOTA / leaderboard equivalence.
@@ -40,6 +40,7 @@ Raw WMH2017 data stays **outside git**. Set `WMH2017_ROOT` in your shell or `.en
 
 - [README_CURSOR_START.md](README_CURSOR_START.md) — agent / developer handoff
 - [docs/release_state_crosswalk.md](docs/release_state_crosswalk.md) — controlled release states
+- [docs/release_evidence/README.md](docs/release_evidence/README.md) — preview promotion evidence index
 - [docs/final_evidence_binder_index.md](docs/final_evidence_binder_index.md) — evidence binder
 - [AUDIT_MAP.md](AUDIT_MAP.md) — repository map
 - [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) — preview promotion checklist

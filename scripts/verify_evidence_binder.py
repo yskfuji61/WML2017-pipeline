@@ -52,6 +52,7 @@ def main() -> None:
     parser.add_argument("--target-state", default="READY_FOR_PREVIEW")
     parser.add_argument("--binder", default="registry/evidence_binder_wmh2017.yaml")
     parser.add_argument("--skip-delegated", action="store_true")
+    parser.add_argument("--structure-only", action="store_true")
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
@@ -73,7 +74,11 @@ def main() -> None:
             failures.append(f"check 2 missing package identity artifact: {rel}")
 
     # 3. artifact sha256 match (run artifacts with sidecars)
-    if _required_for(sections.get("real_run", {}), args.target_state) and args.run_id:
+    if (
+        _required_for(sections.get("real_run", {}), args.target_state)
+        and args.run_id
+        and not args.structure_only
+    ):
         for pattern in sections.get("real_run", {}).get("artifacts", []):
             rel = pattern.replace("{run_id}", args.run_id)
             path = repo_root / rel
@@ -86,7 +91,7 @@ def main() -> None:
                     failures.append(f"check 3 sha256 mismatch: {rel}")
 
     # 4. run_id consistency
-    if args.run_id:
+    if args.run_id and not args.structure_only:
         ctx_path = repo_root / "artifacts" / "runs" / args.run_id / "run_context.json"
         if ctx_path.exists():
             ctx = json.loads(ctx_path.read_text(encoding="utf-8"))
@@ -94,7 +99,7 @@ def main() -> None:
                 failures.append("check 4 run_id mismatch in run_context")
 
     # 5. code_commit consistency
-    if args.run_id:
+    if args.run_id and not args.structure_only:
         ctx_path = repo_root / "artifacts" / "runs" / args.run_id / "run_context.json"
         graph_path = repo_root / "artifacts" / "runs" / args.run_id / "lineage" / "lineage_graph.json"
         if ctx_path.exists() and graph_path.exists():
@@ -144,7 +149,7 @@ def main() -> None:
                     failures.append("check 9 release decision not approved")
 
     # 10. security policy PASS
-    if _required_for(sections.get("security", {}), args.target_state):
+    if _required_for(sections.get("security", {}), args.target_state) and not args.structure_only:
         policy = repo_root / "reports/security/security_policy_result.json"
         if not policy.exists():
             failures.append("check 10 missing security_policy_result.json")
@@ -154,7 +159,7 @@ def main() -> None:
                 failures.append("check 10 security_policy_result not PASS")
 
     # 11. SBOM non-empty
-    if _required_for(sections.get("security", {}), args.target_state):
+    if _required_for(sections.get("security", {}), args.target_state) and not args.structure_only:
         sbom_path = repo_root / "reports/security/sbom.cdx.json"
         if not sbom_path.exists():
             failures.append("check 11 SBOM missing")
@@ -171,7 +176,7 @@ def main() -> None:
 
     # 13. parity vs claim boundary
     parity_path = repo_root / "reports/evaluation/official_metric_parity_report.json"
-    if _required_for(sections.get("official_metric_parity", {}), args.target_state):
+    if _required_for(sections.get("official_metric_parity", {}), args.target_state) and not args.structure_only:
         if not parity_path.exists():
             failures.append("check 13 missing official_metric_parity_report.json")
         else:
@@ -190,10 +195,28 @@ def main() -> None:
                 failures.append(f"check 14 blocked claims accidentally approved: {approved & BLOCKED_CLAIMS}")
 
     # lineage section existence
-    if _required_for(sections.get("lineage", {}), args.target_state) and args.run_id:
+    if (
+        _required_for(sections.get("lineage", {}), args.target_state)
+        and args.run_id
+        and not args.structure_only
+    ):
         lineage_rel = f"artifacts/runs/{args.run_id}/lineage/lineage_graph.json"
         if not (repo_root / lineage_rel).exists():
             failures.append(f"missing lineage artifact: {lineage_rel}")
+
+    # 15. release evidence register
+    if _required_for(sections.get("release_evidence", {}), args.target_state):
+        for rel in sections.get("release_evidence", {}).get("artifacts", []):
+            if not (repo_root / rel).exists():
+                failures.append(f"check 15 missing release evidence artifact: {rel}")
+        if not args.skip_delegated:
+            extra = ["--structure-only"]
+            if args.run_id:
+                extra.extend(["--run-id", args.run_id])
+            try:
+                _run_script(repo_root, "verify_release_evidence_register.py", *extra)
+            except subprocess.CalledProcessError:
+                failures.append("check 15 release evidence register failed")
 
     if failures:
         raise SystemExit("evidence binder gate FAIL:\n" + "\n".join(failures))

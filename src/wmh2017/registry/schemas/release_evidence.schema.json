@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wmh2017/release_evidence_register/v1",
+  "title": "release_evidence_register_wmh2017",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "run_id",
+    "commit_sha",
+    "ci_run_url",
+    "artifact_path",
+    "artifact_sha256",
+    "evidence_type",
+    "decision",
+    "created_at_utc"
+  ],
+  "properties": {
+    "evidence_id": {"type": "string", "pattern": "^RE-WMH-[0-9]{3}$"},
+    "run_id": {"type": "string", "minLength": 1},
+    "commit_sha": {"type": "string"},
+    "ci_run_url": {"type": "string"},
+    "artifact_path": {"type": "string", "minLength": 1},
+    "artifact_sha256": {"type": "string"},
+    "evidence_type": {
+      "type": "string",
+      "enum": ["test", "e2e", "parity", "review", "security"]
+    },
+    "reviewer": {"type": "string"},
+    "decision": {"type": "string", "enum": ["pass", "fail", "blocked"]},
+    "created_at_utc": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

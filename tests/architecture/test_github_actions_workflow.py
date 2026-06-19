@@ -6,6 +6,7 @@ WORKFLOW_FILES = (
     "structural_ci.yml",
     "security_scan.yml",
     "release_candidate_ci.yml",
+    "evidence_binder_ci.yml",
 )
 
 

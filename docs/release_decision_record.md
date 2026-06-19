@@ -3,17 +3,18 @@
 ## Current decision
 
 ```text
-decision: NOT_APPROVED_FOR_PREVIEW_OR_RELEASE
+decision: APPROVED_FOR_PREVIEW
 local_planning_state: READY_FOR_STRUCTURAL_REVIEW
-controlled_release_state: NOT_READY_FOR_PREVIEW
+controlled_release_state: READY_FOR_PREVIEW
 package_id: WMH2017-LOCAL-POC-SCAFFOLD
 package_version: 0.2.3
-package_manifest_sha256: PENDING_GENERATED_MANIFEST
-decision_date: 2026-06-17
-decision_owner: implementation_lead
-release_approver: UNASSIGNED_RELEASE_APPROVER
+preview_run_id: wmh2017_preview_20260618_e48ed25
+authoritative_yaml: docs/release_decisions/release_decision_wmh2017_preview_20260618_e48ed25.yaml
+decision_date: 2026-06-18
+decision_owner: release_owner
 linked_manifest: reports/full_package_manifest.json
 linked_findings: registry/finding_register_wmh2017.csv
+linked_release_evidence: registry/release_evidence_register_wmh2017.csv
 ```
 
 ## Decision boundary
@@ -22,8 +23,9 @@ This package contains executable scaffolding, local unit tests, deterministic
 file layout expectations, CI workflow definitions, evidence commands, and a
 MONAI smoke-training entry point.
 
-It is not `READY_FOR_PREVIEW`, `READY_FOR_LIMITED_INTERNAL_USE`, or
-`READY_FOR_RELEASE`.
+It is approved for `READY_FOR_PREVIEW` as a structural research package only.
+It is not `READY_FOR_LIMITED_INTERNAL_USE`, `READY_FOR_RELEASE`, clinical-ready,
+or production-ready.
 
 `READY_FOR_REQUIREMENTS_REVIEW` is a local planning state only. See
 `docs/release_state_crosswalk.md`.

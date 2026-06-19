@@ -28,7 +28,7 @@ jobs:
       - name: Typecheck
         run: mypy src scripts
       - name: Tests
-        run: pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation
+        run: pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation tests/security tests/supply_chain
       - name: Architecture gates
         run: |
           python scripts/verify_no_raw_data_committed.py

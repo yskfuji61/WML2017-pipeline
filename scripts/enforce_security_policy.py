@@ -8,18 +8,16 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from wmh2017.security.scan_report import (
+    ScanReportError,
+    assert_scan_completed,
+    load_json_report,
+    validate_report_schema,
+)
+
 BANDIT_FAIL_SEVERITIES = {"HIGH", "MEDIUM"}
 BANDIT_FAIL_CONFIDENCE = {"HIGH", "MEDIUM"}
 PIP_AUDIT_FAIL_SEVERITIES = {"CRITICAL", "HIGH"}
-
-
-def _load_json(path: Path) -> dict | list:
-    if not path.exists():
-        return {}
-    text = path.read_text(encoding="utf-8").strip()
-    if not text:
-        return {}
-    return json.loads(text)
 
 
 def _load_exceptions(register_path: Path) -> list[dict[str, str]]:
@@ -105,15 +103,17 @@ def check_detect_secrets(report_dir: Path, audit_txt: Path, exceptions: list[dic
     failures: list[str] = []
     unaudited = 0
     detect_json = report_dir / "detect_secrets.json"
-    if detect_json.exists():
-        data = _load_json(detect_json)
-        if isinstance(data, dict):
-            for item in data.get("results", []):
-                finding_id = f"secret:{item.get('type')}:{item.get('filename')}:{item.get('line_number')}"
-                if _exception_covers(exceptions, tool="detect-secrets", finding_id=finding_id, severity="HIGH"):
-                    continue
-                failures.append(f"detect-secrets: {item.get('type')} in {item.get('filename')}")
-    if audit_txt.exists():
+    data = load_json_report(detect_json)
+    validate_report_schema(data, "detect-secrets")
+    if isinstance(data, dict):
+        for item in data.get("results", []):
+            finding_id = f"secret:{item.get('type')}:{item.get('filename')}:{item.get('line_number')}"
+            if _exception_covers(exceptions, tool="detect-secrets", finding_id=finding_id, severity="HIGH"):
+                continue
+            failures.append(f"detect-secrets: {item.get('type')} in {item.get('filename')}")
+    if not audit_txt.exists():
+        failures.append(f"missing detect-secrets audit report: {audit_txt}")
+    else:
         text = audit_txt.read_text(encoding="utf-8")
         if "Unaudited secrets" in text or "Potential secrets" in text:
             unaudited += 1
@@ -125,15 +125,76 @@ def check_detect_secrets(report_dir: Path, audit_txt: Path, exceptions: list[dic
 
 def check_sbom(path: Path) -> tuple[str, list[str], dict]:
     failures: list[str] = []
-    if not path.exists():
-        failures.append(f"SBOM missing: {path}")
+    try:
+        data = load_json_report(path)
+        validate_report_schema(data, "sbom")
+    except ScanReportError as exc:
+        failures.append(str(exc))
         return "FAIL", failures, {"path": str(path), "component_count": 0}
-    data = _load_json(path)
     components = data.get("components", []) if isinstance(data, dict) else []
     if not components:
         failures.append("SBOM empty")
     status = "PASS" if not failures else "FAIL"
     return status, failures, {"path": str(path), "component_count": len(components)}
+
+
+def enforce_security_policy(
+    report_dir: Path,
+    *,
+    repo_root: Path,
+    exception_register: Path,
+    sbom_path: Path,
+) -> tuple[dict, list[str]]:
+    exceptions = _load_exceptions(exception_register)
+    all_failures: list[str] = []
+
+    for tool in ("detect-secrets", "bandit", "pip-audit"):
+        try:
+            assert_scan_completed(report_dir, tool)
+        except ScanReportError as exc:
+            all_failures.append(str(exc))
+
+    try:
+        ds_status, ds_fail, ds_meta = check_detect_secrets(
+            report_dir,
+            report_dir / "detect_secrets_audit.txt",
+            exceptions,
+        )
+    except ScanReportError as exc:
+        ds_status, ds_fail, ds_meta = "FAIL", [str(exc)], {}
+    all_failures.extend(ds_fail)
+
+    try:
+        bandit_report_raw = load_json_report(report_dir / "bandit.json")
+        validate_report_schema(bandit_report_raw, "bandit")
+        assert isinstance(bandit_report_raw, dict)
+        bandit_status, bandit_fail, bandit_meta = check_bandit(bandit_report_raw, exceptions)
+    except ScanReportError as exc:
+        bandit_status, bandit_fail, bandit_meta = "FAIL", [str(exc)], {}
+    all_failures.extend(bandit_fail)
+
+    try:
+        pip_report = load_json_report(report_dir / "pip_audit.json")
+        validate_report_schema(pip_report, "pip-audit")
+        pip_status, pip_fail, pip_meta = check_pip_audit(pip_report, exceptions)
+    except ScanReportError as exc:
+        pip_status, pip_fail, pip_meta = "FAIL", [str(exc)], {}
+    all_failures.extend(pip_fail)
+
+    sbom_status, sbom_fail, sbom_meta = check_sbom(sbom_path)
+    all_failures.extend(sbom_fail)
+
+    result = {
+        "status": "PASS" if not all_failures else "FAIL",
+        "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+        "detect_secrets": {"status": ds_status, **ds_meta},
+        "bandit": {"status": bandit_status, **bandit_meta},
+        "pip_audit": {"status": pip_status, **pip_meta},
+        "sbom": {"status": sbom_status, **sbom_meta},
+        "exceptions": [],
+        "failures": all_failures,
+    }
+    return result, all_failures
 
 
 def main() -> None:
@@ -148,32 +209,13 @@ def main() -> None:
     report_dir = Path(args.report_dir)
     if not report_dir.is_absolute():
         report_dir = repo_root / report_dir
-    exceptions = _load_exceptions(repo_root / args.exception_register)
 
-    all_failures: list[str] = []
-    ds_status, ds_fail, ds_meta = check_detect_secrets(report_dir, report_dir / "detect_secrets_audit.txt", exceptions)
-    all_failures.extend(ds_fail)
-    bandit_report = _load_json(report_dir / "bandit.json")
-    if not isinstance(bandit_report, dict):
-        bandit_report = {}
-    bandit_status, bandit_fail, bandit_meta = check_bandit(bandit_report, exceptions)
-    all_failures.extend(bandit_fail)
-    pip_status, pip_fail, pip_meta = check_pip_audit(_load_json(report_dir / "pip_audit.json"), exceptions)
-    all_failures.extend(pip_fail)
-    sbom_path = repo_root / args.sbom
-    sbom_status, sbom_fail, sbom_meta = check_sbom(sbom_path)
-    all_failures.extend(sbom_fail)
-
-    result = {
-        "status": "PASS" if not all_failures else "FAIL",
-        "checked_at_utc": datetime.now(timezone.utc).isoformat(),
-        "detect_secrets": {"status": ds_status, **ds_meta},
-        "bandit": {"status": bandit_status, **bandit_meta},
-        "pip_audit": {"status": pip_status, **pip_meta},
-        "sbom": {"status": sbom_status, **sbom_meta},
-        "exceptions": [],
-        "failures": all_failures,
-    }
+    result, all_failures = enforce_security_policy(
+        report_dir,
+        repo_root=repo_root,
+        exception_register=repo_root / args.exception_register,
+        sbom_path=repo_root / args.sbom,
+    )
 
     out_path = Path(args.out) if args.out else report_dir / "security_policy_result.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)

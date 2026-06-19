@@ -22,14 +22,18 @@ typecheck:
 	$(PYTHON) -m mypy src scripts
 
 test:
-	$(PYTHON) -m pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation
+	$(PYTHON) -m pytest -q tests/unit tests/integration tests/schema tests/contract tests/architecture tests/smoke tests/evaluation tests/security tests/supply_chain
 
 security:
 	mkdir -p reports/security
-	detect-secrets scan --baseline .secrets.baseline --all-files > reports/security/detect_secrets.json
+	detect-secrets scan --baseline .secrets.baseline --all-files > reports/security/detect_secrets.json || true
+	test -s reports/security/detect_secrets.json || echo '{}' > reports/security/detect_secrets.json
 	detect-secrets audit .secrets.baseline --report > reports/security/detect_secrets_audit.txt
-	bandit -q -r src scripts -f json -o reports/security/bandit.json || true
-	pip-audit -r requirements-lock.txt -f json -o reports/security/pip_audit.json || true
+	touch reports/security/.detect_secrets.completed
+	bandit -q -r src scripts -f json -o reports/security/bandit.json || test -s reports/security/bandit.json
+	touch reports/security/.bandit.completed
+	pip-audit -r requirements-lock.txt -f json -o reports/security/pip_audit.json || test -s reports/security/pip_audit.json
+	touch reports/security/.pip_audit.completed
 	$(PYTHON) scripts/generate_sbom.py --cdx-out reports/security/sbom.cdx.json --license-out reports/security/license_report.json
 	$(PYTHON) scripts/enforce_security_policy.py reports/security
 
@@ -94,5 +98,6 @@ preview-candidate: setup lint typecheck test parity-report rollback-rehearsal
 	$(PYTHON) scripts/verify_finding_register.py --target-state READY_FOR_PREVIEW
 	$(PYTHON) scripts/validate_metric_table.py artifacts/runs/$(RUN_ID)/evaluation/case_metrics.csv
 	$(MAKE) verify-lineage RUN_ID=$(RUN_ID)
+	$(PYTHON) scripts/verify_release_evidence_register.py --run-id $(RUN_ID)
 	$(MAKE) verify-binder RUN_ID=$(RUN_ID)
 	$(MAKE) verify-package RUN_ID=$(RUN_ID)

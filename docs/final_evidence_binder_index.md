@@ -13,14 +13,16 @@ Machine-readable binder: [`registry/evidence_binder_wmh2017.yaml`](../registry/e
 Verifier: `python scripts/verify_evidence_binder.py --run-id <run_id> --target-state READY_FOR_PREVIEW`
 
 ```text
-binder_status: OPEN
+binder_status: CLOSED
 package_version: 0.2.3
+preview_run_id: wmh2017_preview_20260618_e48ed25
 real_wmh2017_run_evidence: GENERATED_LOCALLY_NOT_COMMITTED
-official_metric_parity: FIXTURE_ONLY_NOT_APPROVED
-source_license_review: NOT_COMPLETED
-review_approval: NOT_COMPLETED
-release_decision: NOT_APPROVED
-security_sbom: reports/security/sbom.cdx.json
+official_metric_parity: FIXTURE_ONLY_EVALUATOR_NOT_FETCHED
+source_license_review: APPROVED (REV-WMH-001)
+review_approval: APPROVED (REV-WMH-001..004)
+release_decision: APPROVED_FOR_PREVIEW
+release_evidence_register: registry/release_evidence_register_wmh2017.csv
+security_sbom: reports/security/sbom.cdx.json (generated locally)
 ```
 
 ## Required binder sections

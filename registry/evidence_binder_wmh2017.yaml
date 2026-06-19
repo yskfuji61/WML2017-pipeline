@@ -77,4 +77,12 @@ required_sections:
       - READY_FOR_PREVIEW
     artifacts:
       - reports/evaluation/official_metric_parity_report.json
+  release_evidence:
+    required_for:
+      - READY_FOR_PREVIEW
+      - READY_FOR_LIMITED_INTERNAL_USE
+      - READY_FOR_RELEASE
+    artifacts:
+      - registry/release_evidence_register_wmh2017.csv
+      - docs/release_evidence/README.md
 closure_rule: every Sev1 is either closed with evidence or release claim is reduced
