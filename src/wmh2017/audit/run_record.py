@@ -70,6 +70,16 @@ def append_run_manifest(row: dict[str, Any], path: str | Path = "registry/runs/r
     df.to_csv(p, index=False)
 
 
+def _ensure_manifest_metric_columns_object(df: pd.DataFrame) -> pd.DataFrame:
+    """Cast metric columns to object dtype so string assignment avoids pandas FutureWarning."""
+    for col in ("metric_json_path", "metric_json_hash"):
+        if col not in df.columns:
+            df[col] = pd.Series([pd.NA] * len(df), dtype="object")
+        else:
+            df[col] = df[col].astype("object")
+    return df
+
+
 def update_run_manifest_metric(
     run_id: str,
     metric_json_path: str | Path,
@@ -87,6 +97,7 @@ def update_run_manifest_metric(
     if not matches.any():
         return False
     metric_path = str(metric_json_path)
+    df = _ensure_manifest_metric_columns_object(df)
     df.loc[matches, "metric_json_path"] = metric_path
     df.loc[matches, "metric_json_hash"] = sha256_path(metric_path)
     df.to_csv(p, index=False)
