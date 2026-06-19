@@ -221,3 +221,39 @@ def test_evaluate_predictions_records_shape_metadata(tmp_path: Path):
     assert case_metrics.loc[0, "prediction_shape"] == "3x3x3"
     assert case_metrics.loc[0, "label_shape"] == "3x3x3"
     assert case_metrics.loc[0, "geometry_policy"] == "shape+spacing+affine"
+    assert out["geometry_metrics_physical_units"] is True
+
+
+def test_evaluate_predictions_shape_only_sets_geometry_physical_units_false(tmp_path: Path) -> None:
+    label = np.zeros((3, 3, 3), dtype=np.uint8)
+    pred = np.zeros((3, 3, 3), dtype=np.uint8)
+    label[1, 1, 1] = 1
+    pred[1, 1, 1] = 1
+
+    label_path = tmp_path / "case001_wmh.npy"
+    pred_dir = tmp_path / "predictions"
+    pred_dir.mkdir()
+    pred_path = pred_dir / "case001_pred.npy"
+
+    np.save(label_path, label)
+    np.save(pred_path, pred)
+
+    manifest = pd.DataFrame([{"case_id": "case001", "wmh_path": str(label_path)}])
+    split = pd.DataFrame([{"case_id": "case001", "assigned_split": "val"}])
+    manifest_csv = tmp_path / "manifest.csv"
+    split_csv = tmp_path / "split.csv"
+    manifest.to_csv(manifest_csv, index=False)
+    split.to_csv(split_csv, index=False)
+
+    out = evaluate_predictions(
+        manifest_csv=manifest_csv,
+        split_csv=split_csv,
+        prediction_dir=pred_dir,
+        out_dir=tmp_path / "eval",
+        run_id="fixture_run",
+        assigned_split="val",
+        strict_geometry=False,
+    )
+
+    assert out["geometry_policy"] == "shape_only"
+    assert out["geometry_metrics_physical_units"] is False

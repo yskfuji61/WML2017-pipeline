@@ -163,6 +163,7 @@ def evaluate_predictions(
         "threshold": threshold,
         "strict_geometry": bool(strict_geometry),
         "geometry_policy": "shape+spacing+affine" if strict_geometry else "shape_only",
+        "geometry_metrics_physical_units": bool(strict_geometry),
         "mean_dice": float(result_df["dice"].mean()),
         "median_dice": float(result_df["dice"].median()),
         "mean_hd95": float(result_df["hd95"].replace([np.inf, -np.inf], np.nan).mean()),
