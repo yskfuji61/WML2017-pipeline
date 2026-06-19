@@ -1,6 +1,6 @@
 # Training-start evidence summary
 
-Last updated: 2026-06-19 (Training Readiness plan)
+Last updated: 2026-06-19 (audit refactor; post short full run)
 
 ## Claim boundary
 
@@ -73,18 +73,31 @@ make e2e-full EPOCHS=3 RUN_ID=wmh2017_full_short_seed42 WMH2017_ROOT="$WMH2017_R
 |---|---:|
 | run_id | `wmh2017_full_short_seed42` |
 | max_epochs (actual) | 3 |
-| best_val_dice | _TBD_ |
-| mean_dice (eval) | _TBD_ |
-| first_epoch_wall_s | _TBD_ |
-| first_epoch_peak_rss_kb | _TBD_ |
+| run_purpose (expected after audit refactor) | `wmh2017_monai_full_training` |
+| best_val_dice | 0.0171 (epoch 1) |
+| mean_dice (eval) | 0.0171 |
+| val_dice by epoch | 0.01225 → 0.01710 → 0.01449 (noise, not convergence) |
+| first_epoch_wall_s | 114.2 |
+| first_epoch_peak_rss_kb | 2575296 (~2.46 GB) |
+| device | mps (float32; no MPS fp16 autocast) |
+| global_step | 144 |
+
+### Interpretation limits (required; not performance claims)
+
+- **Dice ≈ 0.017** confirms end-to-end wiring on real WMH2017 data; it is **not** segmentation quality evidence.
+- Three epochs are insufficient for convergence; val Dice fluctuates rather than improving monotonically.
+- **`lesion_recall` ≈ 0.93** with **`pred_lesion_count` ≫ `target_lesion_count`** indicates over-segmentation; recall alone is misleading.
+- **`hd95` / `avd`** were computed under **`geometry_policy: shape_only`** (`geometry_metrics_physical_units: false`); not valid in physical mm/mm³.
+- **MPS path** substitutes decoder **`ConvTranspose3d` → `InterpConv3d`** (`architecture_parity.comparable_to_native_convtranspose: false`); not numerically comparable to native ConvTranspose on CUDA/CPU.
+- **`claim_allowed.leaderboard_or_sota: false`** in local `metrics_summary.json`; do not cite these numbers externally.
 
 ### Resource extrapolation (after Phase 2)
 
 Use measured epoch-0 values from `run_evidence.json`:
 
 ```
-estimated_full_50ep_hours ≈ (first_epoch_wall_s / 3600) × 50
-estimated_peak_rss_gb ≈ first_epoch_peak_rss_kb / (1024 × 1024)
+estimated_full_50ep_hours ≈ (first_epoch_wall_s / 3600) × 50  ≈ 1.59 h (train epoch 0 only; val sliding-window not included)
+estimated_peak_rss_gb ≈ first_epoch_peak_rss_kb / (1024 × 1024)  ≈ 2.46 GB
 ```
 
 Record extrapolation here after a successful short full run; do not commit absolute local paths.
