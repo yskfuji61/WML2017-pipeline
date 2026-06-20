@@ -6,10 +6,14 @@ from __future__ import annotations
 import argparse
 import importlib
 import json
+import os
 from pathlib import Path
 from typing import Any, cast
 
 import yaml
+
+# MLflow 3.x blocks new writes to file:./mlruns unless explicitly opted in.
+os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
 
 
 def _load_json(path: Path) -> dict:

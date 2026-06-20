@@ -1,0 +1,28 @@
+# Phase B1: WMH2017 2.5D ConvNeXt-Tiny (pretrained) experiment
+run:
+  run_id: wmh2017_exp_b1_convnext25d_seed42
+  seed: 42
+  device: auto
+  output_dir: artifacts/runs/wmh2017_exp_b1_convnext25d_seed42
+  run_manifest: registry/runs/run_manifest.csv
+
+data:
+  dataset_manifest: reports/dataset_manifest.csv
+  split_manifest: data/splits/wmh2017_train_val_seed42.csv
+  image_key: flair_pre_path
+  label_key: wmh_path
+  slice_k: 2
+  img_size: [256, 256]
+
+model:
+  in_channels: 5
+  pretrained: true
+
+training:
+  max_epochs: 30
+  batch_size: 4
+  learning_rate: 0.0001
+  loss:
+    alpha: 0.3
+    beta: 0.7
+    gamma: 1.33
