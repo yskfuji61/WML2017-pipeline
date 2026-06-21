@@ -175,3 +175,45 @@ Human review gates (from kickoff brief):
 - Kuijf et al., "Standardized Assessment of Automatic Segmentation of White
   Matter Hyperintensities and Results of the WMH Segmentation Challenge,"
   IEEE Transactions on Medical Imaging, 2019. doi:10.1109/TMI.2019.2905770
+
+## Section F — Catch-up phase results (June 2026, local CV)
+
+These are local validation results only. They are NOT official-benchmark,
+clinical, customer, production, or SOTA claims. The published challenge scores in
+Section C remain external reference values, not comparisons we are making here.
+
+### F.1 5-fold cross-validation (honest, variance-aware)
+
+After the Phase A governance refactor (ADR-0007) and the Phase B1 k-fold
+foundation, a 5-fold site-stratified CV was run with the A2 recipe
+(TverskyFocal, alpha=0.3/beta=0.7/gamma=1.33) + cosine LR, 100 epochs/fold,
+seed 42. Summary: `reports/cv/cv_summary_a2cv_cosine_seed42.json`.
+
+| metric | CV mean +/- std (n=5) | per-fold |
+|---|---|---|
+| mean_dice | 0.614 +/- 0.037 | 0.660 / 0.629 / 0.619 / 0.560 / 0.601 |
+| mean_lesion_recall | 0.207 +/- 0.038 | 0.173 / 0.212 / 0.177 / 0.205 / 0.268 |
+| mean_lesion_f1 | 0.297 +/- 0.047 | - |
+
+Gate judgment: Phase A gate (Dice 0.65 / Recall 0.35) NOT met; Phase B gate
+(Dice 0.72) NOT met.
+
+### F.2 The single-split measurement was optimistic
+
+A prior single-split A2-100ep run reported Dice 0.645. The honest 5-fold CV mean
+is 0.614 +/- 0.037 with fold range 0.560-0.660. This confirms lesson #1 from
+Section A in a new way: a single validation split over-stated performance, and
+the variance across folds (~0.10 spread) is large relative to the gaps we are
+chasing. CV is now the unit of measurement for any performance claim.
+
+### F.3 Next levers (in priority order)
+
+1. Recall is the binding constraint (0.207 vs 0.35 target). The cheapest
+   config-only lever is the loss FN weight (Tversky `beta`) plus light positive
+   sampling (`training.sampling.pos`), evaluated on the CV foundation. Note the
+   earlier A3 attempt (pos=3 alone) lowered Dice to 0.562, so positive sampling
+   must be paired with the FN-weighted loss and validated for Dice regression.
+2. Per-case oracle threshold analysis (Section A lesson #3) — cheap, may recover
+   recall/Dice without retraining.
+3. Heterogeneous-architecture ensemble (Section A lesson #2: hetero-arch beats
+   homogeneous fold count) — the ConvNeXt 2.5D path is the second architecture.

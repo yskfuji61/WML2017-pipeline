@@ -52,3 +52,17 @@ Clinical use, customer presentation, proprietary-data processing, unapproved clo
 - GAP-004 / GAP-013: official evaluator not fetched; license not reviewed
 - GAP-007: GitHub Actions green CI URLs still PENDING in register
 - GAP-014: real E2E artifacts gitignored; full hash gate needs dispatch CI or local run
+
+## 2026-06-22 update (post Phase B2 CV)
+
+| Field | Value |
+|-------|-------|
+| update_date_utc | 2026-06-22 |
+| git_commit | `28662b0` |
+| change | Phase A selection semantics (ADR-0007), Phase B1 k-fold foundation, Phase B2 5-fold CV |
+| cv_id | `wmh2017_a2cv_cosine_seed42` (summary: `reports/cv/cv_summary_a2cv_cosine_seed42.json`) |
+| cv_result | mean_dice 0.614 +/- 0.037, lesion_recall 0.207 +/- 0.038, lesion_f1 0.297 +/- 0.047 (n=5) |
+| gate | Phase A (0.65/0.35) NOT met; Phase B (0.72) NOT met |
+
+Blocked claims unchanged (clinical/customer/proprietary/cloud/production/SOTA).
+All metrics are local validation only; the test split is never used.
