@@ -64,9 +64,7 @@ def main() -> None:
         fold_df.to_csv(fold_csv, index=False)
         tv = fold_df[fold_df["assigned_split"].isin(["train", "val"])]
         val = fold_df[fold_df["assigned_split"] == "val"]
-        site_val_counts = (
-            val.groupby("site", dropna=False).size().reset_index(name="n").to_dict(orient="records")
-        )
+        site_val_counts = val.groupby("site", dropna=False).size().reset_index(name="n").to_dict(orient="records")
         fold_records.append(
             {
                 "fold": i,
