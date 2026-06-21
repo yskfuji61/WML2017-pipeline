@@ -1,5 +1,10 @@
 # Minimal local WMH2017 MONAI smoke config.
 # Raw WMH2017 data stays outside git. Set WMH2017_ROOT or use an absolute manifest path.
+#
+# SMOKE = NON-PERFORMANCE-CLAIM. This config exists only to prove the pipeline runs
+# end-to-end (data loading, one short loop, validation inference, evidence). It uses
+# val_max_cases and max_steps_per_epoch, so its metrics and best_* fields are emitted
+# as null/non-claim and must never be cited as Dice/recall/SOTA/clinical performance.
 run:
   run_id: wmh2017_monai_smoke_seed42
   seed: 42

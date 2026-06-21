@@ -35,3 +35,17 @@ training:
   save_checkpoint: true
   save_predictions: true
   save_best_only: true
+  # Checkpoint selection semantics (see docs/adr/ADR-0007).
+  # selection_metric drives which validation snapshot is kept as best; default
+  # mean_dice preserves prior behavior. This is local validation only; not SOTA,
+  # not official benchmark, not clinical, not production.
+  selection_metric: mean_dice          # mean_dice | mean_lesion_recall | mean_lesion_f1 | composite_dice_recall
+  selection_mode: max                  # max for dice/recall/f1/composite; min for loss proxies
+  selection_min_delta: 0.0
+  selection_tie_breakers:
+    - mean_lesion_recall
+    - mean_lesion_f1
+  composite_weights:
+    mean_dice: 0.7
+    mean_lesion_recall: 0.3
+  checkpoint_prefix: model_best

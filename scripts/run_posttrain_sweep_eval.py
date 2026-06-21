@@ -44,6 +44,16 @@ def run_posttrain_sweep_eval(
         assigned_split=assigned_split,
     )
     best = select_best_threshold(summary_df)
+    # Record which metric selected the checkpoint, so the threshold artifact is honest
+    # about checkpoint-best vs threshold-best independence.
+    checkpoint_selection_metric = "mean_dice"
+    evidence_for_metric = run_dir / "run_evidence.json"
+    if evidence_for_metric.exists():
+        try:
+            ev = json.loads(evidence_for_metric.read_text(encoding="utf-8"))
+            checkpoint_selection_metric = str(ev.get("selection_policy", {}).get("selection_metric", "mean_dice"))
+        except (json.JSONDecodeError, OSError):
+            checkpoint_selection_metric = "mean_dice"
     payload = write_threshold_sweep_artifacts(
         out_dir=sweep_out,
         summary_df=summary_df,
@@ -52,6 +62,7 @@ def run_posttrain_sweep_eval(
         run_id=run_id,
         probs_dir=probs_dir,
         training_threshold=training_threshold,
+        checkpoint_selection_metric=checkpoint_selection_metric,
     )
 
     pred_dir = run_dir / "predictions"

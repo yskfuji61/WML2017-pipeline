@@ -25,6 +25,12 @@ Target state: **READY_FOR_PREVIEW** (not READY_FOR_RELEASE)
 - [ ] `official_claim_status.leaderboard_claim_allowed: false`
 - [ ] Test split isolation contract tests pass
 - [ ] Label==1 foreground contract tests pass
+- [ ] Checkpoint selection evidence present (ADR-0007): `run_evidence.json` carries
+      `selection_policy` (`selection_metric`/`selection_mode`/`checkpoint_semantics`),
+      `best_selection_score`, `best_selection_epoch`, `best_metrics`
+- [ ] ConvNeXt evidence marks `selection_metric: val_loss_proxy` with `metric_limitations`
+- [ ] `threshold_sweep_best.json` has `threshold_best_is_checkpoint_best: false` and `prohibited_use`
+- [ ] Full-run `prediction_coverage.full_coverage: true` (no silently skipped predictions)
 
 ## CI / security
 

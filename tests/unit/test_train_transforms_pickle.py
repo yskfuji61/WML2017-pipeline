@@ -4,7 +4,7 @@ import pickle
 
 import numpy as np
 
-from wmh2017.training.train_monai import _label_to_foreground_mask
+from wmh2017.training.transforms import _label_to_foreground_mask
 
 
 def test_label_to_foreground_mask_maps_label1_only() -> None:

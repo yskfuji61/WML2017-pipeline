@@ -137,14 +137,27 @@ def sweep_thresholds(
     return summary_df, per_case_df
 
 
-def select_best_threshold(summary_df: pd.DataFrame) -> dict[str, Any]:
-    """Select best threshold by mean_dice, tie-break with mean_lesion_recall."""
+def select_best_threshold(
+    summary_df: pd.DataFrame,
+    *,
+    selection_metric: str = "mean_dice",
+    tie_breakers: Sequence[str] | None = None,
+) -> dict[str, Any]:
+    """Select best threshold by ``selection_metric`` with tie-breakers.
+
+    Default behavior is backward compatible: max ``mean_dice`` on val, tie-broken by
+    ``mean_lesion_recall`` then ``mean_lesion_f1``. This selects a threshold for the
+    already-fixed checkpoint; it never changes which checkpoint was selected.
+    """
     if summary_df.empty:
         raise ValueError("threshold sweep summary is empty")
-    ranked = summary_df.sort_values(
-        ["mean_dice", "mean_lesion_recall", "mean_lesion_f1"],
-        ascending=[False, False, False],
-    )
+    if tie_breakers is None:
+        tie_breakers = ("mean_lesion_recall", "mean_lesion_f1")
+    sort_cols = [selection_metric, *tie_breakers]
+    missing = [c for c in sort_cols if c not in summary_df.columns]
+    if missing:
+        raise KeyError(f"threshold sweep summary missing columns: {missing}")
+    ranked = summary_df.sort_values(sort_cols, ascending=[False] * len(sort_cols))
     best = ranked.iloc[0]
     return {
         "threshold": float(best["threshold"]),
@@ -155,7 +168,9 @@ def select_best_threshold(summary_df: pd.DataFrame) -> dict[str, Any]:
         "mean_lesion_recall": float(best["mean_lesion_recall"]),
         "mean_lesion_f1": float(best["mean_lesion_f1"]),
         "n_cases": int(best["n_cases"]),
-        "selection_policy": "max mean_dice on val; tie-break lesion_recall then lesion_f1",
+        "selection_policy": (f"max {selection_metric} on val; tie-break " + " then ".join(tie_breakers)),
+        "threshold_selection_metric": selection_metric,
+        "threshold_tie_breakers": list(tie_breakers),
         "sweep_split": "val",
     }
 
@@ -169,6 +184,7 @@ def write_threshold_sweep_artifacts(
     run_id: str,
     probs_dir: str | Path,
     training_threshold: float,
+    checkpoint_selection_metric: str = "mean_dice",
 ) -> dict[str, Any]:
     """Write sweep CSV/JSON artifacts under out_dir."""
     out_dir = Path(out_dir)
@@ -191,6 +207,19 @@ def write_threshold_sweep_artifacts(
             "sweep_split": "val",
             "selection_policy": best["selection_policy"],
         },
+        # Threshold-best is independent from checkpoint-best: choosing this threshold
+        # does not change which checkpoint was selected during training.
+        "threshold_best_is_checkpoint_best": False,
+        "checkpoint_selection_metric": checkpoint_selection_metric,
+        "threshold_selection_metric": best.get("threshold_selection_metric", "mean_dice"),
+        "threshold_tie_breakers": best.get("threshold_tie_breakers", ["mean_lesion_recall", "mean_lesion_f1"]),
+        "allowed_use": "validation-only threshold analysis",
+        "prohibited_use": [
+            "test threshold tuning",
+            "SOTA claim",
+            "clinical decision",
+            "production deployment",
+        ],
         "best": best,
         "summary_csv": str(summary_csv),
         "per_case_csv": str(per_case_csv),

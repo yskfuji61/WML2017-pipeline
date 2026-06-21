@@ -17,6 +17,14 @@ from wmh2017.models.convnext_nnunet_seg import ConvNeXtNnUNetSeg
 from wmh2017.training.losses import TverskyFocalLoss
 from wmh2017.training.mps_compat import enable_mps_cpu_fallback, resolve_training_device
 
+# ConvNeXt 2.5D selects its best checkpoint by validation loss proxy (minimization).
+# This is explicitly NOT Dice-best and NOT lesion-recall-best.
+CONVNEXT_SELECTION_POLICY: dict[str, Any] = {
+    "selection_metric": "val_loss_proxy",
+    "selection_mode": "min",
+    "checkpoint_semantics": "best validation loss proxy; not best Dice and not best lesion recall",
+}
+
 
 def _load_config(path: str | Path) -> dict[str, Any]:
     p = Path(path)
@@ -90,7 +98,11 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
     max_epochs = int(train_cfg.get("max_epochs", 20))
     logs: list[dict[str, Any]] = []
     best_val = float("inf")
-    best_path = ckpt_dir / "model_best.pt"
+    best_epoch = -1
+    # Primary checkpoint name reveals selection semantics: this is validation-loss-proxy
+    # best, NOT Dice best and NOT lesion-recall best.
+    best_path = ckpt_dir / "model_best_val_loss_proxy.pt"
+    legacy_best_path = ckpt_dir / "model_best.pt"  # legacy alias only
 
     for epoch in range(max_epochs):
         model.train()
@@ -124,10 +136,19 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
         logs.append({"epoch": epoch, "train_loss": mean_train, "val_loss": mean_val})
         if mean_val < best_val:
             best_val = mean_val
-            torch.save(  # nosec B614
-                {"run_id": run_id, "model_state_dict": model.state_dict(), "config": cfg},
-                best_path,
-            )
+            best_epoch = epoch
+            payload = {
+                "run_id": run_id,
+                "model_state_dict": model.state_dict(),
+                "config": cfg,
+                "selection_policy": dict(CONVNEXT_SELECTION_POLICY),
+                "best_val_loss_proxy": best_val,
+                "best_selection_score": best_val,
+                "best_selection_epoch": best_epoch,
+                "claim_boundary": "local PoC ConvNeXt 2.5D training only",
+            }
+            torch.save(payload, best_path)  # nosec B614
+            torch.save(payload, legacy_best_path)  # nosec B614 — legacy alias copy
 
     log_path = log_dir / "train_log.jsonl"
     log_path.write_text("\n".join(json.dumps(x) for x in logs) + "\n", encoding="utf-8")
@@ -138,7 +159,17 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
         "device": str(device),
         **device_runtime,
         "checkpoint_path": str(best_path),
+        "legacy_checkpoint_alias": str(legacy_best_path),
         "train_log": str(log_path),
+        "selection_policy": dict(CONVNEXT_SELECTION_POLICY),
+        "best_val_loss_proxy": best_val,
+        "best_selection_score": best_val,
+        "best_selection_epoch": best_epoch,
+        "metric_limitations": [
+            "This checkpoint is not selected by mean Dice.",
+            "This checkpoint is not selected by lesion recall.",
+            "model_best.pt is a legacy alias of model_best_val_loss_proxy.pt.",
+        ],
         "safety": {
             "test_split_used": False,
             "label_policy": "label==1 foreground; label==2 ignored as foreground",

@@ -32,6 +32,7 @@ from wmh2017.audit.run_labeling import (
 )
 from wmh2017.audit.run_record import append_run_manifest, make_run_row, write_json
 from wmh2017.data.preprocessing import normalize_nonzero_channelwise
+from wmh2017.evaluation.lesion_metrics import lesion_recall_f1_wmh_label1
 from wmh2017.evaluation.voxel_metrics import dice_wmh_label1
 from wmh2017.inference.export_probabilities import infer_foreground_probability, save_case_prediction
 from wmh2017.io.images import load_array
@@ -41,6 +42,11 @@ from wmh2017.training.mps_compat import (
     enable_mps_cpu_fallback,
     record_mps_convtranspose_patch,
     resolve_training_device,
+)
+from wmh2017.training.selection import (
+    evaluate_candidate,
+    policy_to_payload,
+    selection_policy_from_config,
 )
 from wmh2017.training.transforms import build_monai_transforms
 
@@ -200,7 +206,7 @@ def _build_train_dataset(
     return monai["Dataset"](data=train_rows, transform=transform)
 
 
-def _run_validation_dice(
+def _run_validation_metrics(
     *,
     model: Any,
     torch: Any,
@@ -209,12 +215,19 @@ def _run_validation_dice(
     patch_size: list[int],
     device: Any,
     threshold: float,
-) -> tuple[float, int]:
+) -> tuple[dict[str, float], int]:
+    """Run validation inference and return mean dice/lesion_recall/lesion_f1.
+
+    Lesion metrics are computed so that selection_metric can be dice, recall, f1, or
+    a composite. This is local validation only; not a SOTA/official/clinical claim.
+    """
     if not val_rows:
-        return 0.0, 0
+        return {"mean_dice": 0.0, "mean_lesion_recall": 0.0, "mean_lesion_f1": 0.0}, 0
     model.eval()
     roi_size = tuple(patch_size)
     dice_scores: list[float] = []
+    recall_scores: list[float] = []
+    f1_scores: list[float] = []
     with torch.no_grad():
         for row in val_rows:
             image = load_array(row["image"])
@@ -226,7 +239,15 @@ def _run_validation_dice(
             probs = torch.softmax(logits, dim=1)[:, 1]
             pred = (probs[0].detach().cpu().numpy() >= threshold).astype(np.uint8)
             dice_scores.append(float(dice_wmh_label1(pred, label_mask)))
-    return float(np.mean(dice_scores)), len(dice_scores)
+            lesion = lesion_recall_f1_wmh_label1(pred, label_mask)
+            recall_scores.append(float(lesion["lesion_recall"]))
+            f1_scores.append(float(lesion["lesion_f1"]))
+    metrics = {
+        "mean_dice": float(np.mean(dice_scores)),
+        "mean_lesion_recall": float(np.mean(recall_scores)),
+        "mean_lesion_f1": float(np.mean(f1_scores)),
+    }
+    return metrics, len(dice_scores)
 
 
 def _save_predictions(
@@ -329,13 +350,21 @@ def main(config_path: str) -> None:
     max_epochs = int(train_cfg.get("max_epochs", 1))
     max_steps = int(train_cfg.get("max_steps_per_epoch", 2))
     early_stopping_patience = int(train_cfg.get("early_stopping_patience", 10))
+    selection_policy = selection_policy_from_config(train_cfg, default_metric="mean_dice")
+    checkpoint_semantics = (
+        f"best local validation {selection_policy.metric} ({selection_policy.mode}); "
+        "not test split, not SOTA, not clinical, not production"
+    )
+    selection_policy_payload = policy_to_payload(selection_policy, checkpoint_semantics=checkpoint_semantics)
     logs: list[dict[str, Any]] = []
-    best_val_dice = float("-inf")
+    best_score: float | None = None
+    best_metrics: dict[str, float] = {}
     best_epoch = -1
     epochs_without_improvement = 0
     global_step = 0
     checkpoint_path = ""
     best_checkpoint_path = str(ckpt_dir / checkpoint_filename(mode))
+    best_alias_path = str(ckpt_dir / f"model_best_{selection_policy.metric}.pt")
     amp_enabled, autocast_device, amp_precision_policy = _amp_policy(use_amp, device.type)
     scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled) if amp_enabled else None
     first_epoch_resource: dict[str, Any] | None = None
@@ -380,7 +409,7 @@ def main(config_path: str) -> None:
                 }
             )
 
-        val_dice, val_n = _run_validation_dice(
+        val_metrics, val_n = _run_validation_metrics(
             model=model,
             torch=torch,
             monai=monai,
@@ -389,6 +418,7 @@ def main(config_path: str) -> None:
             device=device,
             threshold=threshold,
         )
+        val_dice = val_metrics["mean_dice"]
         mean_epoch_loss = float(np.mean(epoch_losses)) if epoch_losses else 0.0
         if mode == "full" and epoch == 0:
             epoch_rss_after = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
@@ -406,28 +436,47 @@ def main(config_path: str) -> None:
                 "epoch": epoch,
                 "global_step": global_step,
                 "val_dice": val_dice,
+                "val_mean_lesion_recall": val_metrics["mean_lesion_recall"],
+                "val_mean_lesion_f1": val_metrics["mean_lesion_f1"],
                 "val_n_cases": val_n,
                 "mean_epoch_loss": mean_epoch_loss,
+                "selection_metric": selection_policy.metric,
                 "mode": mode,
             }
         )
-        if val_dice > best_val_dice:
-            best_val_dice = val_dice
+        decision = evaluate_candidate(
+            selection_policy,
+            val_metrics,
+            best_score=best_score,
+            best_metrics=best_metrics or None,
+        )
+        if decision.improved:
+            best_score = decision.score
+            best_metrics = dict(val_metrics)
             best_epoch = epoch
             epochs_without_improvement = 0
             if mode == "full" and bool(train_cfg.get("save_best_only", True)):
+                payload = {
+                    "run_id": run_id,
+                    "model_state_dict": model.state_dict(),
+                    "config": cfg,
+                    "global_step": global_step,
+                    "selection_policy": selection_policy_payload,
+                    "best_selection_score": best_score,
+                    "best_selection_epoch": best_epoch,
+                    "best_metrics": best_metrics,
+                    "best_val_dice": best_metrics["mean_dice"],  # legacy alias
+                    "best_epoch": best_epoch,
+                    "checkpoint_semantics": checkpoint_semantics,
+                    "claim_boundary": "local PoC full training; not clinical or production model",
+                }
                 torch.save(  # nosec B614 — local trusted best checkpoint only; not loading untrusted weights
-                    {
-                        "run_id": run_id,
-                        "model_state_dict": model.state_dict(),
-                        "config": cfg,
-                        "global_step": global_step,
-                        "best_val_dice": best_val_dice,
-                        "best_epoch": best_epoch,
-                        "claim_boundary": "local PoC full training; not clinical or production model",
-                    },
+                    payload,
                     best_checkpoint_path,
                 )
+                # Metric-explicit alias so the filename reveals selection semantics.
+                if best_alias_path != best_checkpoint_path:
+                    torch.save(payload, best_alias_path)  # nosec B614 — local trusted copy
                 checkpoint_path = best_checkpoint_path
         else:
             epochs_without_improvement += 1
@@ -477,8 +526,17 @@ def main(config_path: str) -> None:
         "device": str(device),
         **device_runtime,
         "global_step": global_step,
-        "best_val_dice": best_val_dice if mode == "full" else None,
+        "selection_policy": selection_policy_payload,
+        "best_selection_score": best_score if mode == "full" else None,
+        "best_selection_epoch": best_epoch if mode == "full" else None,
+        "best_metrics": best_metrics if mode == "full" else None,
+        "legacy_best_val_dice": best_metrics.get("mean_dice") if mode == "full" else None,
+        "best_val_dice": best_metrics.get("mean_dice") if mode == "full" else None,  # legacy alias
         "best_epoch": best_epoch if mode == "full" else None,
+        "selection_claim_note": (
+            "best_* fields describe the selected local-validation snapshot only; "
+            "smoke mode emits null best_* (non-performance-claim)"
+        ),
         "train_case_count": len(train_rows),
         "val_prediction_count": pred_count if bool(train_cfg.get("save_predictions", True)) else 0,
         "train_log": str(log_path),
@@ -540,7 +598,12 @@ def main(config_path: str) -> None:
         status="completed",
         checkpoint_path=checkpoint_path,
         prediction_dir=str(pred_dir),
-        notes=f"mode={mode}; global_step={global_step}; best_val_dice={best_val_dice:.6f}; no test110 use",
+        notes=(
+            f"mode={mode}; global_step={global_step}; "
+            f"selection_metric={selection_policy.metric}; "
+            f"best_selection_score={best_score if best_score is not None else float('nan'):.6f}; "
+            f"best_val_dice={best_metrics.get('mean_dice', float('nan')):.6f}; no test110 use"
+        ),
     )
     append_run_manifest(row, run_cfg.get("run_manifest", "registry/runs/run_manifest.csv"))
 

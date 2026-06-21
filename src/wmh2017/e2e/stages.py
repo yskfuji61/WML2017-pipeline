@@ -36,6 +36,21 @@ def run_command(cmd: Sequence[str], *, cwd: Path) -> dict:
     }
 
 
+def _train_config_mode(train_config: Path | str | None) -> str:
+    """Read training.mode from a materialized train config (default 'smoke')."""
+    if not train_config:
+        return "smoke"
+    path = Path(train_config)
+    if not path.exists():
+        return "smoke"
+    try:
+        cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return "smoke"
+    training = cfg.get("training", {}) if isinstance(cfg, dict) else {}
+    return str(training.get("mode", "smoke")).lower()
+
+
 def require_ok(step: dict) -> None:
     if int(step["returncode"]) != 0:
         raise SystemExit(
@@ -290,6 +305,8 @@ def evaluate_stage(state: PipelineState) -> StageResult | None:
     eval_dir = ctx.work_dir / "evaluation"
     logs_dir = ctx.work_dir / "logs"
     model_dst = state.model_dst or (ctx.work_dir / "checkpoints" / "model.pt")
+    train_mode = _train_config_mode(state.train_config)
+    allow_missing = train_mode != "full"
     eval_cmd = [
         sys.executable,
         "scripts/evaluate_wmh2017.py",
@@ -304,12 +321,16 @@ def evaluate_stage(state: PipelineState) -> StageResult | None:
         "--run-id",
         ctx.run_id,
         "--allow-shape-only-geometry",
-        "--skip-missing-predictions",
         "--model-artifact",
         str(model_dst) if model_dst.exists() else "",
         "--config-path",
         str(state.train_config),
     ]
+    # Missing predictions are only tolerated for non-full (smoke) runs, where
+    # val_max_cases intentionally limits coverage. Full evaluation must fail if any
+    # expected prediction is absent so case coverage is never silently incomplete.
+    if allow_missing:
+        eval_cmd.append("--skip-missing-predictions")
     step = run_command(eval_cmd, cwd=ctx.repo_root)
     append_command_log(ctx.work_dir, step)
     require_ok(step)
@@ -353,6 +374,17 @@ def evaluate_stage(state: PipelineState) -> StageResult | None:
         )
     metrics_summary = eval_dir / "metrics_summary.json"
     if metrics_summary.exists():
+        if not allow_missing:
+            summary_obj = json.loads(metrics_summary.read_text(encoding="utf-8"))
+            coverage = summary_obj.get("prediction_coverage", {})
+            expected = int(coverage.get("expected_cases", 0))
+            evaluated = int(coverage.get("evaluated_cases", 0))
+            if expected and evaluated < expected:
+                raise SystemExit(
+                    "full evaluation prediction coverage incomplete: "
+                    f"evaluated {evaluated} < expected {expected}; "
+                    f"missing={coverage.get('missing_predictions', [])}"
+                )
         state.manifest.add(
             "metrics_summary",
             metrics_summary,

@@ -52,6 +52,7 @@ def evaluate_predictions(
     config_path: str | Path = "",
     skip_missing_predictions: bool = False,
     prediction_manifest_path: str | Path = "",
+    missing_prediction_policy: str = "fail_full_allow_smoke",
 ) -> dict[str, Any]:
     manifest_csv = Path(manifest_csv)
     split_csv = Path(split_csv)
@@ -73,6 +74,8 @@ def evaluate_predictions(
     config_hash = sha256_path(config_path) if config_path else ""
     pred_manifest_hash = sha256_path(prediction_manifest_path) if prediction_manifest_path else ""
 
+    expected_case_ids = [str(srow["case_id"]) for _, srow in cases.iterrows()]
+    missing_case_ids: list[str] = []
     records: list[dict[str, Any]] = []
     for _, srow in cases.iterrows():
         case_id = str(srow["case_id"])
@@ -94,6 +97,7 @@ def evaluate_predictions(
         pred_path = _prediction_path_for_case(prediction_dir, case_id)
         if pred_path is None:
             if skip_missing_predictions:
+                missing_case_ids.append(case_id)
                 continue
             raise FileNotFoundError(f"prediction not found for case_id={case_id} in {prediction_dir}")
         pred_meta = load_image_metadata(pred_path)
@@ -170,6 +174,14 @@ def evaluate_predictions(
         "mean_avd": float(result_df["avd"].mean()),
         "mean_lesion_recall": float(result_df["lesion_recall"].mean()),
         "mean_lesion_f1": float(result_df["lesion_f1"].mean()),
+        "prediction_coverage": {
+            "expected_cases": int(len(expected_case_ids)),
+            "evaluated_cases": int(len(result_df)),
+            "missing_predictions": missing_case_ids,
+            "skip_missing_predictions": bool(skip_missing_predictions),
+            "missing_prediction_policy": missing_prediction_policy,
+            "full_coverage": len(missing_case_ids) == 0,
+        },
         "case_metrics_csv": str(case_csv),
         "case_metrics_sha256": sha256_path(case_csv),
         "dataset_manifest": str(manifest_csv),

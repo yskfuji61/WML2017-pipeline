@@ -120,6 +120,27 @@ nearest upsample + `Conv3d` に置換する互換パッチを適用する。
 smoke/互換性確認用の実装であり、元の `ConvTranspose3d` 構成との
 数値的同等性や学習結果の同等性を保証するものではない。
 
+## Checkpoint selection semantics (ADR-0007)
+
+"Best" is explicit and never confusable across paths. See
+`docs/adr/ADR-0007-metric-selection-checkpoint-semantics.md`.
+
+- MONAI training is driven by `training.selection_metric` (default `mean_dice`,
+  `selection_mode: max`). Validation also computes lesion recall/F1, so
+  `selection_metric` may be `mean_lesion_recall`, `mean_lesion_f1`, or
+  `composite_dice_recall`. Each best checkpoint carries `selection_policy`,
+  `best_selection_score`, `best_selection_epoch`, `best_metrics`, and
+  `checkpoint_semantics`; a metric-explicit alias `model_best_<metric>.pt` is saved
+  next to the legacy `model_best.pt`.
+- ConvNeXt 2.5D best is `model_best_val_loss_proxy.pt` (validation loss proxy, `min`);
+  `model_best.pt` is a legacy alias. It is NOT Dice-best and NOT lesion-recall-best.
+- Threshold sweep best is independent from checkpoint best
+  (`threshold_best_is_checkpoint_best: false`) and is validation-only analysis.
+- Full E2E evaluation fails on any missing prediction; only smoke runs may skip
+  missing predictions. `prediction_coverage` is recorded in the metrics summary.
+- Claim boundary is unchanged: local validation only; never SOTA/official/clinical/
+  customer/production, and never selected on the test split.
+
 ## Done definition before July
 
 - WMH2017 source, license, and use boundary are recorded.
