@@ -193,6 +193,49 @@ def _amp_policy(use_amp: bool, device_type: str) -> tuple[bool, str | None, str]
     return False, None, "float32_full_precision"
 
 
+def build_lr_scheduler(
+    torch: Any,
+    optimizer: Any,
+    train_cfg: dict[str, Any],
+    *,
+    max_epochs: int,
+) -> tuple[Any, dict[str, Any]]:
+    """Build a config-gated per-epoch LR scheduler (backward compatible).
+
+    If ``training.lr_scheduler`` is absent or name in {none, "", constant, fixed},
+    returns (None, {...enabled: False}) and the run keeps the prior fixed LR.
+    Supported: cosine (CosineAnnealingLR), poly (polynomial decay), step (StepLR).
+    """
+    sched_cfg = train_cfg.get("lr_scheduler") or {}
+    name = str(sched_cfg.get("name", "none")).lower()
+    if name in {"none", "", "constant", "fixed"}:
+        return None, {"enabled": False, "name": "constant"}
+
+    if name == "cosine":
+        eta_min = float(sched_cfg.get("eta_min", 0.0))
+        t_max = int(sched_cfg.get("t_max", max_epochs))
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=t_max, eta_min=eta_min)
+        return scheduler, {"enabled": True, "name": "cosine", "t_max": t_max, "eta_min": eta_min}
+
+    if name == "poly":
+        power = float(sched_cfg.get("power", 0.9))
+        total = max(1, int(sched_cfg.get("max_epochs", max_epochs)))
+
+        def _poly(epoch: int) -> float:
+            return (1.0 - min(epoch, total) / total) ** power
+
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=_poly)
+        return scheduler, {"enabled": True, "name": "poly", "power": power, "max_epochs": total}
+
+    if name == "step":
+        step_size = int(sched_cfg.get("step_size", max(1, max_epochs // 3)))
+        gamma = float(sched_cfg.get("gamma", 0.1))
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=gamma)
+        return scheduler, {"enabled": True, "name": "step", "step_size": step_size, "gamma": gamma}
+
+    raise ValueError(f"unsupported lr_scheduler name: {name}")
+
+
 def _build_train_dataset(
     monai: dict[str, Any],
     train_rows: list[dict[str, str]],
@@ -346,6 +389,9 @@ def main(config_path: str) -> None:
     model = model.to(device)
     loss_fn = build_loss(train_cfg, monai)
     opt = torch.optim.Adam(model.parameters(), lr=float(train_cfg.get("learning_rate", 1e-4)))
+    lr_scheduler, lr_scheduler_info = build_lr_scheduler(
+        torch, opt, train_cfg, max_epochs=int(train_cfg.get("max_epochs", 1))
+    )
 
     max_epochs = int(train_cfg.get("max_epochs", 1))
     max_steps = int(train_cfg.get("max_steps_per_epoch", 2))
@@ -481,6 +527,9 @@ def main(config_path: str) -> None:
         else:
             epochs_without_improvement += 1
 
+        if lr_scheduler is not None:
+            lr_scheduler.step()
+
         if mode == "full" and epochs_without_improvement >= early_stopping_patience:
             break
 
@@ -560,6 +609,7 @@ def main(config_path: str) -> None:
                 "CUDA may use AMP when use_amp=true."
             ),
         },
+        "lr_scheduler": lr_scheduler_info,
         "resource": {"first_epoch": first_epoch_resource} if first_epoch_resource else None,
         "threshold_policy": {
             "training_threshold": threshold,

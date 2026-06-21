@@ -1,0 +1,171 @@
+split_id,fold,case_id,challenge_split,source_split,assigned_split,site,scanner,scanner_code,group_id,seed,reason,created_at
+WMH2017-KFOLD-SEED42,1,100,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,100,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,101,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,101,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,102,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,102,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,103,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,103,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,104,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,104,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,105,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,105,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,106,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,106,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,107,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,107,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,108,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,108,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,109,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,109,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,110,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,110,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,112,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,112,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,113,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,113,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,114,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,114,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,115,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,115,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,116,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,116,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,126,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,126,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,132,training,training,val,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,132,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,137,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,137,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,144,training,training,train,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,144,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,50,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,50,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,51,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,51,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,52,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,52,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,53,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,53,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,54,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,54,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,55,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,55,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,56,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,56,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,57,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,57,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,58,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,58,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,59,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,59,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,60,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,60,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,61,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,61,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,62,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,62,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,63,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,63,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,64,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,64,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,65,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,65,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,66,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,66,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,67,training,training,val,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,67,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,68,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,68,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,69,training,training,train,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,69,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,0,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,0,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,11,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,11,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,17,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,17,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,19,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,19,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,2,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,2,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,21,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,21,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,23,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,23,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,25,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,25,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,27,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,27,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,29,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,29,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,31,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,31,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,33,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,33,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,35,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,35,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,37,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,37,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,39,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,39,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,4,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,4,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,41,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,41,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,49,training,training,val,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,49,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,6,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,6,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,8,training,training,train,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,8,42,challenge_training_site_stratified_kfold,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,150,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,150,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,151,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,151,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,152,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,152,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,153,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,153,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,154,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,154,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,155,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,155,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,156,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,156,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,157,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,157,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,158,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,158,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,159,test,test,heldout_eval,Amsterdam,1.5T GE Signa HDxt,amsterdam_ge_signa_hdxt_1p5t,159,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,111,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,111,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,117,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,117,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,118,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,118,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,119,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,119,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,120,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,120,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,121,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,121,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,122,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,122,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,123,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,123,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,124,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,124,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,125,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,125,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,127,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,127,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,128,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,128,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,129,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,129,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,130,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,130,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,131,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,131,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,133,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,133,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,134,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,134,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,135,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,135,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,136,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,136,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,138,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,138,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,139,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,139,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,140,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,140,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,141,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,141,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,142,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,142,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,143,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,143,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,145,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,145,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,146,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,146,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,147,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,147,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,148,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,148,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,149,test,test,heldout_eval,Amsterdam,3T GE Signa HDxt,amsterdam_ge_signa_hdxt_3t,149,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,160,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,160,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,161,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,161,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,162,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,162,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,163,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,163,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,164,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,164,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,165,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,165,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,166,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,166,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,167,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,167,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,168,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,168,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,169,test,test,heldout_eval,Amsterdam,3T Philips Ingenuity,amsterdam_philips_ingenuity_3t,169,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,70,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,70,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,71,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,71,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,72,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,72,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,73,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,73,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,74,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,74,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,75,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,75,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,76,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,76,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,77,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,77,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,78,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,78,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,79,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,79,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,80,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,80,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,81,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,81,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,82,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,82,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,83,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,83,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,84,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,84,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,85,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,85,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,86,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,86,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,87,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,87,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,88,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,88,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,89,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,89,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,90,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,90,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,91,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,91,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,92,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,92,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,93,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,93,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,94,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,94,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,95,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,95,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,96,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,96,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,97,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,97,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,98,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,98,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,99,test,test,heldout_eval,Singapore,3T Siemens TrioTim,singapore_siemens_triotim_3t,99,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,1,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,1,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,10,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,10,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,12,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,12,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,13,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,13,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,14,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,14,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,15,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,15,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,16,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,16,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,18,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,18,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,20,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,20,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,22,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,22,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,24,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,24,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,26,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,26,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,28,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,28,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,3,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,3,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,30,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,30,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,32,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,32,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,34,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,34,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,36,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,36,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,38,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,38,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,40,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,40,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,42,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,42,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,43,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,43,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,44,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,44,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,45,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,45,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,46,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,46,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,47,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,47,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,48,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,48,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,5,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,5,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,7,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,7,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00
+WMH2017-KFOLD-SEED42,1,9,test,test,heldout_eval,Utrecht,3T Philips Achieva,utrecht_philips_achieva_3t,9,42,challenge_test_never_train_val_even_if_mask_exists,2026-06-21T13:34:08.173399+00:00

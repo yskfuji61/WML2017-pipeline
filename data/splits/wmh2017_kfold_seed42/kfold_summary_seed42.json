@@ -1,0 +1,122 @@
+{
+  "split_id": "WMH2017-KFOLD-SEED42",
+  "k": 5,
+  "seed": 42,
+  "stratify_col": "site",
+  "source_manifest": "reports/dataset_manifest.csv",
+  "source_manifest_sha256": "63ec5580cddb750a5eb922fa58d427873a29c8c6cdb7843dff29129e5d90b200",
+  "folds": [
+    {
+      "fold": 0,
+      "fold_csv": "data/splits/wmh2017_kfold_seed42/fold0.csv",
+      "fold_csv_sha256": "28b7c154d43c4f8da5989707afad8ef5c759d24c7a1adb7825d500c5a7d25c19",
+      "n_train": 48,
+      "n_val": 12,
+      "n_train_val_total": 60,
+      "val_site_counts": [
+        {
+          "site": "Amsterdam",
+          "n": 4
+        },
+        {
+          "site": "Singapore",
+          "n": 4
+        },
+        {
+          "site": "Utrecht",
+          "n": 4
+        }
+      ]
+    },
+    {
+      "fold": 1,
+      "fold_csv": "data/splits/wmh2017_kfold_seed42/fold1.csv",
+      "fold_csv_sha256": "dac44e932bda2a4a3d52a15464fb72d7eaec18aa0a19d85ab4551d11a4b03883",
+      "n_train": 48,
+      "n_val": 12,
+      "n_train_val_total": 60,
+      "val_site_counts": [
+        {
+          "site": "Amsterdam",
+          "n": 4
+        },
+        {
+          "site": "Singapore",
+          "n": 4
+        },
+        {
+          "site": "Utrecht",
+          "n": 4
+        }
+      ]
+    },
+    {
+      "fold": 2,
+      "fold_csv": "data/splits/wmh2017_kfold_seed42/fold2.csv",
+      "fold_csv_sha256": "0961588edd7811d813eb188907e8166e8c8ba3bda385bd0165177cf47f16a10e",
+      "n_train": 48,
+      "n_val": 12,
+      "n_train_val_total": 60,
+      "val_site_counts": [
+        {
+          "site": "Amsterdam",
+          "n": 4
+        },
+        {
+          "site": "Singapore",
+          "n": 4
+        },
+        {
+          "site": "Utrecht",
+          "n": 4
+        }
+      ]
+    },
+    {
+      "fold": 3,
+      "fold_csv": "data/splits/wmh2017_kfold_seed42/fold3.csv",
+      "fold_csv_sha256": "49bf1837cb1ad4d578cee3caf7620a55f9c74c1c6eec08e70c806fdf2f713dc4",
+      "n_train": 48,
+      "n_val": 12,
+      "n_train_val_total": 60,
+      "val_site_counts": [
+        {
+          "site": "Amsterdam",
+          "n": 4
+        },
+        {
+          "site": "Singapore",
+          "n": 4
+        },
+        {
+          "site": "Utrecht",
+          "n": 4
+        }
+      ]
+    },
+    {
+      "fold": 4,
+      "fold_csv": "data/splits/wmh2017_kfold_seed42/fold4.csv",
+      "fold_csv_sha256": "fd8d36b4f621ebafb0a322953d8da4b19f53c14b6cfd79c7ade1d2e3ae499521",
+      "n_train": 48,
+      "n_val": 12,
+      "n_train_val_total": 60,
+      "val_site_counts": [
+        {
+          "site": "Amsterdam",
+          "n": 4
+        },
+        {
+          "site": "Singapore",
+          "n": 4
+        },
+        {
+          "site": "Utrecht",
+          "n": 4
+        }
+      ]
+    }
+  ],
+  "critical_rule": "challenge_split=test is never used for train/val/tuning across any fold; validation folds partition the training cases with no overlap",
+  "claim_boundary": "local cross-validation only; not SOTA/official/clinical/production"
+}
