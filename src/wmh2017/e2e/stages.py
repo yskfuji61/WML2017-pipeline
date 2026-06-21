@@ -165,24 +165,67 @@ def audit_labels_stage(state: PipelineState) -> StageResult:
     return state._record("label_audit", "PASS", [str(label_json)])
 
 
+def _configured_split_to_load(ctx: E2ERunContext) -> Path | None:
+    """Return an explicit, pre-generated split CSV to load, or None to regenerate.
+
+    Opt-in via ``data.use_configured_split: true`` in the run config (used for k-fold
+    CV folds). Backward compatible: without the flag the pipeline regenerates the
+    standard seeded train/val split as before.
+    """
+    try:
+        cfg = yaml.safe_load(ctx.config_path.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return None
+    data = cfg.get("data", {}) if isinstance(cfg, dict) else {}
+    if not bool(data.get("use_configured_split", False)):
+        return None
+    raw = str(data.get("split_manifest", "") or "")
+    if not raw:
+        return None
+    candidate = Path(raw)
+    if not candidate.is_absolute():
+        candidate = ctx.repo_root / candidate
+    if not candidate.exists():
+        raise SystemExit(f"use_configured_split=true but split_manifest not found: {candidate}")
+    return candidate
+
+
 def create_or_load_split_stage(state: PipelineState) -> StageResult:
     ctx = state.ctx
     assert state.manifest_csv is not None
     splits_dir = ctx.work_dir / "splits"
-    split_cmd = [
-        sys.executable,
-        "scripts/make_wmh2017_splits.py",
-        "--manifest",
-        str(state.manifest_csv),
-        "--seed",
-        str(ctx.seed),
-        "--out-dir",
-        str(splits_dir),
-    ]
-    step = run_command(split_cmd, cwd=ctx.repo_root)
+    splits_dir.mkdir(parents=True, exist_ok=True)
+    configured = _configured_split_to_load(ctx)
+    if configured is not None:
+        import pandas as pd
+
+        from wmh2017.data.splits import assert_no_test_contamination
+
+        split_df = pd.read_csv(configured)
+        assert_no_test_contamination(split_df)
+        split_csv = splits_dir / configured.name
+        split_csv.write_text(configured.read_text(encoding="utf-8"), encoding="utf-8")
+        step = {
+            "cmd": ["load_configured_split", str(configured)],
+            "returncode": 0,
+            "stdout": f"loaded configured split {configured}",
+            "stderr": "",
+        }
+    else:
+        split_csv = splits_dir / f"wmh2017_train_val_seed{ctx.seed}.csv"
+        split_cmd = [
+            sys.executable,
+            "scripts/make_wmh2017_splits.py",
+            "--manifest",
+            str(state.manifest_csv),
+            "--seed",
+            str(ctx.seed),
+            "--out-dir",
+            str(splits_dir),
+        ]
+        step = run_command(split_cmd, cwd=ctx.repo_root)
     append_command_log(ctx.work_dir, step)
     require_ok(step)
-    split_csv = splits_dir / f"wmh2017_train_val_seed{ctx.seed}.csv"
     split_manifest = splits_dir / "split_manifest.json"
     split_manifest.write_text(split_csv.read_text(encoding="utf-8"), encoding="utf-8")
     write_hash_sidecar(split_manifest)
