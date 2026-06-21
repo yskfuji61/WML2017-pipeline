@@ -1,0 +1,60 @@
+{
+  "n_folds": 5,
+  "metrics": {
+    "mean_dice": {
+      "mean": 0.613783066686074,
+      "std": 0.03672500725328666,
+      "n": 5
+    },
+    "mean_lesion_recall": {
+      "mean": 0.2070959357366947,
+      "std": 0.03810792504745249,
+      "n": 5
+    },
+    "mean_lesion_f1": {
+      "mean": 0.29659994519285104,
+      "std": 0.04696959646717441,
+      "n": 5
+    }
+  },
+  "per_fold": [
+    {
+      "fold": 0,
+      "n_cases": 12,
+      "mean_dice": 0.6597888432306594,
+      "mean_lesion_recall": 0.17290383252406052,
+      "mean_lesion_f1": 0.2549433714223333
+    },
+    {
+      "fold": 1,
+      "n_cases": 12,
+      "mean_dice": 0.628783402235466,
+      "mean_lesion_recall": 0.2123130447525143,
+      "mean_lesion_f1": 0.3194888054157465
+    },
+    {
+      "fold": 2,
+      "n_cases": 12,
+      "mean_dice": 0.6191547667686516,
+      "mean_lesion_recall": 0.17704290393384103,
+      "mean_lesion_f1": 0.25008423380658423
+    },
+    {
+      "fold": 3,
+      "n_cases": 12,
+      "mean_dice": 0.5603271806488626,
+      "mean_lesion_recall": 0.2052475587618268,
+      "mean_lesion_f1": 0.2955464969001619
+    },
+    {
+      "fold": 4,
+      "n_cases": 12,
+      "mean_dice": 0.6008611405467306,
+      "mean_lesion_recall": 0.2679723387112307,
+      "mean_lesion_f1": 0.3629368184194295
+    }
+  ],
+  "claim_boundary": "local cross-validation only; not SOTA/official/clinical/production",
+  "selection_note": "aggregated from validation-only per-fold metrics; test split never used",
+  "cv_id": "wmh2017_a2cv_cosine_seed42"
+}
