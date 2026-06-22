@@ -2,10 +2,10 @@ decision_id: REL-WMH-PREVIEW-20260618-001
 run_id: wmh2017_preview_20260618_e48ed25
 package_id: WMH2017-LOCAL-POC-SCAFFOLD
 package_version: 0.2.3
-package_manifest_sha256: sha256:4cb8c980f3543cbd9604ed3043f620b1c59602dee2d8ecdb6ed8990706aa8084
+package_manifest_sha256: sha256:8e36cf988a22fa1784ac478c345282f117f95124b5b04c8a85734355ae711aea
 artifact_manifest_sha256: sha256:ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356
 evidence_binder_sha256: sha256:30ef521fff8699e688ab3daf743bbab5ef2e03404755cda750cd3d449c71068d
-code_commit: d37e61355fcf30f8cc144e593968ad4103af0d83
+code_commit: 5155e39080d9be19bd911d67dfba6399bd96f4b4
 target_state: READY_FOR_PREVIEW
 claims_approved:
   - offline_public_data_research_preview

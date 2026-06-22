@@ -209,8 +209,9 @@ chasing. CV is now the unit of measurement for any performance claim.
 ### F.3 RC2 recall redesign (5-fold CV, June 2026)
 
 After the A2-CV baseline, a fold0 probe compared three recall-focused recipes
-(RC1–RC3). RC2 (Tversky beta=0.75 + light positive sampling) was selected for
-full 5-fold CV. Summary: `reports/cv/cv_summary_rc2_seed42.json`.
+(RC1–RC3). RC2 (Tversky beta=0.85 + pos=2 + light positive sampling) was selected for
+full 5-fold CV after fold0 probe comparison
+(`reports/cv/rc_fold0_probe_comparison_seed42.md`). Summary: `reports/cv/cv_summary_rc2_seed42.json`.
 
 | metric | RC2 CV mean +/- std (n=5) | A2-CV mean +/- std | delta |
 |---|---|---|---|

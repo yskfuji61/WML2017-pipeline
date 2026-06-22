@@ -39,7 +39,7 @@ Use fold 0 for illustration only; CV mean is the honest unit of measurement.
 | mean_dice | 0.614 ± 0.037 | 0.612 ± 0.047 | −0.002 |
 | mean_lesion_recall | 0.207 ± 0.038 | 0.272 ± 0.084 | **+0.065** |
 
-Recall improved under the RC2 recipe (Tversky beta=0.75, light positive sampling) but remains below the Phase A recall gate.
+Recall improved under the RC2 recipe (Tversky beta=0.85, pos=2) but remains below the Phase A recall gate.
 
 ## Claim boundary
 

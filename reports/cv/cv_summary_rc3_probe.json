@@ -1,0 +1,32 @@
+{
+  "n_folds": 1,
+  "metrics": {
+    "mean_dice": {
+      "mean": 0.6495631401820655,
+      "std": 0.0,
+      "n": 1
+    },
+    "mean_lesion_recall": {
+      "mean": 0.16824681396526572,
+      "std": 0.0,
+      "n": 1
+    },
+    "mean_lesion_f1": {
+      "mean": 0.24181471274985666,
+      "std": 0.0,
+      "n": 1
+    }
+  },
+  "per_fold": [
+    {
+      "fold": 0,
+      "n_cases": 12,
+      "mean_dice": 0.6495631401820655,
+      "mean_lesion_recall": 0.16824681396526572,
+      "mean_lesion_f1": 0.24181471274985666
+    }
+  ],
+  "claim_boundary": "local cross-validation only; not SOTA/official/clinical/production",
+  "selection_note": "aggregated from validation-only per-fold metrics; test split never used",
+  "cv_id": "wmh2017_rc3_probe_seed42"
+}
