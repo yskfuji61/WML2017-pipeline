@@ -1,11 +1,11 @@
 {
   "package_id": "WMH2017-LOCAL-POC-SCAFFOLD",
   "package_version": "0.2.3",
-  "generated_at_utc": "2026-06-22T12:14:00.672110+00:00",
+  "generated_at_utc": "2026-06-22T13:35:45.262699+00:00",
   "status": "full_structural_manifest_created",
   "structural_only": true,
   "run_dir": null,
-  "file_count": 4289,
+  "file_count": 4293,
   "claim_boundary": "Every included file is identified by path, bytes, and sha256. This is not proof of real WMH2017 training/evaluation, source review, Preview, or release approval.",
   "required_files_checked": [
     "README.md",
@@ -17744,6 +17744,15 @@
       "release_boundary": "file identity only; not training/evaluation/approval evidence"
     },
     {
+      "path": "artifacts/manifests/figure_manifest.json",
+      "sha256": "756bd512f58c068361fa5661e196c783a0911550ed5e931523f0c9f8022fd515",
+      "bytes": 462,
+      "owner": "documentation_owner",
+      "status": "placeholder_or_generated_area",
+      "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
+      "release_boundary": "file identity only; not training/evaluation/approval evidence"
+    },
+    {
       "path": "artifacts/manifests/split_manifest.json",
       "sha256": "6d97627e9c0f539254a59ed58c086492e1a1a05d67a28cc098db9998218a0730",
       "bytes": 353,
@@ -31371,8 +31380,8 @@
     },
     {
       "path": "docs/current_state_snapshot.md",
-      "sha256": "8a5ee4dca67b6db5deb6c761b1c7dce0a9ef6f8005dfb3d9b92ede21c24461fc",
-      "bytes": 3049,
+      "sha256": "c329f3e03c4a4d8c4d8088c8b4f5808384e6f1ae92cf2ded06638df4a1aa0d49",
+      "bytes": 3864,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
@@ -31434,8 +31443,8 @@
     },
     {
       "path": "docs/experiment_journey.md",
-      "sha256": "700581e0d02099fe94ae4f3cfb749b80352ced4adce4a4f18acab6635777ba4a",
-      "bytes": 10474,
+      "sha256": "83451e5090eb6d2c00bb0bcc2f8b30ca68337806f6fa4624cb6d9702ab6aa960",
+      "bytes": 11305,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
@@ -31758,7 +31767,7 @@
     },
     {
       "path": "docs/release_decisions/release_decision_wmh2017_preview_20260618_e48ed25.yaml",
-      "sha256": "1edc853a9a16147462c1d3c6ede3818927d6c208c1e9f4f2b304d4f94a729297",
+      "sha256": "ad214e9d3c2e79dd59b60853399ff5928bf07ebf1270adbc510ab6778ac758f1",
       "bytes": 1429,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
@@ -31767,8 +31776,8 @@
     },
     {
       "path": "docs/release_evidence/README.md",
-      "sha256": "1a7504312130f0a05dc540b55a608963bb12b9d1b58c5fbc41dace87290a4fe4",
-      "bytes": 1187,
+      "sha256": "7eb6ba0c65a7c599da35b08a01d62b4f8e5950d9eae0052dbfa3edad8cf5cb4b",
+      "bytes": 1403,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
@@ -31793,9 +31802,18 @@
       "release_boundary": "file identity only; not training/evaluation/approval evidence"
     },
     {
+      "path": "docs/release_evidence/july_deliverable_checklist.md",
+      "sha256": "4141b51504fd856914c516db3de92c16458fdd6a05e4f82b5fb5a20e829df88b",
+      "bytes": 4787,
+      "owner": "evidence_owner",
+      "status": "current_scaffold_file",
+      "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
+      "release_boundary": "file identity only; not training/evaluation/approval evidence"
+    },
+    {
       "path": "docs/release_evidence/latest_green_ci.md",
-      "sha256": "8c4b1686cbf374b9a91df4e5dc51302d04ff8e7ef6e48f54b4cefd854c341cbd",
-      "bytes": 709,
+      "sha256": "9f5315a9938d811ed39c27c390825423d567841090490b9d69ee43ef4704918d",
+      "bytes": 1099,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
@@ -31805,6 +31823,15 @@
       "path": "docs/release_evidence/official_evaluator_parity.md",
       "sha256": "f4aa4b4ed59e805efe36596d2c923a18450be4b8f27c6e6fc41748add7cd24d6",
       "bytes": 607,
+      "owner": "evidence_owner",
+      "status": "current_scaffold_file",
+      "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
+      "release_boundary": "file identity only; not training/evaluation/approval evidence"
+    },
+    {
+      "path": "docs/release_evidence/phase_gate_judgment_rc2.md",
+      "sha256": "b8191b51cc5af9347f4c5e01ff2083b3025d5efae12f2146c37d386c5af3ba79",
+      "bytes": 1742,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
@@ -35835,7 +35862,7 @@
     },
     {
       "path": "registry/finding_register_wmh2017.csv",
-      "sha256": "50f5bdfdb9848adcff5ec6de3b9646ef741b00799366d72bb21c802597402299",
+      "sha256": "00490dc8d0f6c5e587fc6da762a952de06658ed8ba634880e2d8ab8d2c7a4ca3",
       "bytes": 4430,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
@@ -35889,8 +35916,8 @@
     },
     {
       "path": "registry/package_identity_wmh2017.yaml",
-      "sha256": "bd8ef0c5e2db60234245574d1cc7006ad0d8cf1b2425ee2234e0e0ee71a82be8",
-      "bytes": 471,
+      "sha256": "70f6a75fbe08591e7fa8c12a468227cff38ec2809d1cd3ba915071474189f5ea",
+      "bytes": 507,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
@@ -35898,8 +35925,8 @@
     },
     {
       "path": "registry/release_evidence_register_wmh2017.csv",
-      "sha256": "1340534c1f8df54e5395bfa63d82d074051f5a0109fc37870dc16150a791994d",
-      "bytes": 1605,
+      "sha256": "1eeb73a6b22f04e85d3e7ac7e2af943eba6110d677736ddbfaf4f1db79a48f55",
+      "bytes": 1722,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
@@ -35916,7 +35943,7 @@
     },
     {
       "path": "registry/review_approval_register_wmh2017.csv",
-      "sha256": "7e67cb6385b8ae045ad57089d256bccf8c4f17149afe6da31dc67726293cd627",
+      "sha256": "22a67706f8a5b4851f6b7ceceed9f67d5eb384fcdc774232b37be7bbc2be4da8",
       "bytes": 1575,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
@@ -36116,6 +36143,15 @@
       "path": "reports/failure_case_index.csv",
       "sha256": "29d268a2b8a03bc16c3243aac96223132da15008871f85b0d2f1d83cc4152373",
       "bytes": 170,
+      "owner": "evidence_owner",
+      "status": "current_scaffold_file",
+      "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",
+      "release_boundary": "file identity only; not training/evaluation/approval evidence"
+    },
+    {
+      "path": "reports/figures/overlays/100_flair_label1_overlay.png",
+      "sha256": "2b66a4bc48fc7cc07abdfe8d9991cf4f3021ef1dd66be1b43333f5ba5868b34f",
+      "bytes": 63997,
       "owner": "evidence_owner",
       "status": "current_scaffold_file",
       "dlp_class": "public_or_internal_scaffold_no_raw_medical_images",

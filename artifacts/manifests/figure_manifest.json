@@ -1,0 +1,13 @@
+{
+  "case_id": "100",
+  "run_id": "wmh2017_rc2_cosine_fold0_seed42",
+  "audit_id": "one_case_20260622",
+  "source_image_hash": "PENDING_CONFIRMATION",
+  "label_hash": "PENDING_CONFIRMATION",
+  "generated_file_hash": "2b66a4bc48fc7cc07abdfe8d9991cf4f3021ef1dd66be1b43333f5ba5868b34f",
+  "public_data_only": true,
+  "local_path_redacted": "REDACTED_OR_LOCAL_ONLY",
+  "png_committed": false,
+  "status": "GENERATED",
+  "title_must_not_include_absolute_path": true
+}

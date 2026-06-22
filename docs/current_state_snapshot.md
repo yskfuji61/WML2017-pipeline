@@ -50,7 +50,7 @@ Clinical use, customer presentation, proprietary-data processing, unapproved clo
 ## Open gaps (see audit_gap_register.md)
 
 - GAP-004 / GAP-013: official evaluator not fetched; license not reviewed
-- GAP-007: GitHub Actions green CI URLs still PENDING in register
+- GAP-007: GitHub Actions green CI URLs recorded at `docs/release_evidence/latest_green_ci.md` (commit `d37e613`)
 - GAP-014: real E2E artifacts gitignored; full hash gate needs dispatch CI or local run
 
 ## 2026-06-22 update (post Phase B2 CV)
@@ -66,3 +66,19 @@ Clinical use, customer presentation, proprietary-data processing, unapproved clo
 
 Blocked claims unchanged (clinical/customer/proprietary/cloud/production/SOTA).
 All metrics are local validation only; the test split is never used.
+
+## 2026-06-22 update (RC2 recall redesign CV)
+
+| Field | Value |
+|-------|-------|
+| update_date_utc | 2026-06-22 |
+| git_commit | `d37e613` |
+| change | RC2 recall redesign selected after fold0 probe; 5-fold CV completed |
+| cv_id | `wmh2017_rc2_seed42` (summary: `reports/cv/cv_summary_rc2_seed42.json`) |
+| cv_result | mean_dice 0.612 +/- 0.047, lesion_recall 0.272 +/- 0.084, lesion_f1 0.354 +/- 0.056 (n=5) |
+| fold0_reference | dice 0.671, recall 0.252 (`wmh2017_rc2_cosine_fold0_seed42`) |
+| vs_a2cv | recall +0.065; dice -0.002 |
+| gate | Phase A (0.65/0.35) **NOT met**; Phase B (0.72) **NOT met** |
+| gate_evidence | `docs/release_evidence/phase_gate_judgment_rc2.md` |
+
+Prior A2-CV row above remains historical; RC2 is the current primary CV measurement.

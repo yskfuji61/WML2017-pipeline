@@ -206,13 +206,34 @@ Section A in a new way: a single validation split over-stated performance, and
 the variance across folds (~0.10 spread) is large relative to the gaps we are
 chasing. CV is now the unit of measurement for any performance claim.
 
-### F.3 Next levers (in priority order)
+### F.3 RC2 recall redesign (5-fold CV, June 2026)
 
-1. Recall is the binding constraint (0.207 vs 0.35 target). The cheapest
-   config-only lever is the loss FN weight (Tversky `beta`) plus light positive
-   sampling (`training.sampling.pos`), evaluated on the CV foundation. Note the
-   earlier A3 attempt (pos=3 alone) lowered Dice to 0.562, so positive sampling
-   must be paired with the FN-weighted loss and validated for Dice regression.
+After the A2-CV baseline, a fold0 probe compared three recall-focused recipes
+(RC1–RC3). RC2 (Tversky beta=0.75 + light positive sampling) was selected for
+full 5-fold CV. Summary: `reports/cv/cv_summary_rc2_seed42.json`.
+
+| metric | RC2 CV mean +/- std (n=5) | A2-CV mean +/- std | delta |
+|---|---|---|---|
+| mean_dice | 0.612 +/- 0.047 | 0.614 +/- 0.037 | -0.002 |
+| mean_lesion_recall | 0.272 +/- 0.084 | 0.207 +/- 0.038 | **+0.065** |
+| mean_lesion_f1 | 0.354 +/- 0.056 | 0.297 +/- 0.047 | +0.057 |
+
+Per-fold dice: 0.671 / 0.640 / 0.616 / 0.557 / 0.574. Per-fold recall:
+0.252 / 0.240 / 0.213 / 0.234 / 0.420.
+
+Gate judgment (primary CV): Phase A (Dice 0.65 / Recall 0.35) **NOT met**;
+Phase B (Dice 0.72) **NOT met**. Formal record:
+`docs/release_evidence/phase_gate_judgment_rc2.md`.
+
+Reference fold0 only (illustration, not primary): dice 0.671, recall 0.252
+(`wmh2017_rc2_cosine_fold0_seed42`).
+
+### F.4 Next levers (in priority order)
+
+1. Recall remains the binding constraint (0.272 vs 0.35 target). RC2 improved
+   recall vs A2-CV (+0.065) without meaningful Dice regression, but the gate
+   gap persists. Further FN-weight / sampling sweeps or threshold analysis may
+   help; validate on CV only.
 2. Per-case oracle threshold analysis (Section A lesson #3) — cheap, may recover
    recall/Dice without retraining.
 3. Heterogeneous-architecture ensemble (Section A lesson #2: hetero-arch beats

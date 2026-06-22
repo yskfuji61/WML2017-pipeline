@@ -9,6 +9,8 @@ Verifier: `python scripts/verify_release_evidence_register.py --run-id wmh2017_p
 | Document | Purpose |
 |----------|---------|
 | [latest_green_ci.md](latest_green_ci.md) | Structural/security/evidence CI status |
+| [phase_gate_judgment_rc2.md](phase_gate_judgment_rc2.md) | RC2 5-fold CV Phase A/B gate judgment |
+| [july_deliverable_checklist.md](july_deliverable_checklist.md) | July reporting checklist (AC + release index) |
 | [real_wmh2017_e2e_run.md](real_wmh2017_e2e_run.md) | Real-data E2E run_id and artifact hashes |
 | [official_evaluator_parity.md](official_evaluator_parity.md) | Official metric parity status |
 | [human_review_record.md](human_review_record.md) | Human review approvals |
