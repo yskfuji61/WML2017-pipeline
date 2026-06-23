@@ -13,7 +13,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
-from scipy.ndimage import label as cc_label
 
 
 @dataclass(frozen=True)
@@ -39,6 +38,8 @@ def post_process_binary(
     if adaptive_low_thr > 0 and adaptive_high_vol > 0 and int(binary.sum()) > adaptive_high_vol:
         binary = (prob >= float(adaptive_low_thr)).astype(np.uint8)
     if min_size > 0 and binary.sum() > 0:
+        from scipy.ndimage import label as cc_label
+
         lbl, n = cc_label(binary)
         keep = np.zeros_like(binary)
         for i in range(1, n + 1):
