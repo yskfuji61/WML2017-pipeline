@@ -5,13 +5,18 @@ from __future__ import annotations
 import json
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
 
 from wmh2017.data.label_policy import wmh_foreground_mask
-from wmh2017.evaluation.lesion_metrics import lesion_recall_f1_wmh_label1
+from wmh2017.evaluation.lesion_metrics import (
+    DEFAULT_SIZE_BINS,
+    lesion_recall_by_size_bins_wmh_label1,
+    lesion_recall_f1_wmh_label1,
+)
+from wmh2017.evaluation.postprocess import post_process_binary
 from wmh2017.evaluation.voxel_metrics import avd_wmh_label1, dice_wmh_label1, hd95_wmh_label1
 from wmh2017.io.images import load_array, load_image_metadata
 from wmh2017.lineage.hashes import sha256_jsonable
@@ -64,14 +69,25 @@ def _case_rows_for_split(
     return rows
 
 
+def _threshold_prediction(probs: np.ndarray, threshold: float, min_component_size: int) -> np.ndarray:
+    """Binarize at ``threshold``; apply CC min-size filter only when requested.
+
+    With ``min_component_size == 0`` this is byte-identical to ``probs >= threshold``.
+    """
+    if min_component_size > 0:
+        return post_process_binary(probs, threshold=float(threshold), min_size=int(min_component_size))
+    return (probs >= float(threshold)).astype(np.uint8)
+
+
 def _metrics_at_threshold(
     *,
     probs: np.ndarray,
     label_mask: np.ndarray,
     threshold: float,
     spacing: tuple[float, ...] | None,
+    min_component_size: int = 0,
 ) -> dict[str, float]:
-    pred_mask = (probs >= float(threshold)).astype(np.uint8)
+    pred_mask = _threshold_prediction(probs, threshold, min_component_size)
     lesion = lesion_recall_f1_wmh_label1(pred_mask, label_mask)
     hd95 = hd95_wmh_label1(pred_mask, label_mask, spacing=spacing)
     return {
@@ -91,8 +107,12 @@ def sweep_thresholds(
     probs_dir: str | Path,
     assigned_split: str = "val",
     thresholds: Sequence[float] | None = None,
+    min_component_size: int = 0,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Sweep thresholds on validation probability maps.
+
+    ``min_component_size`` (default 0 = off) optionally applies a connected-component
+    min-size filter at each threshold; with 0 the output is byte-identical to before.
 
     Returns:
         summary_df: one row per threshold with mean metrics across cases
@@ -116,6 +136,7 @@ def sweep_thresholds(
                 label_mask=label_mask,
                 threshold=thr,
                 spacing=spacing,
+                min_component_size=min_component_size,
             )
             per_case_records.append({"case_id": case_id, **metrics})
 
@@ -185,6 +206,7 @@ def write_threshold_sweep_artifacts(
     probs_dir: str | Path,
     training_threshold: float,
     checkpoint_selection_metric: str = "mean_dice",
+    min_component_size: int = 0,
 ) -> dict[str, Any]:
     """Write sweep CSV/JSON artifacts under out_dir."""
     out_dir = Path(out_dir)
@@ -224,8 +246,129 @@ def write_threshold_sweep_artifacts(
         "summary_csv": str(summary_csv),
         "per_case_csv": str(per_case_csv),
     }
+    if min_component_size > 0:
+        payload["post_process"] = {"min_component_size": int(min_component_size)}
     payload["artifact_hash"] = sha256_jsonable(payload)
     best_json.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    return payload
+
+
+def _aggregate_bin_recall(
+    accumulator: dict[str, dict[str, int]],
+    bin_rows: list[dict[str, float | int | str | None]],
+) -> None:
+    for row in bin_rows:
+        name = str(row["bin"])
+        acc = accumulator.setdefault(name, {"n_target": 0, "n_detected": 0})
+        acc["n_target"] += cast(int, row["n_target"])
+        acc["n_detected"] += cast(int, row["n_detected"])
+
+
+def lesion_size_bin_audit(
+    *,
+    manifest_csv: str | Path,
+    split_csv: str | Path,
+    probs_dir: str | Path,
+    threshold: float,
+    min_component_size: int,
+    assigned_split: str = "val",
+    bins: Sequence[tuple[str, int, int | None]] = DEFAULT_SIZE_BINS,
+    connectivity: int = 26,
+) -> dict[str, Any]:
+    """Compare baseline vs post-processed lesion recall per GT size bin (val only).
+
+    For each case, recall-by-size-bin is micro-aggregated (sum detected / sum target across
+    cases) for the baseline prediction (``probs >= threshold``) and the post-processed
+    prediction (CC min-size filter). A drop in the smallest non-empty bin sets
+    ``small_lesion_recall_regressed`` — the signal that component removal helped Dice by
+    deleting true small lesions. Diagnostic only; never tunes on the test split.
+    """
+    probs_dir = Path(probs_dir)
+    case_rows = _case_rows_for_split(manifest_csv, split_csv, assigned_split)
+
+    baseline_acc: dict[str, dict[str, int]] = {}
+    post_acc: dict[str, dict[str, int]] = {}
+    bin_order = [name for name, _, _ in bins]
+    bin_meta = {name: (lo, hi) for name, lo, hi in bins}
+
+    for row in case_rows:
+        probs = _load_probability_map(probs_dir, row["case_id"])
+        label_mask = wmh_foreground_mask(load_array(row["label_path"])).astype(np.uint8)
+        baseline_pred = _threshold_prediction(probs, threshold, 0)
+        post_pred = _threshold_prediction(probs, threshold, min_component_size)
+        _aggregate_bin_recall(baseline_acc, lesion_recall_by_size_bins_wmh_label1(baseline_pred, label_mask, bins=bins))
+        _aggregate_bin_recall(post_acc, lesion_recall_by_size_bins_wmh_label1(post_pred, label_mask, bins=bins))
+
+    def _recall(acc: dict[str, int]) -> float | None:
+        return (acc["n_detected"] / acc["n_target"]) if acc["n_target"] else None
+
+    eps = 1e-9
+    per_bin: list[dict[str, Any]] = []
+    regressed = False
+    smallest_seen = False
+    for name in bin_order:
+        base = baseline_acc.get(name, {"n_target": 0, "n_detected": 0})
+        post = post_acc.get(name, {"n_target": 0, "n_detected": 0})
+        base_recall = _recall(base)
+        post_recall = _recall(post)
+        delta = None if (base_recall is None or post_recall is None) else (post_recall - base_recall)
+        lo, hi = bin_meta[name]
+        per_bin.append(
+            {
+                "bin": name,
+                "min_voxels": int(lo),
+                "max_voxels": (None if hi is None else int(hi)),
+                "n_target": int(base["n_target"]),
+                "baseline_recall": base_recall,
+                "post_recall": post_recall,
+                "delta_recall": delta,
+            }
+        )
+        # The smallest non-empty bin is the small-lesion regression sentinel.
+        if not smallest_seen and base["n_target"] > 0:
+            smallest_seen = True
+            if delta is not None and delta < -eps:
+                regressed = True
+
+    return {
+        "threshold": float(threshold),
+        "min_component_size": int(min_component_size),
+        "connectivity": int(connectivity),
+        "assigned_split": assigned_split,
+        "n_cases": len(case_rows),
+        "per_bin": per_bin,
+        "small_lesion_recall_regressed": regressed,
+    }
+
+
+def write_lesion_size_bin_audit_artifact(
+    *,
+    out_dir: str | Path,
+    audit: dict[str, Any],
+    run_id: str,
+) -> dict[str, Any]:
+    """Write lesion_size_bin_audit.json with claim guards + artifact hash."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "run_id": run_id,
+        **audit,
+        # Post-processing is a validation diagnostic; it does not change the selected
+        # checkpoint and must never be tuned on the test split.
+        "threshold_best_is_checkpoint_best": False,
+        "allowed_use": "validation-only postprocess audit",
+        "prohibited_use": [
+            "test threshold tuning",
+            "SOTA claim",
+            "clinical decision",
+            "production deployment",
+        ],
+        "claim_boundary": "local validation lesion-size diagnostic; not SOTA/official/clinical/production",
+    }
+    payload["artifact_hash"] = sha256_jsonable(payload)
+    (out_dir / "lesion_size_bin_audit.json").write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
     return payload
 
 

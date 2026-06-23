@@ -1,0 +1,10 @@
+# Example pre-registered ensemble spec.
+# Fix member weights + threshold on validation BEFORE reading the reporting fold/test.
+# Weights are convex (sum to 1). Local validation only; not SOTA/official/clinical.
+ensemble:
+  threshold: 0.5
+  members:
+    - {name: a2cv, probs_dir: artifacts/runs/wmh2017_a2cv_cosine_fold0_seed42/predictions/probs, weight: 0.5}
+    - {name: rc2,  probs_dir: artifacts/runs/wmh2017_rc2_cosine_fold0_seed42/predictions/probs,  weight: 0.5}
+  post_process:
+    min_component_size: 0

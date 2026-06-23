@@ -1,0 +1,14 @@
+# Pre-registered cross-run candidate selection rule.
+# Fix this rule BEFORE reading CV results to avoid after-the-fact metric gaming.
+# Local cross-validation only; selection_scope=candidate_family; not SOTA/official/clinical.
+#
+# Intent: maximize lesion F1 while not regressing Dice beyond a small tolerance
+# (A2-CV mean Dice 0.6138 - 0.005 = 0.6088). Ties broken by lesion recall then Dice.
+candidate_selection:
+  primary_metric: mean_lesion_f1
+  primary_mode: max
+  constraints:
+    mean_dice_min: 0.6088
+  tie_breakers:
+    - mean_lesion_recall
+    - mean_dice

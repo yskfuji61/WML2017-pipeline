@@ -21,7 +21,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import pandas as pd
 
 from wmh2017.audit.run_labeling import (
     architecture_parity_block,
@@ -31,11 +30,18 @@ from wmh2017.audit.run_labeling import (
     run_purpose_for_mode,
 )
 from wmh2017.audit.run_record import append_run_manifest, make_run_row, write_json
-from wmh2017.data.preprocessing import normalize_nonzero_channelwise
+from wmh2017.config.training_config import (
+    modalities_to_payload,
+    modality_keys,
+    resolve_input_modalities,
+)
+from wmh2017.data.case_records import case_records_to_monai_rows, load_case_records
 from wmh2017.evaluation.lesion_metrics import lesion_recall_f1_wmh_label1
 from wmh2017.evaluation.voxel_metrics import dice_wmh_label1
 from wmh2017.inference.export_probabilities import infer_foreground_probability, save_case_prediction
+from wmh2017.inference.input_builder import load_normalized_input_volume, to_batched_tensor
 from wmh2017.io.images import load_array
+from wmh2017.models.factory import build_unet
 from wmh2017.training.loss_factory import build_loss
 from wmh2017.training.mps_compat import (
     apply_mps_safe_convtranspose_patch,
@@ -122,38 +128,25 @@ def _set_seed(seed: int, torch: Any) -> None:
 def _case_rows(
     manifest_csv: str | Path, split_csv: str | Path, assigned_split: str, image_key: str, label_key: str
 ) -> list[dict[str, str]]:
-    manifest = pd.read_csv(manifest_csv)
-    split = pd.read_csv(split_csv)
-    split = split[split["assigned_split"].astype(str).str.lower() == assigned_split.lower()].copy()
-    if split.empty:
-        raise ValueError(f"no rows for assigned_split={assigned_split} in {split_csv}")
-    rows: list[dict[str, str]] = []
-    for _, s in split.iterrows():
-        case_id = str(s["case_id"])
-        m = manifest[manifest["case_id"].astype(str) == case_id]
-        if m.empty:
-            raise ValueError(f"case_id={case_id} exists in split but not manifest")
-        r = m.iloc[0]
-        if str(r.get("challenge_split", "")).lower() == "test":
-            raise ValueError(f"test case cannot be used for train/val smoke training: {case_id}")
-        image = str(r.get(image_key, "") or r.get("flair_path", "") or r.get("flair_pre_path", ""))
-        label = str(r.get(label_key, "") or r.get("wmh_path", "") or r.get("mask_path", ""))
-        if not image or not label:
-            raise ValueError(f"case_id={case_id} missing image or label path")
-        rows.append({"case_id": case_id, "image": image, "label": label})
-    return rows
+    """Resolve legacy single-modality MONAI rows.
+
+    Thin wrapper over :func:`load_case_records` / :func:`case_records_to_monai_rows`.
+    Kept for backward-compatible imports; returns ``{"case_id", "image", "label"}`` rows.
+    """
+    input_modalities = resolve_input_modalities({"image_key": image_key})
+    records = load_case_records(
+        manifest_csv=manifest_csv,
+        split_csv=split_csv,
+        assigned_split=assigned_split,
+        input_modalities=input_modalities,
+        label_key=label_key,
+    )
+    return case_records_to_monai_rows(records)
 
 
 def _build_model(monai: dict[str, Any], cfg: dict[str, Any]) -> Any:
-    m = cfg.get("model", {})
-    return monai["UNet"](
-        spatial_dims=int(m.get("spatial_dims", 3)),
-        in_channels=int(m.get("in_channels", 1)),
-        out_channels=int(m.get("out_channels", 2)),
-        channels=tuple(m.get("channels", [8, 16, 32])),
-        strides=tuple(m.get("strides", [2, 2])),
-        num_res_units=int(m.get("num_res_units", 1)),
-    )
+    """Build the MONAI UNet (delegates to :func:`models.factory.build_unet`)."""
+    return build_unet(monai, cfg)
 
 
 def _transforms(
@@ -161,12 +154,9 @@ def _transforms(
     patch_size: list[int] | tuple[int, int, int],
     train: bool,
     train_cfg: dict[str, Any] | None = None,
+    input_keys: tuple[str, ...] = ("image",),
 ) -> Any:
-    return build_monai_transforms(monai, patch_size, train=train, train_cfg=train_cfg)
-
-
-def _normalize_for_inference(image: np.ndarray) -> np.ndarray:
-    return normalize_nonzero_channelwise(image)
+    return build_monai_transforms(monai, patch_size, train=train, train_cfg=train_cfg, input_keys=input_keys)
 
 
 def _training_mode(train_cfg: dict[str, Any]) -> str:
@@ -242,8 +232,9 @@ def _build_train_dataset(
     patch_size: list[int],
     cache_rate: float,
     train_cfg: dict[str, Any] | None = None,
+    input_keys: tuple[str, ...] = ("image",),
 ) -> Any:
-    transform = _transforms(monai, patch_size, train=True, train_cfg=train_cfg)
+    transform = _transforms(monai, patch_size, train=True, train_cfg=train_cfg, input_keys=input_keys)
     if cache_rate > 0:
         return monai["CacheDataset"](data=train_rows, transform=transform, cache_rate=float(cache_rate))
     return monai["Dataset"](data=train_rows, transform=transform)
@@ -258,6 +249,7 @@ def _run_validation_metrics(
     patch_size: list[int],
     device: Any,
     threshold: float,
+    input_keys: tuple[str, ...] = ("image",),
 ) -> tuple[dict[str, float], int]:
     """Run validation inference and return mean dice/lesion_recall/lesion_f1.
 
@@ -273,11 +265,11 @@ def _run_validation_metrics(
     f1_scores: list[float] = []
     with torch.no_grad():
         for row in val_rows:
-            image = load_array(row["image"])
             label = load_array(row["label"])
             label_mask = (label == 1).astype(np.uint8)
-            x = _normalize_for_inference(image)
-            tensor = torch.from_numpy(x[None, None].astype(np.float32)).to(device)
+            image_paths = {key: row[key] for key in input_keys}
+            volume = load_normalized_input_volume(image_paths=image_paths, input_keys=input_keys)
+            tensor = to_batched_tensor(torch, volume, device)
             logits = monai["sliding_window_inference"](tensor, roi_size=roi_size, sw_batch_size=1, predictor=model)
             probs = torch.softmax(logits, dim=1)[:, 1]
             pred = (probs[0].detach().cpu().numpy() >= threshold).astype(np.uint8)
@@ -303,22 +295,26 @@ def _save_predictions(
     device: Any,
     threshold: float,
     pred_dir: Path,
+    input_keys: tuple[str, ...] = ("image",),
 ) -> int:
     probs_dir = pred_dir / "probs"
     count = 0
     for row in val_rows:
+        image_paths = {key: row[key] for key in input_keys}
+        reference_image_path = row[input_keys[0]]
         probs = infer_foreground_probability(
             model=model,
             torch=torch,
             monai=monai,
-            image_path=row["image"],
+            image_paths=image_paths,
+            input_keys=input_keys,
             patch_size=patch_size,
             device=device,
         )
         save_case_prediction(
             probs=probs,
             threshold=threshold,
-            reference_image_path=row["image"],
+            reference_image_path=reference_image_path,
             pred_path=pred_dir / f"{row['case_id']}_pred.nii.gz",
             prob_path=probs_dir / f"{row['case_id']}.npz",
         )
@@ -343,7 +339,8 @@ def main(config_path: str) -> None:
 
     dataset_manifest = str(data_cfg["dataset_manifest"])
     split_manifest = str(data_cfg["split_manifest"])
-    image_key = str(data_cfg.get("image_key", "flair_pre_path"))
+    input_modalities = resolve_input_modalities(data_cfg)
+    input_keys = modality_keys(input_modalities)
     label_key = str(data_cfg.get("label_key", "wmh_path"))
     patch_size = list(data_cfg.get("patch_size", [32, 32, 32]))
     num_workers_requested = int(data_cfg.get("num_workers", 0))
@@ -363,8 +360,24 @@ def main(config_path: str) -> None:
     for p in [pred_dir, ckpt_dir, log_dir]:
         p.mkdir(parents=True, exist_ok=True)
 
-    train_rows = _case_rows(dataset_manifest, split_manifest, "train", image_key, label_key)
-    all_val_rows = _case_rows(dataset_manifest, split_manifest, "val", image_key, label_key)
+    train_rows = case_records_to_monai_rows(
+        load_case_records(
+            manifest_csv=dataset_manifest,
+            split_csv=split_manifest,
+            assigned_split="train",
+            input_modalities=input_modalities,
+            label_key=label_key,
+        )
+    )
+    all_val_rows = case_records_to_monai_rows(
+        load_case_records(
+            manifest_csv=dataset_manifest,
+            split_csv=split_manifest,
+            assigned_split="val",
+            input_modalities=input_modalities,
+            label_key=label_key,
+        )
+    )
     if val_max_cases > 0:
         val_rows = all_val_rows[:val_max_cases]
         val_eval_rows = all_val_rows[:val_max_cases]
@@ -374,10 +387,10 @@ def main(config_path: str) -> None:
     if not train_rows or not val_rows:
         raise ValueError("train and val rows are required for training")
 
-    train_ds = _build_train_dataset(monai, train_rows, patch_size, cache_rate, train_cfg)
+    train_ds = _build_train_dataset(monai, train_rows, patch_size, cache_rate, train_cfg, input_keys=input_keys)
     train_loader = monai["DataLoader"](train_ds, batch_size=1, shuffle=True, num_workers=num_workers)
 
-    model = _build_model(monai, cfg)
+    model = build_unet(monai, cfg, input_modalities=input_modalities)
     if device.type == "mps":
         patched_layers = apply_mps_safe_convtranspose_patch(model)
         if patched_layers == 0:
@@ -463,6 +476,7 @@ def main(config_path: str) -> None:
             patch_size=patch_size,
             device=device,
             threshold=threshold,
+            input_keys=input_keys,
         )
         val_dice = val_metrics["mean_dice"]
         mean_epoch_loss = float(np.mean(epoch_losses)) if epoch_losses else 0.0
@@ -506,6 +520,7 @@ def main(config_path: str) -> None:
                     "run_id": run_id,
                     "model_state_dict": model.state_dict(),
                     "config": cfg,
+                    "input_modalities": modalities_to_payload(input_modalities),
                     "global_step": global_step,
                     "selection_policy": selection_policy_payload,
                     "best_selection_score": best_score,
@@ -540,6 +555,7 @@ def main(config_path: str) -> None:
                 "run_id": run_id,
                 "model_state_dict": model.state_dict(),
                 "config": cfg,
+                "input_modalities": modalities_to_payload(input_modalities),
                 "global_step": global_step,
                 "claim_boundary": "smoke checkpoint only; not a clinical or production model",
             },
@@ -561,6 +577,7 @@ def main(config_path: str) -> None:
             device=device,
             threshold=threshold,
             pred_dir=pred_dir,
+            input_keys=input_keys,
         )
     else:
         pred_count = 0

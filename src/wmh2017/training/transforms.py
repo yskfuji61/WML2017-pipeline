@@ -13,24 +13,54 @@ def _label_to_foreground_mask(label: np.ndarray) -> np.ndarray:
     return (label == 1).astype(np.int64)
 
 
+class StackModalitiesd:
+    """Concatenate channel-first modality arrays into a single ``output_key`` volume.
+
+    Each input key is expected to be channel-first (e.g. ``(1, Z, Y, X)`` after
+    ``EnsureChannelFirstd``); the result is stacked along the channel axis. Keys other
+    than ``output_key`` are dropped after stacking. Only used for multi-modality inputs.
+    """
+
+    def __init__(self, keys: tuple[str, ...], output_key: str = "image") -> None:
+        self.keys = keys
+        self.output_key = output_key
+
+    def __call__(self, data: dict[str, Any]) -> dict[str, Any]:
+        channels = [np.asarray(data[key]) for key in self.keys]
+        data[self.output_key] = np.concatenate(channels, axis=0)
+        for key in self.keys:
+            if key != self.output_key:
+                data.pop(key, None)
+        return data
+
+
 def build_monai_transforms(
     monai: dict[str, Any],
     patch_size: list[int] | tuple[int, int, int],
     *,
     train: bool,
     train_cfg: dict[str, Any] | None = None,
+    input_keys: tuple[str, ...] = ("image",),
 ) -> Any:
-    """Build MONAI Compose pipeline from training config."""
+    """Build MONAI Compose pipeline from training config.
+
+    ``input_keys`` are the modality dictionary keys to load and normalize. For the
+    default single ``("image",)`` the op list is identical to the prior FLAIR-only
+    pipeline. With multiple keys, channels are stacked into ``"image"`` before cropping.
+    """
     train_cfg = train_cfg or {}
     sampling_cfg = train_cfg.get("sampling", {}) if isinstance(train_cfg.get("sampling"), dict) else {}
     aug_cfg = train_cfg.get("augmentation", {}) if isinstance(train_cfg.get("augmentation"), dict) else {}
 
+    load_keys = [*input_keys, "label"]
     ops: list[Any] = [
-        monai["LoadImaged"](keys=["image", "label"]),
-        monai["EnsureChannelFirstd"](keys=["image", "label"]),
-        monai["Lambdad"](keys=["image"], func=normalize_nonzero_channelwise),
+        monai["LoadImaged"](keys=load_keys),
+        monai["EnsureChannelFirstd"](keys=load_keys),
+        monai["Lambdad"](keys=list(input_keys), func=normalize_nonzero_channelwise),
         monai["Lambdad"](keys=["label"], func=_label_to_foreground_mask),
     ]
+    if len(input_keys) > 1:
+        ops.append(StackModalitiesd(keys=input_keys, output_key="image"))
 
     if train:
         pos = int(sampling_cfg.get("pos", 1))

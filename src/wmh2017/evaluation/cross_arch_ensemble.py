@@ -7,13 +7,21 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-from scipy.ndimage import label as cc_label
 
 from wmh2017.data.label_policy import wmh_foreground_mask
 from wmh2017.evaluation.lesion_metrics import lesion_recall_f1_wmh_label1
+from wmh2017.evaluation.postprocess import post_process_binary
 from wmh2017.evaluation.threshold_sweep import default_threshold_grid
 from wmh2017.evaluation.voxel_metrics import avd_wmh_label1, dice_wmh_label1, hd95_wmh_label1
 from wmh2017.io.images import load_array, load_image_metadata
+
+__all__ = [
+    "load_probability_volume",
+    "fuse_probability_maps",
+    "post_process_binary",
+    "evaluate_fused_predictions",
+    "sweep_ensemble_hyperparams",
+]
 
 
 def load_probability_volume(path: str | Path) -> np.ndarray:
@@ -40,29 +48,6 @@ def fuse_probability_maps(
     if primary.shape != secondary.shape:
         raise ValueError(f"shape mismatch: {primary.shape} vs {secondary.shape}")
     return ((1.0 - w) * primary + w * secondary).astype(np.float32)
-
-
-def post_process_binary(
-    prob: np.ndarray,
-    *,
-    threshold: float,
-    min_size: int = 0,
-    adaptive_low_thr: float = 0.0,
-    adaptive_high_vol: int = 0,
-) -> np.ndarray:
-    """Threshold + optional CC filter + optional adaptive low-threshold rescue."""
-    binary = (prob >= float(threshold)).astype(np.uint8)
-    if adaptive_low_thr > 0 and adaptive_high_vol > 0 and int(binary.sum()) > adaptive_high_vol:
-        binary = (prob >= float(adaptive_low_thr)).astype(np.uint8)
-    if min_size > 0 and binary.sum() > 0:
-        lbl, n = cc_label(binary)
-        keep = np.zeros_like(binary)
-        for i in range(1, n + 1):
-            comp = lbl == i
-            if comp.sum() >= min_size:
-                keep[comp] = 1
-        binary = keep
-    return binary.astype(np.uint8)
 
 
 def _case_rows(manifest_csv: str | Path, split_csv: str | Path, assigned_split: str) -> list[dict[str, str]]:

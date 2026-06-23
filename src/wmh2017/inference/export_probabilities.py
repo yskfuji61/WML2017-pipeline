@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
-from wmh2017.data.preprocessing import normalize_nonzero_channelwise
-from wmh2017.io.images import load_array, save_array_like
+from wmh2017.config.training_config import modality_keys, resolve_input_modalities
+from wmh2017.data.case_records import case_records_to_monai_rows, load_case_records
+from wmh2017.inference.input_builder import load_normalized_input_volume, to_batched_tensor
+from wmh2017.io.images import save_array_like
 from wmh2017.training.mps_compat import (
     apply_mps_safe_convtranspose_patch,
     enable_mps_cpu_fallback,
@@ -21,14 +24,24 @@ def infer_foreground_probability(
     model: Any,
     torch: Any,
     monai: dict[str, Any],
-    image_path: str,
     patch_size: list[int] | tuple[int, ...],
     device: Any,
+    image_path: str | None = None,
+    image_paths: Mapping[str, str] | None = None,
+    input_keys: tuple[str, ...] = ("image",),
 ) -> np.ndarray:
-    """Run sliding-window inference and return foreground probability (Z, Y, X) float32."""
-    image = load_array(image_path)
-    x = normalize_nonzero_channelwise(image)
-    tensor = torch.from_numpy(x[None, None].astype(np.float32)).to(device)
+    """Run sliding-window inference and return foreground probability (Z, Y, X) float32.
+
+    Pass ``image_paths``/``input_keys`` for multi-channel inputs. The legacy single
+    ``image_path`` argument is still accepted and treated as ``{"image": image_path}``.
+    """
+    if image_paths is None:
+        if image_path is None:
+            raise ValueError("provide either image_path or image_paths")
+        image_paths = {"image": image_path}
+        input_keys = ("image",)
+    volume = load_normalized_input_volume(image_paths=image_paths, input_keys=input_keys)
+    tensor = to_batched_tensor(torch, volume, device)
     roi_size = tuple(patch_size)
     model.eval()
     with torch.no_grad():
@@ -68,13 +81,18 @@ def load_model_from_checkpoint(
     monai: dict[str, Any],
 ) -> Any:
     """Build MONAI UNet, apply MPS patch if needed, and load checkpoint weights."""
-    from wmh2017.training.train_monai import _build_model
+    from wmh2017.models.factory import assert_checkpoint_modality_compat, build_unet
 
-    model = _build_model(monai, cfg)
+    config_modalities = resolve_input_modalities(cfg.get("data", {}))
+    model = build_unet(monai, cfg, input_modalities=config_modalities)
     if device.type == "mps":
         apply_mps_safe_convtranspose_patch(model)
     state = torch.load(  # nosec B614 — local checkpoint only
         str(checkpoint_path), map_location=device, weights_only=False
+    )
+    assert_checkpoint_modality_compat(
+        checkpoint_modalities=state.get("input_modalities"),
+        config_modalities=config_modalities,
     )
     model.load_state_dict(state["model_state_dict"])
     return model.to(device)
@@ -91,7 +109,6 @@ def export_val_probabilities(
 ) -> dict[str, Any]:
     """Export val probability maps from a trained checkpoint (no retraining)."""
     from wmh2017.training.train_monai import (
-        _case_rows,
         _load_config,
         _require_monai_stack,
         _set_seed,
@@ -112,7 +129,6 @@ def export_val_probabilities(
 
     dataset_manifest = str(data_cfg["dataset_manifest"])
     split_manifest = str(data_cfg["split_manifest"])
-    image_key = str(data_cfg.get("image_key", "flair_pre_path"))
     label_key = str(data_cfg.get("label_key", "wmh_path"))
     patch_size = list(data_cfg.get("patch_size", [32, 32, 32]))
     val_max_cases = int(data_cfg.get("val_max_cases", 0))
@@ -124,7 +140,16 @@ def export_val_probabilities(
     if save_binary_predictions:
         pred_dir.mkdir(parents=True, exist_ok=True)
 
-    val_rows = _case_rows(dataset_manifest, split_manifest, assigned_split, image_key, label_key)
+    input_modalities = resolve_input_modalities(data_cfg)
+    input_keys = modality_keys(input_modalities)
+    val_records = load_case_records(
+        manifest_csv=dataset_manifest,
+        split_csv=split_manifest,
+        assigned_split=assigned_split,
+        input_modalities=input_modalities,
+        label_key=label_key,
+    )
+    val_rows = case_records_to_monai_rows(val_records)
     if val_max_cases > 0:
         val_rows = val_rows[:val_max_cases]
     if not val_rows:
@@ -140,11 +165,13 @@ def export_val_probabilities(
 
     exported: list[str] = []
     for row in val_rows:
+        image_paths = {key: row[key] for key in input_keys}
         probs = infer_foreground_probability(
             model=model,
             torch=torch,
             monai=monai,
-            image_path=row["image"],
+            image_paths=image_paths,
+            input_keys=input_keys,
             patch_size=patch_size,
             device=device,
         )
@@ -155,7 +182,7 @@ def export_val_probabilities(
             save_case_prediction(
                 probs=probs,
                 threshold=effective_threshold,
-                reference_image_path=row["image"],
+                reference_image_path=row[input_keys[0]],
                 pred_path=pred_dir / f"{row['case_id']}_pred.nii.gz",
             )
 
