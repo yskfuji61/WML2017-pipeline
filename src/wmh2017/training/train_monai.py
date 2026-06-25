@@ -12,6 +12,7 @@ Safety boundaries:
 
 from __future__ import annotations
 
+import csv
 import json
 import random
 import resource
@@ -375,6 +376,21 @@ def resolve_checkpoint_policy(*, run_val: bool, save_last_checkpoint: bool) -> s
     return "last_epoch" if (not run_val and save_last_checkpoint) else "best_on_val"
 
 
+def _split_has_assigned(split_csv: str | Path, assigned_split: str) -> bool:
+    """True if the split CSV has >=1 row for ``assigned_split`` (stdlib peek).
+
+    Lets all-train mode detect a genuinely empty val set without triggering load_case_records'
+    empty-selection ValueError, while still surfacing a non-empty val set so the allow_empty_val
+    misconfiguration guard (require_train_val_rows) can reject it.
+    """
+    target = assigned_split.strip().lower()
+    with open(split_csv, newline="") as f:
+        for row in csv.DictReader(f):
+            if str(row.get("assigned_split", "")).strip().lower() == target:
+                return True
+    return False
+
+
 def main(config_path: str) -> None:
     enable_mps_cpu_fallback()
     torch, monai = _require_monai_stack()
@@ -422,23 +438,29 @@ def main(config_path: str) -> None:
             label_key=label_key,
         )
     )
-    all_val_rows = case_records_to_monai_rows(
-        load_case_records(
-            manifest_csv=dataset_manifest,
-            split_csv=split_manifest,
-            assigned_split="val",
-            input_modalities=input_modalities,
-            label_key=label_key,
+    allow_empty_val = bool(train_cfg.get("allow_empty_val", False))
+    save_last_checkpoint = bool(train_cfg.get("save_last_checkpoint", False))
+    # All-train mode: when allow_empty_val is set and the split has no val rows, skip the val load
+    # (load_case_records raises on an empty selection). A split that *does* contain val rows is
+    # still loaded so require_train_val_rows can reject the allow_empty_val + non-empty-val misconfig.
+    if allow_empty_val and not _split_has_assigned(split_manifest, "val"):
+        all_val_rows: list[dict[str, str]] = []
+    else:
+        all_val_rows = case_records_to_monai_rows(
+            load_case_records(
+                manifest_csv=dataset_manifest,
+                split_csv=split_manifest,
+                assigned_split="val",
+                input_modalities=input_modalities,
+                label_key=label_key,
+            )
         )
-    )
     if val_max_cases > 0:
         val_rows = all_val_rows[:val_max_cases]
         val_eval_rows = all_val_rows[:val_max_cases]
     else:
         val_rows = all_val_rows
         val_eval_rows = all_val_rows
-    allow_empty_val = bool(train_cfg.get("allow_empty_val", False))
-    save_last_checkpoint = bool(train_cfg.get("save_last_checkpoint", False))
     require_train_val_rows(
         train_rows,
         val_rows,

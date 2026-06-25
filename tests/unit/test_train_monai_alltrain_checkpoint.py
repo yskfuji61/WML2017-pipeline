@@ -6,9 +6,28 @@ test-based selection). Pure-function tests: no torch/monai import, no training r
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
-from wmh2017.training.train_monai import require_train_val_rows, resolve_checkpoint_policy
+from wmh2017.training.train_monai import (
+    _split_has_assigned,
+    require_train_val_rows,
+    resolve_checkpoint_policy,
+)
+
+_HEADER = (
+    "split_id,fold,case_id,challenge_split,source_split,assigned_split,"
+    "site,scanner,scanner_code,group_id,seed,reason,created_at\n"
+)
+
+
+def _write_split(path: Path, assigned: list[str]) -> Path:
+    lines = [_HEADER]
+    for i, a in enumerate(assigned):
+        lines.append(f"S,0,{i},training,training,{a},Site,Sc,sc,{i},42,r,t\n")
+    path.write_text("".join(lines), encoding="utf-8")
+    return path
 
 
 def test_default_off_normal_rows_ok() -> None:
@@ -53,3 +72,30 @@ def test_policy_best_on_val_for_cv() -> None:
     assert resolve_checkpoint_policy(run_val=True, save_last_checkpoint=True) == "best_on_val"
     # No val and no save_last is not a valid all-train config, but the policy label is best_on_val.
     assert resolve_checkpoint_policy(run_val=False, save_last_checkpoint=False) == "best_on_val"
+
+
+def test_split_has_assigned_detects_val(tmp_path: Path) -> None:
+    cv = _write_split(tmp_path / "cv.csv", ["train", "train", "val", "heldout_eval"])
+    assert _split_has_assigned(cv, "val") is True
+    assert _split_has_assigned(cv, "train") is True
+    assert _split_has_assigned(cv, "heldout_eval") is True
+
+
+def test_split_has_assigned_false_for_alltrain(tmp_path: Path) -> None:
+    alltrain = _write_split(tmp_path / "alltrain.csv", ["train", "train", "heldout_eval"])
+    assert _split_has_assigned(alltrain, "val") is False
+    assert _split_has_assigned(alltrain, "train") is True
+
+
+def test_alltrain_prep_path_skips_val_and_passes_guard(tmp_path: Path) -> None:
+    # Ties the loader peek to the guard: a val-less split + allow_empty_val + save_last_checkpoint
+    # takes the empty-val branch (no load) and require_train_val_rows accepts the empty val set.
+    alltrain = _write_split(tmp_path / "alltrain.csv", ["train", "train", "heldout_eval"])
+    assert _split_has_assigned(alltrain, "val") is False
+    require_train_val_rows(["a", "b"], [], allow_empty_val=True, save_last_checkpoint=True)
+
+
+def test_normal_cv_split_would_load_val(tmp_path: Path) -> None:
+    cv = _write_split(tmp_path / "cv.csv", ["train", "val"])
+    # Normal CV: val present -> the loader peek is True, so the val load runs as before.
+    assert _split_has_assigned(cv, "val") is True
