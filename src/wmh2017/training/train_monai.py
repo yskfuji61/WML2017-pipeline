@@ -345,6 +345,36 @@ def _save_predictions(
     return count
 
 
+def require_train_val_rows(
+    train_rows: list[Any],
+    val_rows: list[Any],
+    *,
+    allow_empty_val: bool,
+    save_last_checkpoint: bool,
+) -> None:
+    """Validate train/val row presence against the all-train flags.
+
+    Default behavior (allow_empty_val=False) is unchanged: train and val are both required.
+    All-train mode (allow_empty_val=True) requires save_last_checkpoint=True and an EMPTY val set —
+    the final model is the last-epoch checkpoint with no validation- or test-based selection.
+    """
+    if not train_rows:
+        raise ValueError("train rows are required for training")
+    if allow_empty_val:
+        if not save_last_checkpoint:
+            raise ValueError("allow_empty_val=true requires save_last_checkpoint=true")
+        if val_rows:
+            raise ValueError("allow_empty_val=true requires an empty val set (all-train mode)")
+        return
+    if not val_rows:
+        raise ValueError("train and val rows are required for training")
+
+
+def resolve_checkpoint_policy(*, run_val: bool, save_last_checkpoint: bool) -> str:
+    """Return the checkpoint-selection policy label recorded in run evidence."""
+    return "last_epoch" if (not run_val and save_last_checkpoint) else "best_on_val"
+
+
 def main(config_path: str) -> None:
     enable_mps_cpu_fallback()
     torch, monai = _require_monai_stack()
@@ -407,8 +437,15 @@ def main(config_path: str) -> None:
     else:
         val_rows = all_val_rows
         val_eval_rows = all_val_rows
-    if not train_rows or not val_rows:
-        raise ValueError("train and val rows are required for training")
+    allow_empty_val = bool(train_cfg.get("allow_empty_val", False))
+    save_last_checkpoint = bool(train_cfg.get("save_last_checkpoint", False))
+    require_train_val_rows(
+        train_rows,
+        val_rows,
+        allow_empty_val=allow_empty_val,
+        save_last_checkpoint=save_last_checkpoint,
+    )
+    run_val = bool(val_eval_rows)
 
     train_ds = _build_train_dataset(monai, train_rows, patch_size, cache_rate, train_cfg, input_keys=input_keys)
     train_loader = monai["DataLoader"](train_ds, batch_size=1, shuffle=True, num_workers=num_workers)
@@ -447,6 +484,8 @@ def main(config_path: str) -> None:
     checkpoint_path = ""
     best_checkpoint_path = str(ckpt_dir / checkpoint_filename(mode))
     best_alias_path = str(ckpt_dir / f"model_best_{selection_policy.metric}.pt")
+    last_checkpoint_path = str(ckpt_dir / "model_last.pt")
+    last_checkpoint_saved = False
     amp_enabled, autocast_device, amp_precision_policy = _amp_policy(use_amp, device.type)
     scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled) if amp_enabled else None
     first_epoch_resource: dict[str, Any] | None = None
@@ -491,18 +530,23 @@ def main(config_path: str) -> None:
                 }
             )
 
-        val_metrics, val_n = _run_validation_metrics(
-            model=model,
-            torch=torch,
-            monai=monai,
-            val_rows=val_eval_rows,
-            patch_size=patch_size,
-            device=device,
-            threshold=threshold,
-            input_keys=input_keys,
-        )
-        val_dice = val_metrics["mean_dice"]
         mean_epoch_loss = float(np.mean(epoch_losses)) if epoch_losses else 0.0
+        if run_val:
+            val_metrics, val_n = _run_validation_metrics(
+                model=model,
+                torch=torch,
+                monai=monai,
+                val_rows=val_eval_rows,
+                patch_size=patch_size,
+                device=device,
+                threshold=threshold,
+                input_keys=input_keys,
+            )
+        else:
+            # All-train mode: no validation set, no per-epoch metrics, no selection.
+            val_metrics = {"mean_dice": 0.0, "mean_lesion_recall": 0.0, "mean_lesion_f1": 0.0}
+            val_n = 0
+        val_dice = val_metrics["mean_dice"]
         if mode == "full" and epoch == 0:
             epoch_rss_after = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
             first_epoch_resource = {
@@ -514,62 +558,91 @@ def main(config_path: str) -> None:
                 "patch_size": patch_size,
                 "max_epochs_configured": max_epochs,
             }
-        logs.append(
-            {
-                "epoch": epoch,
-                "global_step": global_step,
-                "val_dice": val_dice,
-                "val_mean_lesion_recall": val_metrics["mean_lesion_recall"],
-                "val_mean_lesion_f1": val_metrics["mean_lesion_f1"],
-                "val_n_cases": val_n,
-                "mean_epoch_loss": mean_epoch_loss,
-                "selection_metric": selection_policy.metric,
-                "mode": mode,
-            }
-        )
-        decision = evaluate_candidate(
-            selection_policy,
-            val_metrics,
-            best_score=best_score,
-            best_metrics=best_metrics or None,
-        )
-        if decision.improved:
-            best_score = decision.score
-            best_metrics = dict(val_metrics)
-            best_epoch = epoch
-            epochs_without_improvement = 0
-            if mode == "full" and bool(train_cfg.get("save_best_only", True)):
-                payload = {
-                    "run_id": run_id,
-                    "model_state_dict": model.state_dict(),
-                    "config": cfg,
-                    "input_modalities": modalities_to_payload(input_modalities),
+        if run_val:
+            logs.append(
+                {
+                    "epoch": epoch,
                     "global_step": global_step,
-                    "selection_policy": selection_policy_payload,
-                    "best_selection_score": best_score,
-                    "best_selection_epoch": best_epoch,
-                    "best_metrics": best_metrics,
-                    "best_val_dice": best_metrics["mean_dice"],  # legacy alias
-                    "best_epoch": best_epoch,
-                    "checkpoint_semantics": checkpoint_semantics,
-                    "claim_boundary": "local PoC full training; not clinical or production model",
+                    "val_dice": val_dice,
+                    "val_mean_lesion_recall": val_metrics["mean_lesion_recall"],
+                    "val_mean_lesion_f1": val_metrics["mean_lesion_f1"],
+                    "val_n_cases": val_n,
+                    "mean_epoch_loss": mean_epoch_loss,
+                    "selection_metric": selection_policy.metric,
+                    "mode": mode,
                 }
-                torch.save(  # nosec B614 — local trusted best checkpoint only; not loading untrusted weights
-                    payload,
-                    best_checkpoint_path,
-                )
-                # Metric-explicit alias so the filename reveals selection semantics.
-                if best_alias_path != best_checkpoint_path:
-                    torch.save(payload, best_alias_path)  # nosec B614 — local trusted copy
-                checkpoint_path = best_checkpoint_path
+            )
+            decision = evaluate_candidate(
+                selection_policy,
+                val_metrics,
+                best_score=best_score,
+                best_metrics=best_metrics or None,
+            )
+            if decision.improved:
+                best_score = decision.score
+                best_metrics = dict(val_metrics)
+                best_epoch = epoch
+                epochs_without_improvement = 0
+                if mode == "full" and bool(train_cfg.get("save_best_only", True)):
+                    payload = {
+                        "run_id": run_id,
+                        "model_state_dict": model.state_dict(),
+                        "config": cfg,
+                        "input_modalities": modalities_to_payload(input_modalities),
+                        "global_step": global_step,
+                        "selection_policy": selection_policy_payload,
+                        "best_selection_score": best_score,
+                        "best_selection_epoch": best_epoch,
+                        "best_metrics": best_metrics,
+                        "best_val_dice": best_metrics["mean_dice"],  # legacy alias
+                        "best_epoch": best_epoch,
+                        "checkpoint_semantics": checkpoint_semantics,
+                        "claim_boundary": "local PoC full training; not clinical or production model",
+                    }
+                    torch.save(  # nosec B614 — local trusted best checkpoint only; not loading untrusted weights
+                        payload,
+                        best_checkpoint_path,
+                    )
+                    # Metric-explicit alias so the filename reveals selection semantics.
+                    if best_alias_path != best_checkpoint_path:
+                        torch.save(payload, best_alias_path)  # nosec B614 — local trusted copy
+                    checkpoint_path = best_checkpoint_path
+            else:
+                epochs_without_improvement += 1
         else:
-            epochs_without_improvement += 1
+            logs.append(
+                {
+                    "epoch": epoch,
+                    "global_step": global_step,
+                    "val_skipped": True,
+                    "val_n_cases": 0,
+                    "mean_epoch_loss": mean_epoch_loss,
+                    "selection_metric": selection_policy.metric,
+                    "mode": mode,
+                }
+            )
 
         if lr_scheduler is not None:
             lr_scheduler.step()
 
-        if mode == "full" and epochs_without_improvement >= early_stopping_patience:
+        if run_val and mode == "full" and epochs_without_improvement >= early_stopping_patience:
             break
+
+    if mode == "full" and save_last_checkpoint:
+        last_payload = {
+            "run_id": run_id,
+            "model_state_dict": model.state_dict(),
+            "config": cfg,
+            "input_modalities": modalities_to_payload(input_modalities),
+            "global_step": global_step,
+            "checkpoint_semantics": "final/last training epoch; no validation- or test-based selection",
+            "claim_boundary": "local PoC full training; not clinical or production model",
+        }
+        torch.save(last_payload, last_checkpoint_path)  # nosec B614 — local trusted last checkpoint
+        last_checkpoint_saved = True
+        # In all-train (empty-val) mode no best checkpoint exists, so the last epoch is selected.
+        if not checkpoint_path:
+            checkpoint_path = last_checkpoint_path
 
     if mode == "smoke" and bool(train_cfg.get("save_checkpoint", True)):
         checkpoint_path = str(ckpt_dir / checkpoint_filename(mode))
@@ -616,6 +689,15 @@ def main(config_path: str) -> None:
         **device_runtime,
         "global_step": global_step,
         "selection_policy": selection_policy_payload,
+        "checkpoint_policy": (
+            resolve_checkpoint_policy(run_val=run_val, save_last_checkpoint=save_last_checkpoint)
+            if mode == "full"
+            else "smoke"
+        ),
+        "allow_empty_val": allow_empty_val,
+        "save_last_checkpoint": save_last_checkpoint,
+        "val_case_count": len(val_eval_rows),
+        "last_checkpoint_path": last_checkpoint_path if last_checkpoint_saved else "",
         "best_selection_score": best_score if mode == "full" else None,
         "best_selection_epoch": best_epoch if mode == "full" else None,
         "best_metrics": best_metrics if mode == "full" else None,
