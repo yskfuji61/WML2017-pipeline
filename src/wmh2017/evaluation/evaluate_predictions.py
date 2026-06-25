@@ -14,6 +14,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from wmh2017.data.split_guard import guard_challenge_split_test, is_released_label_local_test_case
 from wmh2017.evaluation.lesion_metrics import lesion_recall_f1_wmh_label1
 from wmh2017.evaluation.metric_schema import validate_case_metrics_columns
 from wmh2017.evaluation.voxel_metrics import avd_wmh_label1, dice_wmh_label1, hd95_wmh_label1
@@ -53,6 +54,7 @@ def evaluate_predictions(
     skip_missing_predictions: bool = False,
     prediction_manifest_path: str | Path = "",
     missing_prediction_policy: str = "fail_full_allow_smoke",
+    allow_released_label_local_test: bool = False,
 ) -> dict[str, Any]:
     manifest_csv = Path(manifest_csv)
     split_csv = Path(split_csv)
@@ -76,6 +78,7 @@ def evaluate_predictions(
 
     expected_case_ids = [str(srow["case_id"]) for _, srow in cases.iterrows()]
     missing_case_ids: list[str] = []
+    released_label_local_test_used = False
     records: list[dict[str, Any]] = []
     for _, srow in cases.iterrows():
         case_id = str(srow["case_id"])
@@ -84,12 +87,17 @@ def evaluate_predictions(
             raise ValueError(f"case_id={case_id} exists in split but not manifest")
         m = mrow.iloc[0]
         challenge_split = str(m.get("challenge_split", "")).lower()
-        if challenge_split == "test":
-            raise ValueError(
-                f"case_id={case_id} belongs to challenge_split=test; "
-                "test split must not be used for local validation, threshold tuning, "
-                "model selection, or early stopping"
-            )
+        guard_challenge_split_test(
+            case_id,
+            challenge_split,
+            assigned_split=assigned_split,
+            allow_released_label_local_test=allow_released_label_local_test,
+            context="evaluation",
+        )
+        if is_released_label_local_test_case(
+            challenge_split, assigned_split, allow_released_label_local_test=allow_released_label_local_test
+        ):
+            released_label_local_test_used = True
         label_path = str(m.get("wmh_path", "") or m.get("mask_path", "") or "")
         if not label_path:
             raise ValueError(f"case_id={case_id} has no label path; local validation requires labels")
@@ -195,6 +203,8 @@ def evaluate_predictions(
         "metric_script_hash": sha256_path(metric_script_path),
         "code_commit": git_commit_or_unknown(),
         "package_versions": package_versions(),
+        "allow_released_label_local_test": bool(allow_released_label_local_test),
+        "evaluation_boundary": ("released_label_local_test" if released_label_local_test_used else "local_validation"),
         "official_claim_status": {
             "local_metrics_available": True,
             "official_evaluator_parity_complete": False,

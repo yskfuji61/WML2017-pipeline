@@ -29,6 +29,14 @@ def main() -> None:
         action="store_true",
         help="Evaluate only cases with prediction files (smoke runs with val_max_cases)",
     )
+    parser.add_argument(
+        "--allow-released-label-local-test",
+        action="store_true",
+        help=(
+            "Default-off override permitting challenge_split=test cases ONLY for "
+            "assigned_split=heldout_eval (released-label LOCAL test; not official/leaderboard/SOTA)."
+        ),
+    )
     args = parser.parse_args()
 
     summary = evaluate_predictions(
@@ -43,6 +51,7 @@ def main() -> None:
         model_artifact_path=args.model_artifact,
         config_path=args.config_path,
         skip_missing_predictions=args.skip_missing_predictions,
+        allow_released_label_local_test=args.allow_released_label_local_test,
     )
     print(f"Wrote {summary['case_metrics_csv']}")
     print(f"Wrote {Path(args.out_dir) / 'metrics_summary.json'}")

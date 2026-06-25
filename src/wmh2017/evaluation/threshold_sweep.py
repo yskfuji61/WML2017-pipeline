@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 
 from wmh2017.data.label_policy import wmh_foreground_mask
+from wmh2017.data.split_guard import guard_challenge_split_test
 from wmh2017.evaluation.lesion_metrics import (
     DEFAULT_SIZE_BINS,
     lesion_recall_by_size_bins_wmh_label1,
@@ -56,11 +57,9 @@ def _case_rows_for_split(
         if mrow.empty:
             raise ValueError(f"case_id={case_id} exists in split but not manifest")
         m = mrow.iloc[0]
-        if str(m.get("challenge_split", "")).lower() == "test":
-            raise ValueError(
-                f"case_id={case_id} belongs to challenge_split=test; "
-                "test split must not be used for threshold tuning"
-            )
+        guard_challenge_split_test(
+            case_id, str(m.get("challenge_split", "")), assigned_split=assigned_split, context="threshold_sweep"
+        )
         label_path = str(m.get("wmh_path", "") or m.get("mask_path", "") or "")
         if not label_path:
             raise ValueError(f"case_id={case_id} has no label path")

@@ -18,6 +18,7 @@ from pathlib import Path
 import pandas as pd
 
 from wmh2017.config.training_config import LEGACY_IMAGE_NAME, InputModality
+from wmh2017.data.split_guard import guard_challenge_split_test
 
 # Legacy fallback columns tried (in order) when the configured manifest key is empty.
 # Only applied to the legacy single-channel "image" modality to preserve behavior.
@@ -61,8 +62,14 @@ def load_case_records(
     assigned_split: str,
     input_modalities: tuple[InputModality, ...],
     label_key: str,
+    allow_released_label_local_test: bool = False,
 ) -> list[CaseRecord]:
-    """Resolve case records for ``assigned_split``; raise on any test-split case."""
+    """Resolve case records for ``assigned_split``; raise on any test-split case.
+
+    ``allow_released_label_local_test`` is a narrow, default-off override that permits
+    ``challenge_split=test`` cases **only** when ``assigned_split == "heldout_eval"`` (released-label
+    local test inference). It never relaxes train/val/tuning.
+    """
     manifest = pd.read_csv(manifest_csv)
     split = pd.read_csv(split_csv)
     split = split[split["assigned_split"].astype(str).str.lower() == assigned_split.lower()].copy()
@@ -77,8 +84,13 @@ def load_case_records(
             raise ValueError(f"case_id={case_id} exists in split but not manifest")
         r = m.iloc[0]
         challenge_split = str(r.get("challenge_split", ""))
-        if challenge_split.lower() == "test":
-            raise ValueError(f"case_id={case_id} belongs to challenge_split=test; cannot be used here")
+        guard_challenge_split_test(
+            case_id,
+            challenge_split,
+            assigned_split=assigned_split,
+            allow_released_label_local_test=allow_released_label_local_test,
+            context="inference",
+        )
 
         image_paths: dict[str, str] = {}
         for modality in input_modalities:

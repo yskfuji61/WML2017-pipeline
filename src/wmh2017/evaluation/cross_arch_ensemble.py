@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 from wmh2017.data.label_policy import wmh_foreground_mask
+from wmh2017.data.split_guard import guard_challenge_split_test
 from wmh2017.evaluation.lesion_metrics import lesion_recall_f1_wmh_label1
 from wmh2017.evaluation.postprocess import post_process_binary
 from wmh2017.evaluation.threshold_sweep import default_threshold_grid
@@ -61,8 +62,9 @@ def _case_rows(manifest_csv: str | Path, split_csv: str | Path, assigned_split: 
         if mrow.empty:
             raise ValueError(f"case_id={case_id} missing in manifest")
         m = mrow.iloc[0]
-        if str(m.get("challenge_split", "")).lower() == "test":
-            raise ValueError(f"test case {case_id} cannot be used for ensemble threshold tuning")
+        guard_challenge_split_test(
+            case_id, str(m.get("challenge_split", "")), assigned_split=assigned_split, context="ensemble"
+        )
         label_path = str(m.get("wmh_path", "") or m.get("mask_path", "") or "")
         rows.append({"case_id": case_id, "label_path": label_path})
     return rows

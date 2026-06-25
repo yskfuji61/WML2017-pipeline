@@ -11,6 +11,7 @@ import torch
 from torch.utils.data import Dataset
 
 from wmh2017.data.label_policy import wmh_foreground_mask
+from wmh2017.data.split_guard import guard_challenge_split_test
 from wmh2017.io.images import load_array, load_image_metadata
 
 
@@ -84,8 +85,9 @@ class WmhVolumeDataset(Dataset):
             if mrow.empty:
                 raise ValueError(f"case_id={case_id} missing in manifest")
             m = mrow.iloc[0]
-            if str(m.get("challenge_split", "")).lower() == "test":
-                raise ValueError(f"test case {case_id} cannot be used for training/val")
+            guard_challenge_split_test(
+                case_id, str(m.get("challenge_split", "")), assigned_split=assigned_split, context="slice_dataset"
+            )
             image = str(m.get(image_key, "") or m.get("flair_pre_path", ""))
             label = str(m.get(label_key, "") or m.get("wmh_path", ""))
             if not image or not label:

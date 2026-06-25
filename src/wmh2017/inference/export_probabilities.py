@@ -106,8 +106,14 @@ def export_val_probabilities(
     assigned_split: str = "val",
     save_binary_predictions: bool = False,
     threshold: float | None = None,
+    allow_released_label_local_test: bool = False,
 ) -> dict[str, Any]:
-    """Export val probability maps from a trained checkpoint (no retraining)."""
+    """Export val probability maps from a trained checkpoint (no retraining).
+
+    ``allow_released_label_local_test`` is a narrow, default-off override forwarded to
+    ``load_case_records``; it permits ``challenge_split=test`` cases only for
+    ``assigned_split="heldout_eval"`` (released-label local test inference).
+    """
     from wmh2017.training.train_monai import (
         _load_config,
         _require_monai_stack,
@@ -148,6 +154,7 @@ def export_val_probabilities(
         assigned_split=assigned_split,
         input_modalities=input_modalities,
         label_key=label_key,
+        allow_released_label_local_test=allow_released_label_local_test,
     )
     val_rows = case_records_to_monai_rows(val_records)
     if val_max_cases > 0:
