@@ -65,3 +65,49 @@ def test_unknown_scheduler_raises() -> None:
     opt = _tiny_optimizer(torch)
     with pytest.raises(ValueError):
         build_lr_scheduler(torch, opt, {"lr_scheduler": {"name": "bogus"}}, max_epochs=10)
+
+
+def test_warmup_default_off_unchanged() -> None:
+    torch = pytest.importorskip("torch")
+    from wmh2017.training.train_monai import build_lr_scheduler
+
+    opt = _tiny_optimizer(torch)
+    scheduler, info = build_lr_scheduler(
+        torch, opt, {"lr_scheduler": {"name": "cosine", "eta_min": 0.0}}, max_epochs=20
+    )
+    assert info == {"enabled": True, "name": "cosine", "t_max": 20, "eta_min": 0.0}
+    assert "warmup_epochs" not in info
+
+
+def test_cosine_warmup_ramps_then_decays() -> None:
+    torch = pytest.importorskip("torch")
+    from wmh2017.training.train_monai import build_lr_scheduler
+
+    opt = _tiny_optimizer(torch)  # peak lr 0.1
+    peak = 0.1
+    scheduler, info = build_lr_scheduler(
+        torch, opt, {"warmup_epochs": 5, "lr_scheduler": {"name": "cosine", "eta_min": 0.0}}, max_epochs=20
+    )
+    assert info["name"] == "cosine_warmup"
+    assert info["warmup_epochs"] == 5
+    lrs = [opt.param_groups[0]["lr"]]  # epoch 0 (start of warmup)
+    for _ in range(19):
+        scheduler.step()
+        lrs.append(opt.param_groups[0]["lr"])
+    # Warmup: starts well below peak and ramps up across the first 5 epochs to ~peak.
+    assert lrs[0] < peak
+    assert lrs[4] > lrs[0]
+    assert lrs[5] >= 0.9 * peak
+    # After warmup: cosine decay (later epochs strictly below the peak).
+    assert lrs[10] < lrs[5]
+    assert lrs[-1] < lrs[10]
+
+
+@pytest.mark.parametrize("bad", [-1, 20, 25])
+def test_invalid_warmup_epochs_raises(bad) -> None:
+    torch = pytest.importorskip("torch")
+    from wmh2017.training.train_monai import build_lr_scheduler
+
+    opt = _tiny_optimizer(torch)
+    with pytest.raises(ValueError, match="warmup_epochs"):
+        build_lr_scheduler(torch, opt, {"warmup_epochs": bad, "lr_scheduler": {"name": "cosine"}}, max_epochs=20)

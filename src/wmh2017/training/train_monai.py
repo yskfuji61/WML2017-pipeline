@@ -198,12 +198,35 @@ def build_lr_scheduler(
     """
     sched_cfg = train_cfg.get("lr_scheduler") or {}
     name = str(sched_cfg.get("name", "none")).lower()
+    warmup_epochs = int(train_cfg.get("warmup_epochs", 0))
+    if warmup_epochs < 0 or warmup_epochs >= max_epochs:
+        raise ValueError(f"warmup_epochs must be in [0, max_epochs); got {warmup_epochs}")
     if name in {"none", "", "constant", "fixed"}:
         return None, {"enabled": False, "name": "constant"}
 
     if name == "cosine":
         eta_min = float(sched_cfg.get("eta_min", 0.0))
         t_max = int(sched_cfg.get("t_max", max_epochs))
+        if warmup_epochs > 0:
+            # Short linear warmup (lr ramps from peak/warmup_epochs to peak over warmup_epochs),
+            # then cosine-anneal over the remaining epochs. Per-epoch stepping; works with any
+            # number of optimizer param groups.
+            warm = torch.optim.lr_scheduler.LinearLR(
+                optimizer, start_factor=1.0 / warmup_epochs, end_factor=1.0, total_iters=warmup_epochs
+            )
+            main = torch.optim.lr_scheduler.CosineAnnealingLR(
+                optimizer, T_max=max(1, t_max - warmup_epochs), eta_min=eta_min
+            )
+            scheduler = torch.optim.lr_scheduler.SequentialLR(
+                optimizer, schedulers=[warm, main], milestones=[warmup_epochs]
+            )
+            return scheduler, {
+                "enabled": True,
+                "name": "cosine_warmup",
+                "t_max": t_max,
+                "eta_min": eta_min,
+                "warmup_epochs": warmup_epochs,
+            }
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=t_max, eta_min=eta_min)
         return scheduler, {"enabled": True, "name": "cosine", "t_max": t_max, "eta_min": eta_min}
 
