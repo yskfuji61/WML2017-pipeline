@@ -102,6 +102,65 @@ class TverskyFocalLoss(nn.Module):
         return focal_t.mean()
 
 
+class SmallLesionWeightedDiceCELoss(nn.Module):
+    """Dice + small-lesion-weighted cross-entropy (default-off lever; CE weighting only).
+
+    Dice term is the standard soft-dice on foreground probability (unchanged region term). The CE
+    term is per-voxel cross-entropy re-weighted by a small-lesion map derived from the GT:
+    ``weighted_ce = sum(ce * w) / sum(w)`` with ``w = small_lesion_ce_weight`` on voxels in GT
+    connected components of size <= ``small_lesion_max_voxels`` and 1 elsewhere. With weight 1.0 the
+    map is all ones and this reduces to dice + mean CE.
+    """
+
+    def __init__(
+        self,
+        small_lesion_ce_weight: float,
+        small_lesion_max_voxels: int = 10,
+        connectivity: int = 26,
+        smooth: float = 1.0,
+    ) -> None:
+        super().__init__()
+        self.small_lesion_ce_weight = float(small_lesion_ce_weight)
+        self.small_lesion_max_voxels = int(small_lesion_max_voxels)
+        self.connectivity = int(connectivity)
+        self.smooth = float(smooth)
+
+    def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        import numpy as np
+
+        from wmh2017.training.small_lesion_sampling import small_lesion_weight_map
+
+        # target_idx: (B, *spatial) long
+        target_idx = targets[:, 0].long() if targets.ndim == logits.ndim else targets.long()
+        targets_f = target_idx.unsqueeze(1).float()
+
+        # soft dice on foreground probability (region term, unchanged)
+        probs = _foreground_probs_from_logits(logits)
+        probs_flat, targets_flat = _flatten_spatial(probs, targets_f)
+        inter = (probs_flat * targets_flat).sum(1)
+        den = probs_flat.sum(1) + targets_flat.sum(1)
+        dice = (2 * inter + self.smooth) / (den + self.smooth)
+        dice_loss = 1 - dice.mean()
+
+        # per-voxel CE, re-weighted by the small-lesion map (normalized)
+        ce_voxel = F.cross_entropy(logits, target_idx, reduction="none")
+        ti = target_idx.detach().cpu().numpy()
+        wmaps = np.stack(
+            [
+                small_lesion_weight_map(
+                    ti[b],
+                    self.small_lesion_max_voxels,
+                    self.small_lesion_ce_weight,
+                    connectivity=self.connectivity,
+                )
+                for b in range(ti.shape[0])
+            ]
+        )
+        wmap = torch.as_tensor(wmaps, dtype=ce_voxel.dtype, device=ce_voxel.device)
+        weighted_ce = (ce_voxel * wmap).sum() / wmap.sum().clamp_min(1.0)
+        return dice_loss + weighted_ce
+
+
 class MonaiDiceCELossWrapper(nn.Module):
     """Adapter around MONAI DiceCELoss for config-driven factory parity."""
 

@@ -9,6 +9,7 @@ import torch.nn as nn
 from wmh2017.training.losses import (
     DiceFocalLoss,
     MonaiDiceCELossWrapper,
+    SmallLesionWeightedDiceCELoss,
     TverskyFocalLoss,
     TverskyLoss,
 )
@@ -30,7 +31,19 @@ def build_loss(train_cfg: dict[str, Any], monai: dict[str, Any]) -> nn.Module:
         raise ValueError(f"training.loss must be str or dict, got {type(loss_cfg)!r}")
 
     if name in {"dice_ce", "dicece", "monai_dice_ce"}:
-        return MonaiDiceCELossWrapper(monai["DiceCELoss"](to_onehot_y=True, softmax=True))
+        small_w = float(params.get("small_lesion_ce_weight", 1.0))
+        small_max = int(params.get("small_lesion_max_voxels", 10))
+        if small_w < 1.0:
+            raise ValueError(f"small_lesion_ce_weight must be >= 1.0; got {small_w}")
+        if small_max < 1:
+            raise ValueError(f"small_lesion_max_voxels must be >= 1; got {small_max}")
+        if small_w == 1.0:
+            # Default-off: unchanged MONAI dice_ce.
+            return MonaiDiceCELossWrapper(monai["DiceCELoss"](to_onehot_y=True, softmax=True))
+        return SmallLesionWeightedDiceCELoss(
+            small_lesion_ce_weight=small_w,
+            small_lesion_max_voxels=small_max,
+        )
     if name in {"tversky", "tversky_loss"}:
         return TverskyLoss(
             alpha=float(params.get("alpha", 0.3)),

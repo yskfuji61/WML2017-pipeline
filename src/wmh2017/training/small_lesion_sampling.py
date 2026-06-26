@@ -32,6 +32,28 @@ def small_lesion_flat_indices(label_fg_3d: np.ndarray, max_voxels: int, *, conne
     return np.flatnonzero(small_mask.ravel()).astype(np.int64)
 
 
+def small_lesion_weight_map(
+    label_3d: np.ndarray, max_voxels: int, weight: float, *, connectivity: int = 26
+) -> np.ndarray:
+    """Per-voxel weight map: ``weight`` on voxels in small components, 1 elsewhere (float32).
+
+    Small = connected components of the foreground (label>0) with size <= ``max_voxels``. Used to
+    up-weight the CE contribution of small lesions. ``weight==1`` yields an all-ones map (no-op).
+    """
+    fg = np.asarray(label_3d) > 0
+    wmap = np.ones(fg.shape, dtype=np.float32)
+    if float(weight) == 1.0 or not fg.any():
+        return wmap
+    cc, n = connected_components(fg.astype(np.uint8), connectivity=connectivity)
+    if n == 0:
+        return wmap
+    sizes = np.bincount(cc.ravel())
+    small_labels = [lbl for lbl in range(1, n + 1) if int(sizes[lbl]) <= int(max_voxels)]
+    if small_labels:
+        wmap[np.isin(cc, small_labels)] = float(weight)
+    return wmap
+
+
 def map_fg_bg_flat_indices(label_fg_3d: np.ndarray, brain_mask_3d: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Foreground / background flat indices (MONAI map_binary_to_indices semantics).
 
