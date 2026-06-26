@@ -7,6 +7,10 @@ from typing import Any
 import numpy as np
 
 from wmh2017.data.preprocessing import normalize_nonzero_channelwise
+from wmh2017.training.small_lesion_sampling import (
+    SmallLesionFgBgIndicesd,
+    resolve_small_lesion_sampling_cfg,
+)
 
 
 def _label_to_foreground_mask(label: np.ndarray) -> np.ndarray:
@@ -66,19 +70,33 @@ def build_monai_transforms(
         pos = int(sampling_cfg.get("pos", 1))
         neg = int(sampling_cfg.get("neg", 1))
         num_samples = int(sampling_cfg.get("num_samples", 1))
-        ops.append(
-            monai["RandCropByPosNegLabeld"](
-                keys=["image", "label"],
-                label_key="label",
-                spatial_size=tuple(patch_size),
-                pos=pos,
-                neg=neg,
-                num_samples=num_samples,
-                image_key="image",
-                image_threshold=0,
-                allow_smaller=True,
-            )
+        sl_enabled, sl_prob, sl_max_voxels = resolve_small_lesion_sampling_cfg(sampling_cfg)
+        crop_kwargs: dict[str, Any] = dict(
+            keys=["image", "label"],
+            label_key="label",
+            spatial_size=tuple(patch_size),
+            pos=pos,
+            neg=neg,
+            num_samples=num_samples,
+            image_key="image",
+            image_threshold=0,
+            allow_smaller=True,
         )
+        if sl_enabled:
+            # Default-off small-lesion-aware sampling: precompute small-lesion-biased fg indices
+            # so positive crop centers favor small lesions; everything else stays MONAI's crop.
+            ops.append(
+                SmallLesionFgBgIndicesd(
+                    label_key="label",
+                    image_key="image",
+                    max_voxels=sl_max_voxels,
+                    small_center_prob=sl_prob,
+                    image_threshold=0,
+                )
+            )
+            crop_kwargs["fg_indices_key"] = "fg_indices"
+            crop_kwargs["bg_indices_key"] = "bg_indices"
+        ops.append(monai["RandCropByPosNegLabeld"](**crop_kwargs))
 
         flip_prob = float(aug_cfg.get("random_flip_prob", 0.0))
         if flip_prob > 0:
