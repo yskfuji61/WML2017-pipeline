@@ -74,6 +74,93 @@ def is_better_selection(mode: str, candidate: float, best: float) -> bool:
     return candidate < best
 
 
+# --- T1-R3: checkpoint persistence + validation-only probability diagnostics ---
+# All additive; the selected-checkpoint contract (filename/state/alias/selection) is unchanged.
+
+_VAL_PROB_THRESHOLDS = (0.15, 0.40, 0.50)
+
+
+def new_val_prob_accum() -> dict[str, Any]:
+    """Fresh streaming accumulator for per-epoch validation probability diagnostics."""
+    return {"max_prob": 0.0, "counts": {t: 0 for t in _VAL_PROB_THRESHOLDS}, "lesion_probs": []}
+
+
+def update_val_prob_accum(accum: dict[str, Any], prob: Any, label: Any) -> None:
+    """Fold one validation batch's foreground prob + binary label into ``accum`` (streaming).
+
+    Keeps only scalar accumulators and the (sparse) GT-lesion-voxel probabilities — never the full
+    probability volume — so memory stays bounded. ``prob``/``label`` are array-likes of equal size.
+    """
+    p = np.asarray(prob, dtype=np.float64).ravel()
+    if p.size:
+        accum["max_prob"] = max(float(accum["max_prob"]), float(p.max()))
+    for t in accum["counts"]:
+        accum["counts"][t] += int((p >= t).sum())
+    lab = np.asarray(label).ravel()
+    if lab.size == p.size and p.size:
+        mask = lab > 0.5
+        lp = p[mask]
+        if lp.size:
+            accum["lesion_probs"].append(lp.astype(np.float64))
+
+
+def finalize_val_prob_diagnostics(accum: dict[str, Any]) -> dict[str, Any]:
+    """Reduce a streaming accumulator to the per-epoch validation diagnostics dict.
+
+    Empty validation / all-background labels yield 0.0 (no error).
+    """
+    lp = np.concatenate(accum["lesion_probs"]) if accum["lesion_probs"] else np.array([], dtype=np.float64)
+    counts = accum["counts"]
+    return {
+        "val_max_prob": float(accum["max_prob"]),
+        "val_pred_voxels_at_0_15": int(counts[0.15]),
+        "val_pred_voxels_at_0_40": int(counts[0.40]),
+        "val_pred_voxels_at_0_50": int(counts[0.50]),
+        "val_lesion_voxel_mean_prob": float(lp.mean()) if lp.size else 0.0,
+        "val_lesion_voxel_median_prob": float(np.median(lp)) if lp.size else 0.0,
+    }
+
+
+def checkpoint_filenames(selection_mode: str) -> dict[str, str | None]:
+    """Checkpoint filenames for a mode. ``last`` is always present; ``loss_proxy_safety`` only in dice mode."""
+    dice = selection_mode == "best_val_dice"
+    return {
+        "selected": "model_best_val_dice.pt" if dice else "model_best_val_loss_proxy.pt",
+        "legacy_alias": "model_best.pt",
+        "last": "model_last.pt",
+        "loss_proxy_safety": "model_best_val_loss_proxy.pt" if dice else None,
+    }
+
+
+def build_checkpoint_inventory(
+    selection_mode: str,
+    *,
+    best_epoch: int,
+    best_score: float,
+    best_val_loss: float,
+    best_loss_epoch: int,
+    last_epoch: int,
+) -> dict[str, dict[str, Any]]:
+    """Inventory of persisted checkpoints (filename -> role/epoch/metric) for run evidence."""
+    dice = selection_mode == "best_val_dice"
+    names = checkpoint_filenames(selection_mode)
+    inv: dict[str, dict[str, Any]] = {}
+    inv[str(names["selected"])] = {
+        "role": "selected",
+        "epoch": int(best_epoch),
+        ("val_dice" if dice else "val_loss_proxy"): float(best_score),
+    }
+    inv[str(names["legacy_alias"])] = {"role": "selected_alias", "epoch": int(best_epoch)}
+    if dice:
+        inv["model_best_val_loss_proxy.pt"] = {
+            "role": "safety_val_loss_proxy",
+            "epoch": int(best_loss_epoch),
+            "val_loss_proxy": float(best_val_loss),
+        }
+    inv[str(names["last"])] = {"role": "last", "epoch": int(last_epoch)}
+    return inv
+
+
 def _load_config(path: str | Path) -> dict[str, Any]:
     p = Path(path)
     if p.suffix.lower() in {".yaml", ".yml"}:
@@ -153,12 +240,17 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
     best_val_loss = float("inf")
     best_val_dice = float("-inf")
     best_epoch = -1
+    best_loss_epoch = -1
+    last_epoch = -1
     selection_policy = dict(CONVNEXT_DICE_SELECTION_POLICY if dice_selection else CONVNEXT_SELECTION_POLICY)
     # Primary checkpoint name reveals selection semantics. Default (val_loss_proxy) keeps the
     # historical name; best_val_dice mode uses a Dice-best name. The legacy alias points to
     # whichever checkpoint the active mode selected.
     best_path = ckpt_dir / ("model_best_val_dice.pt" if dice_selection else "model_best_val_loss_proxy.pt")
     legacy_best_path = ckpt_dir / "model_best.pt"  # legacy alias only
+    # T1-R3 (additive): always-persisted final checkpoint + dice-mode best-val-loss safety checkpoint.
+    last_path = ckpt_dir / "model_last.pt"
+    loss_proxy_safety_path = ckpt_dir / "model_best_val_loss_proxy.pt"
 
     for epoch in range(max_epochs):
         model.train()
@@ -177,12 +269,15 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
             opt.step()
             epoch_losses.append(float(loss.detach().cpu().item()))
 
+        last_epoch = epoch
         model.eval()
         val_losses: list[float] = []
         # Dice accumulators are only computed in best_val_dice mode (default path unchanged).
         dice_inter = 0.0
         dice_pred = 0.0
         dice_gt = 0.0
+        # T1-R3 (additive): validation-only probability diagnostics, computed in every mode.
+        prob_accum = new_val_prob_accum()
         with torch.no_grad():
             for batch in val_loader:
                 images = batch["image"].to(device)
@@ -191,15 +286,21 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
                 if isinstance(logits, list):
                     logits = logits[0]
                 val_losses.append(float(loss_fn(logits, labels).detach().cpu().item()))
+                prob = torch.sigmoid(logits)
+                update_val_prob_accum(prob_accum, prob.detach().cpu().numpy(), labels.detach().cpu().numpy())
                 if dice_selection:
-                    pred = (torch.sigmoid(logits) >= 0.5).float()
+                    pred = (prob >= 0.5).float()
                     tgt = (labels > 0.5).float()
                     dice_inter += float((pred * tgt).sum().detach().cpu().item())
                     dice_pred += float(pred.sum().detach().cpu().item())
                     dice_gt += float(tgt.sum().detach().cpu().item())
         mean_train = float(np.mean(epoch_losses)) if epoch_losses else 0.0
         mean_val = float(np.mean(val_losses)) if val_losses else 0.0
-        best_val_loss = min(best_val_loss, mean_val)
+        # Track the min-val-loss epoch (same running-min value as before, now with the epoch index).
+        loss_improved = mean_val < best_val_loss
+        if loss_improved:
+            best_val_loss = mean_val
+            best_loss_epoch = epoch
         log_row: dict[str, Any] = {"epoch": epoch, "train_loss": mean_train, "val_loss": mean_val}
         if dice_selection:
             val_dice = micro_dice(dice_inter, dice_pred, dice_gt)
@@ -207,7 +308,25 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
             candidate = val_dice
         else:
             candidate = mean_val
+        log_row.update(finalize_val_prob_diagnostics(prob_accum))
         logs.append(log_row)
+        # T1-R3 (additive): in dice mode, also persist a best-val-loss safety checkpoint so a
+        # loss-selected trained model is recoverable when val Dice is degenerate. (In val_loss_proxy
+        # mode the selection block below already writes this exact file — gate avoids double-write.)
+        if dice_selection and loss_improved:
+            torch.save(  # nosec B614
+                {
+                    "run_id": run_id,
+                    "model_state_dict": model.state_dict(),
+                    "config": cfg,
+                    "selection_policy": dict(CONVNEXT_SELECTION_POLICY),
+                    "best_val_loss_proxy": best_val_loss,
+                    "best_selection_epoch": best_loss_epoch,
+                    "checkpoint_kind": "safety_val_loss_proxy",
+                    "claim_boundary": "local PoC ConvNeXt 2.5D training only",
+                },
+                loss_proxy_safety_path,
+            )
         if is_better_selection(selection_mode, candidate, best_score):
             best_score = candidate
             best_epoch = epoch
@@ -227,6 +346,30 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
                 payload["best_val_dice"] = best_val_dice
             torch.save(payload, best_path)  # nosec B614
             torch.save(payload, legacy_best_path)  # nosec B614 — legacy alias copy
+
+    # T1-R3 (additive): always persist the final-epoch ("last") checkpoint, every mode, so a trained
+    # model is recoverable even when the selection metric is degenerate.
+    torch.save(  # nosec B614
+        {
+            "run_id": run_id,
+            "model_state_dict": model.state_dict(),
+            "config": cfg,
+            "selection_policy": dict(selection_policy),
+            "best_val_loss_proxy": best_val_loss,
+            "checkpoint_kind": "last",
+            "epoch": last_epoch,
+            "claim_boundary": "local PoC ConvNeXt 2.5D training only",
+        },
+        last_path,
+    )
+    checkpoint_inventory = build_checkpoint_inventory(
+        selection_mode,
+        best_epoch=best_epoch,
+        best_score=best_score,
+        best_val_loss=best_val_loss,
+        best_loss_epoch=best_loss_epoch,
+        last_epoch=last_epoch,
+    )
 
     log_path = log_dir / "train_log.jsonl"
     log_path.write_text("\n".join(json.dumps(x) for x in logs) + "\n", encoding="utf-8")
@@ -255,6 +398,7 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
                 "model_best.pt is a legacy alias of model_best_val_loss_proxy.pt.",
             ]
         ),
+        "checkpoints": checkpoint_inventory,
         "safety": {
             "test_split_used": False,
             "label_policy": "label==1 foreground; label==2 ignored as foreground",
