@@ -9,12 +9,13 @@ from typing import Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
+import torch.nn as nn
+from torch.utils.data import DataLoader, WeightedRandomSampler
 
 from wmh2017.audit.run_record import append_run_manifest, make_run_row, write_json
 from wmh2017.data.wmh_slice_dataset import WmhSliceDataset, WmhVolumeDataset
 from wmh2017.models.convnext_nnunet_seg import ConvNeXtNnUNetSeg
-from wmh2017.training.losses import TverskyFocalLoss
+from wmh2017.training.losses import DiceFocalLoss, TverskyFocalLoss
 from wmh2017.training.mps_compat import enable_mps_cpu_fallback, resolve_training_device
 
 # ConvNeXt 2.5D selects its best checkpoint by validation loss proxy (minimization).
@@ -161,6 +162,88 @@ def build_checkpoint_inventory(
     return inv
 
 
+# --- T1-R5: default-off A+B retry enablers (loss dispatch + positive-slice balancing) ---
+# Key-absent ⇒ bit-identical to the prior trainer (TverskyFocalLoss + shuffle DataLoader).
+
+VALID_CONVNEXT_LOSSES = ("tversky_focal", "dice_focal")
+
+
+def resolve_convnext_loss(train_cfg: dict[str, Any]) -> nn.Module:
+    """Resolve the 2.5D training loss (default ``tversky_focal``; both 1-channel sigmoid).
+
+    ``training.loss`` may be a str (name) or a dict with ``name`` + params. Absent/``tversky_focal``
+    reproduces the historical `TverskyFocalLoss`; ``dice_focal`` returns the 1-channel `DiceFocalLoss`.
+    Unknown names raise a clear ``ValueError``. MONAI 2-channel DiceCE is intentionally not used.
+    """
+    loss_cfg: Any = train_cfg.get("loss") or {}
+    if isinstance(loss_cfg, str):
+        name = loss_cfg.strip().lower()
+        params: dict[str, Any] = {}
+    elif isinstance(loss_cfg, dict):
+        name = str(loss_cfg.get("name", "tversky_focal")).strip().lower()
+        params = {k: v for k, v in loss_cfg.items() if k != "name"}
+    else:
+        raise ValueError(f"training.loss must be str or dict, got {type(loss_cfg)!r}")
+
+    if name in {"tversky_focal", "tverskyfocal"}:
+        return TverskyFocalLoss(
+            alpha=float(params.get("alpha", 0.3)),
+            beta=float(params.get("beta", 0.7)),
+            gamma=float(params.get("gamma", 1.33)),
+            smooth=float(params.get("smooth", 1.0)),
+        )
+    if name in {"dice_focal", "dicefocal"}:
+        return DiceFocalLoss(
+            alpha=float(params.get("alpha", 0.25)),
+            gamma=float(params.get("gamma", 2.0)),
+            smooth=float(params.get("smooth", 1.0)),
+        )
+    raise ValueError(f"unknown training.loss.name={name!r}; expected one of {list(VALID_CONVNEXT_LOSSES)}")
+
+
+def compute_slice_foreground_flags(slice_ds: Any) -> list[bool]:
+    """Per-slice foreground presence over ``slice_ds.index_map`` (one label load per volume).
+
+    Duck-typed: needs ``slice_ds.index_map`` = list of ``(vidx, z)`` and
+    ``slice_ds.volume_dataset[vidx]["label"]`` = a 3D mask. Does not modify the dataset.
+    """
+    flags: list[bool] = []
+    cache_vidx: int | None = None
+    cache_label: Any = None
+    for vidx, z in slice_ds.index_map:
+        if vidx != cache_vidx:
+            cache_label = np.asarray(slice_ds.volume_dataset[int(vidx)]["label"])
+            cache_vidx = vidx
+        flags.append(bool(np.asarray(cache_label[int(z)]).any()))
+    return flags
+
+
+def positive_slice_sample_weights(flags: list[bool], pos_weight: float) -> list[float]:
+    """Sampling weights: ``pos_weight`` for foreground slices, ``1.0`` for background (pure)."""
+    pw = float(pos_weight)
+    return [pw if f else 1.0 for f in flags]
+
+
+def build_train_loader(train_ds: Any, train_cfg: dict[str, Any]) -> DataLoader:
+    """Train DataLoader. Default-off ⇒ existing ``shuffle=True`` loader (bit-identical).
+
+    Opt-in via ``training.positive_slice_weight`` (>0): build a train-only
+    ``WeightedRandomSampler`` that oversamples foreground-bearing slices. Validation is built
+    separately and is unaffected.
+    """
+    batch_size = int(train_cfg.get("batch_size", 4))
+    pos_weight = train_cfg.get("positive_slice_weight")
+    if pos_weight is None:
+        return DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=0)
+    pw = float(pos_weight)
+    if pw <= 0:
+        raise ValueError(f"training.positive_slice_weight must be > 0; got {pw}")
+    flags = compute_slice_foreground_flags(train_ds)
+    weights = positive_slice_sample_weights(flags, pw)
+    sampler = WeightedRandomSampler(weights, num_samples=len(weights), replacement=True)
+    return DataLoader(train_ds, batch_size=batch_size, sampler=sampler, num_workers=0)
+
+
 def _load_config(path: str | Path) -> dict[str, Any]:
     p = Path(path)
     if p.suffix.lower() in {".yaml", ".yml"}:
@@ -214,7 +297,7 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
     img_size = (int(img_size_cfg[0]), int(img_size_cfg[1])) if img_size_cfg else None
     train_ds = WmhSliceDataset(vol_ds, k=k, img_size=img_size)
     val_ds = WmhSliceDataset(val_vol_ds, k=k, img_size=img_size)
-    train_loader = DataLoader(train_ds, batch_size=int(train_cfg.get("batch_size", 4)), shuffle=True, num_workers=0)
+    train_loader = build_train_loader(train_ds, train_cfg)
     val_loader = DataLoader(val_ds, batch_size=1, shuffle=False, num_workers=0)
 
     in_channels = int(model_cfg.get("in_channels", 2 * k + 1))
@@ -223,11 +306,7 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
         pretrained=bool(model_cfg.get("pretrained", True)),
         out_channels=1,
     ).to(device)
-    loss_fn = TverskyFocalLoss(
-        alpha=float(train_cfg.get("loss", {}).get("alpha", 0.3)),
-        beta=float(train_cfg.get("loss", {}).get("beta", 0.7)),
-        gamma=float(train_cfg.get("loss", {}).get("gamma", 1.33)),
-    )
+    loss_fn = resolve_convnext_loss(train_cfg)
     opt = torch.optim.AdamW(model.parameters(), lr=float(train_cfg.get("learning_rate", 1e-4)))
 
     max_epochs = int(train_cfg.get("max_epochs", 20))
