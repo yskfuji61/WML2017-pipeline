@@ -9,10 +9,16 @@ from typing import Any
 import numpy as np
 import torch
 
-from wmh2017.data.wmh_slice_dataset import WmhVolumeDataset
+from wmh2017.data.wmh_slice_dataset import (
+    WmhVolumeDataset,
+    _restore_pad_crop_2d_np,
+    resolve_modality_keys,
+    stack_slices_2_5d,
+)
 from wmh2017.inference.export_probabilities import save_case_probability_map
 from wmh2017.models.convnext_nnunet_seg import ConvNeXtNnUNetSeg
 from wmh2017.training.mps_compat import enable_mps_cpu_fallback, resolve_training_device
+from wmh2017.training.train_convnext_25d import resolve_in_channels, resolve_modalities
 
 
 def _load_config(path: str | Path) -> dict[str, Any]:
@@ -27,29 +33,27 @@ def _load_config(path: str | Path) -> dict[str, Any]:
 def infer_volume_probabilities(
     *,
     model: torch.nn.Module,
-    image3d: np.ndarray,
+    image3d: np.ndarray | None = None,
+    volumes: list[np.ndarray] | None = None,
     offsets: list[int],
     device: torch.device,
     img_size: tuple[int, int] | None = None,
 ) -> np.ndarray:
-    """Slice-wise 2.5D inference; returns foreground probability (Z, H, W) at native resolution."""
-    from wmh2017.data.wmh_slice_dataset import _center_pad_crop_2d_np, _restore_pad_crop_2d_np
+    """Slice-wise 2.5D inference; returns foreground probability (Z, H, W) at native resolution.
 
-    zdim = int(image3d.shape[0])
-    orig_h, orig_w = int(image3d.shape[1]), int(image3d.shape[2])
+    Default-off multimodal: pass a single ``image3d`` (FLAIR-only, unchanged) or ``volumes`` (one 3D
+    per modality). Per-z input is built via the shared T1-R8 stacker (modality-major, FLAIR block
+    first) so the channel contract matches the trainer exactly.
+    """
+    vols = volumes if volumes is not None else [np.asarray(image3d)]
+    zdim = int(vols[0].shape[0])
+    orig_h, orig_w = int(vols[0].shape[1]), int(vols[0].shape[2])
     out_h, out_w = img_size if img_size is not None else (orig_h, orig_w)
     prob_work = np.zeros((zdim, out_h, out_w), dtype=np.float32)
     model.eval()
     with torch.no_grad():
         for z in range(zdim):
-            slices = []
-            for offset in offsets:
-                zi = int(np.clip(z + offset, 0, zdim - 1))
-                sl = image3d[zi]
-                if img_size is not None:
-                    sl = _center_pad_crop_2d_np(sl, out_h, out_w)
-                slices.append(sl)
-            inp = np.stack(slices, axis=0).astype(np.float32)
+            inp = stack_slices_2_5d(vols, z, offsets, img_size)
             tensor = torch.from_numpy(inp).unsqueeze(0).to(device)
             logits = model(tensor)
             if isinstance(logits, list):
@@ -85,7 +89,23 @@ def export_convnext_val_probabilities(
     offsets = list(range(-k, k + 1))
     img_size_cfg = data_cfg.get("img_size")
     out_h, out_w = (int(img_size_cfg[0]), int(img_size_cfg[1])) if img_size_cfg else (None, None)
-    in_channels = int(model_cfg.get("in_channels", 2 * k + 1))
+
+    # T1-R8x default-off multimodal: absent data.modalities ⇒ FLAIR-only (bit-identical). Same
+    # modality resolution / stacking / in_channels semantics as the T1-R8 trainer path.
+    label_key = str(data_cfg.get("label_key", "wmh_path"))
+    modalities = resolve_modalities(data_cfg)
+    if modalities is not None and len(modalities) > 1:
+        image_keys = resolve_modality_keys(modalities)  # validates names
+        n_modalities = len(image_keys)
+        vol_kwargs: dict[str, Any] = {"image_keys": image_keys, "label_key": label_key}
+    else:
+        image_key = (
+            resolve_modality_keys(modalities)[0] if modalities else str(data_cfg.get("image_key", "flair_pre_path"))
+        )
+        n_modalities = 1
+        vol_kwargs = {"image_key": image_key, "label_key": label_key}
+
+    in_channels = resolve_in_channels(model_cfg, k, n_modalities)
     model = ConvNeXtNnUNetSeg(
         in_channels=in_channels,
         pretrained=False,
@@ -98,17 +118,19 @@ def export_convnext_val_probabilities(
         data_cfg["dataset_manifest"],
         data_cfg["split_manifest"],
         assigned_split,
-        image_key=str(data_cfg.get("image_key", "flair_pre_path")),
-        label_key=str(data_cfg.get("label_key", "wmh_path")),
+        **vol_kwargs,
     )
 
     exported: list[str] = []
     for idx in range(len(vol_ds)):
         sample = vol_ds[idx]
-        image3d = np.asarray(sample["image"], dtype=np.float32)
+        if "images" in sample:
+            vols = [np.asarray(v, dtype=np.float32) for v in sample["images"]]
+        else:
+            vols = [np.asarray(sample["image"], dtype=np.float32)]
         probs = infer_volume_probabilities(
             model=model,
-            image3d=image3d,
+            volumes=vols,
             offsets=offsets,
             device=device,
             img_size=(out_h, out_w) if out_h is not None and out_w is not None else None,
