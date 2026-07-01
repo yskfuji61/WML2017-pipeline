@@ -13,7 +13,11 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, WeightedRandomSampler
 
 from wmh2017.audit.run_record import append_run_manifest, make_run_row, write_json
-from wmh2017.data.wmh_slice_dataset import WmhSliceDataset, WmhVolumeDataset
+from wmh2017.data.wmh_slice_dataset import (
+    WmhSliceDataset,
+    WmhVolumeDataset,
+    resolve_modality_keys,
+)
 from wmh2017.models.convnext_nnunet_seg import ConvNeXtNnUNetSeg
 from wmh2017.training.losses import DiceFocalLoss, TverskyFocalLoss
 from wmh2017.training.mps_compat import enable_mps_cpu_fallback, resolve_training_device
@@ -224,6 +228,21 @@ def positive_slice_sample_weights(flags: list[bool], pos_weight: float) -> list[
     return [pw if f else 1.0 for f in flags]
 
 
+def resolve_modalities(data_cfg: dict[str, Any]) -> list[str] | None:
+    """Modality names from ``data.modalities`` (default-off: None ⇒ legacy single-modality)."""
+    mods = data_cfg.get("modalities")
+    if not mods:
+        return None
+    if isinstance(mods, str):
+        mods = [mods]
+    return [str(m).strip().lower() for m in mods]
+
+
+def resolve_in_channels(model_cfg: dict[str, Any], k: int, n_modalities: int) -> int:
+    """Model in_channels: explicit override else ``(2k+1)·n_modalities``."""
+    return int(model_cfg.get("in_channels", (2 * int(k) + 1) * int(n_modalities)))
+
+
 def build_train_loader(train_ds: Any, train_cfg: dict[str, Any]) -> DataLoader:
     """Train DataLoader. Default-off ⇒ existing ``shuffle=True`` loader (bit-identical).
 
@@ -278,20 +297,21 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
     ckpt_dir.mkdir(parents=True, exist_ok=True)
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    vol_ds = WmhVolumeDataset(
-        data_cfg["dataset_manifest"],
-        data_cfg["split_manifest"],
-        "train",
-        image_key=str(data_cfg.get("image_key", "flair_pre_path")),
-        label_key=str(data_cfg.get("label_key", "wmh_path")),
-    )
-    val_vol_ds = WmhVolumeDataset(
-        data_cfg["dataset_manifest"],
-        data_cfg["split_manifest"],
-        "val",
-        image_key=str(data_cfg.get("image_key", "flair_pre_path")),
-        label_key=str(data_cfg.get("label_key", "wmh_path")),
-    )
+    # T1-R8 default-off FLAIR+T1 parity: absent data.modalities ⇒ legacy single-modality (bit-identical).
+    modalities = resolve_modalities(data_cfg)
+    label_key = str(data_cfg.get("label_key", "wmh_path"))
+    if modalities is not None and len(modalities) > 1:
+        image_keys = resolve_modality_keys(modalities)  # validates names
+        n_modalities = len(image_keys)
+        vol_kwargs: dict[str, Any] = {"image_keys": image_keys, "label_key": label_key}
+    else:
+        image_key = (
+            resolve_modality_keys(modalities)[0] if modalities else str(data_cfg.get("image_key", "flair_pre_path"))
+        )
+        n_modalities = 1
+        vol_kwargs = {"image_key": image_key, "label_key": label_key}
+    vol_ds = WmhVolumeDataset(data_cfg["dataset_manifest"], data_cfg["split_manifest"], "train", **vol_kwargs)
+    val_vol_ds = WmhVolumeDataset(data_cfg["dataset_manifest"], data_cfg["split_manifest"], "val", **vol_kwargs)
     k = int(data_cfg.get("slice_k", 2))
     img_size_cfg = data_cfg.get("img_size")
     img_size = (int(img_size_cfg[0]), int(img_size_cfg[1])) if img_size_cfg else None
@@ -300,7 +320,7 @@ def train_convnext_25d(config_path: str | Path) -> dict[str, Any]:
     train_loader = build_train_loader(train_ds, train_cfg)
     val_loader = DataLoader(val_ds, batch_size=1, shuffle=False, num_workers=0)
 
-    in_channels = int(model_cfg.get("in_channels", 2 * k + 1))
+    in_channels = resolve_in_channels(model_cfg, k, n_modalities)
     model = ConvNeXtNnUNetSeg(
         in_channels=in_channels,
         pretrained=bool(model_cfg.get("pretrained", True)),
